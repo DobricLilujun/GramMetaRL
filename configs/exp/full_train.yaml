@@ -1,0 +1,11 @@
+defaults:
+  - /model: qwen3_8b
+  - /data: grammar_agent_mt
+  - /tool: grammar_first_tools
+  - /reward: grammar_reward
+  - /algo: grpo
+  - /train: fsdp2_vllm
+train:
+  max_steps: 5000
+  global_batch_size: 256
+  micro_batch_size: 4

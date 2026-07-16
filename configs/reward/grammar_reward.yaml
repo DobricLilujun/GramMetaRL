@@ -1,0 +1,12 @@
+weights:
+  mt: 0.25
+  grammar: 0.40
+  tool: 0.20
+  trace: 0.10
+  efficiency: 0.05
+metrics:
+  mt: chrf
+  grammar: verify_pass_rate
+  tool: relevant_tool_usage
+  trace: span_alignment
+  efficiency: normalized_step_cost

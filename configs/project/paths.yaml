@@ -1,0 +1,27 @@
+# Workspace path templates. Use {namespace} for experiment isolation.
+paths:
+  artifacts_root_default: artifacts
+  artifacts_root_namespaced: artifacts/experiments/{namespace}
+
+  input_pdf_dir: data/raw/pdf
+  input_ocr_dir: data/raw/ocr
+
+  rules_dir: data/rules
+  lexicon_dir: data/lexicon
+
+  processed_dir_default: data/processed
+  processed_dir_namespaced: data/processed/{namespace}
+
+  rules_cards_file_default: data/rules/mbg_cards.jsonl
+  rules_cards_file_namespaced: data/rules/mbg_cards_{namespace}.jsonl
+
+  lexicon_file: data/lexicon/dictionary.jsonl
+
+  train_dataset_file_default: data/processed/train.jsonl
+  train_dataset_file_namespaced: data/processed/{namespace}/train.jsonl
+
+  ocr_run_dir_default: artifacts/ocr/deepseek_fullbook
+  ocr_run_dir_namespaced: artifacts/experiments/{namespace}/ocr/deepseek_fullbook
+
+  mbg_work_dir_default: artifacts/extraction/_mbg_work
+  mbg_work_dir_namespaced: artifacts/experiments/{namespace}/extraction/_mbg_work

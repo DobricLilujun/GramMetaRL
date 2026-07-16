@@ -1,0 +1,28 @@
+[project]
+name = "grammetarl"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+	"addict>=2.4.0",
+	"easydict>=1.13",
+	"einops>=0.8.2",
+	"flash-attn==2.7.3",
+	"img2pdf>=0.6.3",
+	"jinja2>=3.1.0",
+	"numpy>=2.4.6",
+	"pillow>=12.3.0",
+	"pyyaml>=6.0.2",
+	"pydantic>=2.8.0",
+	"pymupdf>=1.24.0",
+	"requests>=2.32.0",
+	"tokenizers==0.20.3",
+	"torch==2.6.0",
+	"torchaudio==2.6.0",
+	"torchvision==0.21.0",
+	"transformers==4.46.3",
+]
+
+[project.scripts]
+grammetarl = "main:main"

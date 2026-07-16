@@ -1,0 +1,5 @@
+name: Qwen/Qwen3-8B
+max_prompt_length: 4096
+max_response_length: 1024
+dtype: bfloat16
+trust_remote_code: true

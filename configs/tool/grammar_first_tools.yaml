@@ -1,0 +1,10 @@
+tool_order:
+  - grammar_rule_search
+  - dictionary_lookup
+  - grammar_rule_apply
+  - grammar_verify
+max_steps: 6
+search:
+  stage1: bm25
+  stage2: embedding
+  reranker: true

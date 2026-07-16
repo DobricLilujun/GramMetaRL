@@ -1,0 +1,10 @@
+algorithm:
+  adv_estimator: grpo
+  norm_adv_by_std_in_grpo: true
+actor_rollout_ref:
+  actor:
+    use_kl_loss: true
+    kl_loss_coef: 1.0e-3
+    clip_ratio: 0.2
+  rollout:
+    n: 6

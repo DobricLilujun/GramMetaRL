@@ -1,0 +1,10 @@
+algorithm:
+  adv_estimator: grpo
+  norm_adv_by_std_in_grpo: false
+  loss_agg_mode: seq-mean-token-sum-norm
+actor_rollout_ref:
+  actor:
+    use_kl_loss: false
+    clip_ratio: 0.2
+  rollout:
+    n: 6

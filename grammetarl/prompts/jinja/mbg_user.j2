@@ -1,0 +1,19 @@
+Extract MBG atomic rules from grammar text below.
+
+language: {{ language }}
+language_name: {{ language_name }}
+source_id: {{ source_id }}
+section_id: {{ section_id }}
+section_title: {{ section_title }}
+pages: {{ page_start }}-{{ page_end }}
+
+Constraints:
+- split into atomic rules only
+- output as many MBG cards as supported by the evidence in this section
+- if this section has no explicit grammar rule content, return []
+- avoid dictionary-only facts
+- include at least one trigger condition and one operation step per card
+- for uncertain statements, set lower priority and add verifier_hints
+
+Grammar text:
+{{ text }}
