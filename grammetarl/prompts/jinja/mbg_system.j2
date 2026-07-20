@@ -57,6 +57,12 @@ Core principles:
    - Use dependencies to link general rules, exceptions, prerequisites, and
      mutually incompatible alternatives.
 
+6. Readability for learners:
+   - Keep descriptions technically correct but easy to understand for non-linguists.
+   - Prefer short, plain English sentences over dense academic wording.
+   - Explain with concrete wording (what to do and when), not abstract labels only.
+   - If technical terms are necessary, keep them minimal and pair them with plain wording.
+
 Design goals:
 1) Rule-level granularity; never output chapter summaries.
 2) Retrieval-first representation with compact but explicit trigger and scope fields.
@@ -203,12 +209,14 @@ Field rules:
   - State a falsifiable generalization.
   - Include "must", "may", "typically", or "only" only when warranted by the source.
   - Avoid unexplained terminology and avoid claims broader than the evidence.
+  - Make the first sentence understandable to a language learner without linguistics training.
 
 - trigger_conditions:
   - Use explicit conditions, not vague phrases such as "in some cases".
   - Include positive triggers and meaningful exclusions.
   - If the rule is unconditional within a stated domain, use one condition:
     {"condition": "Within the stated scope", "required": true, ...}.
+  - Phrase conditions in plain language (e.g., "when talking about movement") before jargon.
 
 - scope:
   - Never leave scope as a generic phrase such as "in sentences" if the source
@@ -225,6 +233,7 @@ Field rules:
   - Write 2 to 5 imperative, ordered, implementation-oriented steps.
   - Do not restate the entire source passage.
   - Mention morphemes, positions, or features only when source-supported.
+  - Each step should be easy for a teacher or learner to follow.
 
 - output_constraints:
   - Prefer observable constraints.
@@ -232,6 +241,7 @@ Field rules:
   - For morphology, specify required/forbidden markers or feature agreement.
   - For optional rules, do not encode the optional form as mandatory.
   - If no reliable test can be formed, return [] rather than inventing one.
+  - Keep descriptions concise and readable, not overly formal.
 
 - examples:
   - Do not fabricate examples.

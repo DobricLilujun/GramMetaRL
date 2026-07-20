@@ -1,0 +1,16 @@
+Create one teaching example set from the extracted grammar and grammar-book text below.
+
+language_code: {{ language_code }}
+language_name: {{ language_name }}
+
+Extracted grammar:
+{{ extracted_grammar }}
+
+Grammar-book text:
+{{ source_text }}
+
+Remember:
+- The output must be in English for the source sentence and notes.
+- The target-language expressions must be natural for {{ language_name }}.
+- The wrong expression must be close enough to look plausible but still clearly wrong for the extracted grammar.
+- If no high-quality example is possible, return null.

@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import fitz
 
+from .example_agent import ExampleAgent
 from .llm_extract import ExtractionChunk, MBGExtractor
 from .ocr import OCRProvider
 from .pdf_ingest import PDFIngestor
@@ -152,6 +154,111 @@ def _build_sections_from_ocr_rows(page_rows: dict[int, dict[str, Any]], max_page
     return sections
 
 
+def _build_page_batch_sections_from_ocr_rows(page_rows: dict[int, dict[str, Any]], max_page: int, batch_pages: int) -> list[OCRSection]:
+    sections: list[OCRSection] = []
+    if batch_pages < 1:
+        raise ValueError("batch_pages must be >= 1")
+
+    start_page = min(page_rows.keys()) if page_rows else 1
+    end_page = max(page_rows.keys()) if page_rows else 0
+    sec_idx = 1
+
+    for batch_start in range(start_page, end_page + 1, batch_pages):
+        batch_end = min(batch_start + batch_pages - 1, max_page)
+        lines: list[str] = []
+        for page in range(batch_start, batch_end + 1):
+            row = page_rows.get(page)
+            if not row:
+                continue
+            raw_blocks = row.get("blocks", [])
+            blocks = [b for b in raw_blocks if isinstance(b, dict)] if isinstance(raw_blocks, list) else []
+            if not blocks:
+                fallback_text = _page_record_to_text(row)
+                if fallback_text:
+                    lines.append(f"[OCR_PAGE page={page}] {fallback_text}")
+                continue
+            for block in blocks:
+                line = _block_to_tagged_text(block)
+                if line:
+                    lines.append(line)
+
+        if not lines:
+            continue
+
+        sections.append(
+            OCRSection(
+                section_id=f"ocr_batch_{sec_idx:04d}",
+                title=f"Pages {batch_start}-{batch_end}",
+                page_start=batch_start,
+                page_end=batch_end,
+                text="\n".join(lines).strip(),
+            )
+        )
+        sec_idx += 1
+
+    return sections
+
+
+def _build_block_sections_from_ocr_rows(page_rows: dict[int, dict[str, Any]], max_page: int) -> list[OCRSection]:
+    sections: list[OCRSection] = []
+    sec_idx = 1
+    current_title = "Untitled"
+
+    for page in sorted(page_rows.keys()):
+        if page < 1 or page > max_page:
+            continue
+        row = page_rows[page]
+        raw_blocks = row.get("blocks", [])
+        if isinstance(raw_blocks, list) and raw_blocks:
+            blocks = [b for b in raw_blocks if isinstance(b, dict)]
+        else:
+            fallback_text = _page_record_to_text(row)
+            blocks = [{"label": "text", "bbox": [], "text": fallback_text}] if fallback_text else []
+
+        for block_idx, block in enumerate(blocks, start=1):
+            label = str(block.get("label") or block.get("block_type") or "unknown").strip().lower()
+            text = str(block.get("text", "")).strip()
+            if not text:
+                continue
+
+            if label == "sub_title":
+                current_title = text.replace("\n", " ").strip() or "Untitled"
+                continue
+
+            line = _block_to_tagged_text(block)
+            if not line:
+                continue
+
+            sections.append(
+                OCRSection(
+                    section_id=f"ocr_blk_{sec_idx:04d}",
+                    title=current_title,
+                    page_start=page,
+                    page_end=page,
+                    text=line,
+                )
+            )
+            sec_idx += 1
+
+    return sections
+
+
+def _build_extraction_sections_from_ocr_rows(
+    page_rows: dict[int, dict[str, Any]],
+    max_page: int,
+    extract_mode: str,
+    batch_pages: int,
+) -> list[OCRSection]:
+    mode = (extract_mode or "chapter").strip().lower()
+    if mode == "chapter":
+        return _build_sections_from_ocr_rows(page_rows, max_page=max_page)
+    if mode == "page_batch":
+        return _build_page_batch_sections_from_ocr_rows(page_rows, max_page=max_page, batch_pages=batch_pages)
+    if mode == "block":
+        return _build_block_sections_from_ocr_rows(page_rows, max_page=max_page)
+    raise ValueError(f"Unsupported extract_mode: {extract_mode}")
+
+
 def build_mbg_from_pdf(
     pdf_path: Path | None,
     output_jsonl: Path,
@@ -159,6 +266,10 @@ def build_mbg_from_pdf(
     source_id: str,
     extractor: MBGExtractor,
     ocr_provider: OCRProvider | None,
+    example_agent: ExampleAgent | None = None,
+    example_output_jsonl: Path | None = None,
+    extract_mode: str = "chapter",
+    batch_pages: int = 3,
     max_chunk_chars: int = 4200,
     render_dpi: int = 220,
     work_dir: Path | None = None,
@@ -166,6 +277,16 @@ def build_mbg_from_pdf(
     page_start: int | None = None,
     page_end: int | None = None,
 ) -> list[MBGCard]:
+    def _append_card(handle, card: MBGCard) -> None:
+        handle.write(json.dumps(card.as_dict(), ensure_ascii=False) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+
+    def _append_example(handle, record) -> None:
+        handle.write(json.dumps(record.as_dict(), ensure_ascii=False) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+
     use_precomputed_ocr = ocr_pages_jsonl is not None
 
     if use_precomputed_ocr:
@@ -193,55 +314,74 @@ def build_mbg_from_pdf(
         if not page_rows:
             raise ValueError("No OCR pages left after applying page range filter")
 
-        ocr_sections = _build_sections_from_ocr_rows(page_rows, max_page=max_page)
+        ocr_sections = _build_extraction_sections_from_ocr_rows(
+            page_rows,
+            max_page=max_page,
+            extract_mode=extract_mode,
+            batch_pages=batch_pages,
+        )
         if not ocr_sections:
             raise ValueError("No usable OCR sections were built from ocr_pages_jsonl")
 
         cards: list[MBGCard] = []
         seen_ids: set[str] = set()
         total = len(ocr_sections)
-
-        for idx, sec in enumerate(ocr_sections, start=1):
-            print(
-                f"[MBG] section {idx}/{total} title={sec.title} pages={sec.page_start}-{sec.page_end}",
-                flush=True,
-            )
-
-            chunk = ExtractionChunk(
-                language=language,
-                source_id=source_id,
-                section_id=sec.section_id,
-                section_title=sec.title,
-                page_start=sec.page_start,
-                page_end=sec.page_end,
-                text=sec.text,
-            )
-
-            try:
-                extracted = extractor.extract_cards(chunk)
-            except Exception as exc:  # noqa: BLE001
-                print(f"[MBG][WARN] section {idx}/{total} failed: {exc}", flush=True)
-                continue
-            added = 0
-            for card in extracted:
-                if not card.id or card.id in seen_ids:
-                    seed = (
-                        f"{language}|{card.scope}|{','.join(card.trigger_conditions)}|"
-                        f"{sec.section_id}|{card.source.page_start}-{card.source.page_end}"
-                    )
-                    card.id = f"{language.upper()}_{_stable_id(seed)}"
-                if card.id in seen_ids:
-                    continue
-                seen_ids.add(card.id)
-                cards.append(card)
-                added += 1
-
-            print(f"[MBG] section {idx}/{total} extracted={len(extracted)} added={added}", flush=True)
+        example_handle = None
+        if example_agent and example_output_jsonl is not None:
+            example_output_jsonl.parent.mkdir(parents=True, exist_ok=True)
+            example_handle = example_output_jsonl.open("w", encoding="utf-8")
 
         output_jsonl.parent.mkdir(parents=True, exist_ok=True)
-        with output_jsonl.open("w", encoding="utf-8") as f:
-            for card in cards:
-                f.write(json.dumps(card.as_dict(), ensure_ascii=False) + "\n")
+        try:
+            with output_jsonl.open("w", encoding="utf-8") as f:
+                for idx, sec in enumerate(ocr_sections, start=1):
+                    print(
+                        f"[MBG] section {idx}/{total} title={sec.title} pages={sec.page_start}-{sec.page_end}",
+                        flush=True,
+                    )
+
+                    chunk = ExtractionChunk(
+                        language=language,
+                        source_id=source_id,
+                        section_id=sec.section_id,
+                        section_title=sec.title,
+                        page_start=sec.page_start,
+                        page_end=sec.page_end,
+                        text=sec.text,
+                    )
+
+                    try:
+                        extracted = extractor.extract_cards(chunk)
+                    except Exception as exc:  # noqa: BLE001
+                        print(f"[MBG][WARN] section {idx}/{total} failed: {exc}", flush=True)
+                        continue
+                    added = 0
+                    for card in extracted:
+                        if not card.id or card.id in seen_ids:
+                            seed = (
+                                f"{language}|{card.scope}|{','.join(card.trigger_conditions)}|"
+                                f"{sec.section_id}|{card.source.page_start}-{card.source.page_end}"
+                            )
+                            card.id = f"{language.upper()}_{_stable_id(seed)}"
+                        if card.id in seen_ids:
+                            continue
+                        seen_ids.add(card.id)
+                        cards.append(card)
+                        _append_card(f, card)
+                        if example_agent and example_handle is not None:
+                            try:
+                                example_record = example_agent.generate_record(card, source_text=chunk.text)
+                            except Exception as exc:  # noqa: BLE001
+                                print(f"[MBG][WARN] example agent failed for {card.id}: {exc}", flush=True)
+                            else:
+                                if example_record is not None:
+                                    _append_example(example_handle, example_record)
+                        added += 1
+
+                    print(f"[MBG] section {idx}/{total} extracted={len(extracted)} added={added}", flush=True)
+        finally:
+            if example_handle is not None:
+                example_handle.close()
 
         print(f"[MBG] completed sections={total} cards={len(cards)} output={output_jsonl}", flush=True)
         return cards
@@ -270,59 +410,73 @@ def build_mbg_from_pdf(
     seen_ids: set[str] = set()
 
     total_sections = len(sections)
-    for sec_idx, sec in enumerate(sections, start=1):
-        print(
-            f"[MBG] section {sec_idx}/{total_sections} title={sec.title} pages={sec.page_start}-{sec.page_end}",
-            flush=True,
-        )
-        page_ocr = "\n".join(ocr_cache.get(p, "") for p in range(sec.page_start, sec.page_end + 1))
-        fused_text = (sec.text + "\n\n" + page_ocr).strip()
-        if not fused_text:
-            continue
-
-        subchunks = _chunk_text(fused_text, max_chars=max_chunk_chars)
-        for i, text_chunk in enumerate(subchunks, start=1):
-            chunk = ExtractionChunk(
-                language=language,
-                source_id=source_id,
-                section_id=f"{sec.section_id}_c{i}",
-                section_title=sec.title,
-                page_start=sec.page_start,
-                page_end=sec.page_end,
-                text=text_chunk,
-            )
-            try:
-                extracted = extractor.extract_cards(chunk)
-            except Exception as exc:  # noqa: BLE001
+    output_jsonl.parent.mkdir(parents=True, exist_ok=True)
+    example_handle = None
+    if example_agent and example_output_jsonl is not None:
+        example_output_jsonl.parent.mkdir(parents=True, exist_ok=True)
+        example_handle = example_output_jsonl.open("w", encoding="utf-8")
+    try:
+        with output_jsonl.open("w", encoding="utf-8") as f:
+            for sec_idx, sec in enumerate(sections, start=1):
                 print(
-                    f"[MBG][WARN] section {sec_idx}/{total_sections} chunk={i}/{len(subchunks)} failed: {exc}",
+                    f"[MBG] section {sec_idx}/{total_sections} title={sec.title} pages={sec.page_start}-{sec.page_end}",
                     flush=True,
                 )
-                continue
-            added = 0
-            for card in extracted:
-                if not card.id or card.id in seen_ids:
-                    seed = (
-                        f"{language}|{card.scope}|{','.join(card.trigger_conditions)}|"
-                        f"{sec.section_id}|{card.source.page_start}-{card.source.page_end}"
-                    )
-                    card.id = f"{language.upper()}_{_stable_id(seed)}"
-                if card.id in seen_ids:
+                page_ocr = "\n".join(ocr_cache.get(p, "") for p in range(sec.page_start, sec.page_end + 1))
+                fused_text = (sec.text + "\n\n" + page_ocr).strip()
+                if not fused_text:
                     continue
-                seen_ids.add(card.id)
-                cards.append(card)
-                added += 1
 
-            print(
-                f"[MBG] section {sec_idx}/{total_sections} chunk={i}/{len(subchunks)} "
-                f"extracted={len(extracted)} added={added}",
-                flush=True,
-            )
+                subchunks = _chunk_text(fused_text, max_chars=max_chunk_chars)
+                for i, text_chunk in enumerate(subchunks, start=1):
+                    chunk = ExtractionChunk(
+                        language=language,
+                        source_id=source_id,
+                        section_id=f"{sec.section_id}_c{i}",
+                        section_title=sec.title,
+                        page_start=sec.page_start,
+                        page_end=sec.page_end,
+                        text=text_chunk,
+                    )
+                    try:
+                        extracted = extractor.extract_cards(chunk)
+                    except Exception as exc:  # noqa: BLE001
+                        print(
+                            f"[MBG][WARN] section {sec_idx}/{total_sections} chunk={i}/{len(subchunks)} failed: {exc}",
+                            flush=True,
+                        )
+                        continue
+                    added = 0
+                    for card in extracted:
+                        if not card.id or card.id in seen_ids:
+                            seed = (
+                                f"{language}|{card.scope}|{','.join(card.trigger_conditions)}|"
+                                f"{sec.section_id}|{card.source.page_start}-{card.source.page_end}"
+                            )
+                            card.id = f"{language.upper()}_{_stable_id(seed)}"
+                        if card.id in seen_ids:
+                            continue
+                        seen_ids.add(card.id)
+                        cards.append(card)
+                        _append_card(f, card)
+                        if example_agent and example_handle is not None:
+                            try:
+                                example_record = example_agent.generate_record(card, source_text=chunk.text)
+                            except Exception as exc:  # noqa: BLE001
+                                print(f"[MBG][WARN] example agent failed for {card.id}: {exc}", flush=True)
+                            else:
+                                if example_record is not None:
+                                    _append_example(example_handle, example_record)
+                        added += 1
 
-    output_jsonl.parent.mkdir(parents=True, exist_ok=True)
-    with output_jsonl.open("w", encoding="utf-8") as f:
-        for card in cards:
-            f.write(json.dumps(card.as_dict(), ensure_ascii=False) + "\n")
+                    print(
+                        f"[MBG] section {sec_idx}/{total_sections} chunk={i}/{len(subchunks)} "
+                        f"extracted={len(extracted)} added={added}",
+                        flush=True,
+                    )
+    finally:
+        if example_handle is not None:
+            example_handle.close()
 
     print(f"[MBG] completed sections={total_sections} cards={len(cards)} output={output_jsonl}", flush=True)
 

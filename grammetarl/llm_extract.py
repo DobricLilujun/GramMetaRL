@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import hashlib
 from dataclasses import dataclass
 from typing import Any
 
@@ -96,6 +97,16 @@ class MBGExtractor:
     def _normalize_card_obj(self, obj: dict[str, Any]) -> dict[str, Any]:
         normalized = dict(obj)
 
+        if not str(normalized.get("id", "")).strip():
+            for key in ["rule_id", "rule_name", "statement", "formal_pattern", "trigger_condition"]:
+                value = str(normalized.get(key, "")).strip()
+                if value:
+                    normalized["id"] = f"AUTO_{hashlib.sha1(value.encode('utf-8')).hexdigest()[:12]}"
+                    break
+        if not str(normalized.get("id", "")).strip():
+            serialized = json.dumps(normalized, ensure_ascii=False, sort_keys=True)
+            normalized["id"] = f"AUTO_{hashlib.sha1(serialized.encode('utf-8')).hexdigest()[:12]}"
+
         # Accept richer schema outputs and coerce to current MBGCard schema.
         scope_val = normalized.get("scope")
         if isinstance(scope_val, dict):
@@ -109,6 +120,24 @@ class MBGExtractor:
         else:
             normalized["scope"] = str(scope_val).strip() or "unspecified"
 
+        if "trigger_conditions" not in normalized and "trigger_condition" in normalized:
+            trigger_value = normalized.get("trigger_condition")
+            if isinstance(trigger_value, list):
+                normalized["trigger_conditions"] = [str(v) for v in trigger_value if str(v).strip()]
+            elif trigger_value is None:
+                normalized["trigger_conditions"] = []
+            else:
+                normalized["trigger_conditions"] = [str(trigger_value)]
+
+        if "operation_steps" not in normalized and "operation_step" in normalized:
+            step_value = normalized.get("operation_step")
+            if isinstance(step_value, list):
+                normalized["operation_steps"] = [str(v) for v in step_value if str(v).strip()]
+            elif step_value is None:
+                normalized["operation_steps"] = []
+            else:
+                normalized["operation_steps"] = [str(step_value)]
+
         for key in ["phenomenon_tags", "trigger_conditions", "operation_steps", "retrieval_hints", "verifier_hints"]:
             val = normalized.get(key)
             if val is None:
@@ -119,6 +148,15 @@ class MBGExtractor:
                 normalized[key] = [str(v) for v in val if str(v).strip()]
             else:
                 normalized[key] = [str(val)]
+
+        if not normalized.get("phenomenon_tags"):
+            normalized["phenomenon_tags"] = self._infer_phenomenon_tags(normalized)
+
+        if not normalized.get("retrieval_hints"):
+            normalized["retrieval_hints"] = self._infer_retrieval_hints(normalized)
+
+        if not normalized.get("verifier_hints"):
+            normalized["verifier_hints"] = self._infer_verifier_hints(normalized)
 
         constraints = normalized.get("output_constraints", [])
         if isinstance(constraints, dict):
@@ -213,6 +251,78 @@ class MBGExtractor:
         normalized["operation_type"] = op_val if op_val in valid_operation_types else "fallback"
 
         return normalized
+
+    def _infer_phenomenon_tags(self, obj: dict[str, Any]) -> list[str]:
+        text_blob = " ".join(
+            [
+                str(obj.get("scope", "")),
+                " ".join(obj.get("trigger_conditions", []) or []),
+                " ".join(obj.get("operation_steps", []) or []),
+                str(obj.get("operation_type", "")),
+            ]
+        ).lower()
+        tags: list[str] = []
+
+        if "preposition" in text_blob:
+            tags.append("preposition_governance")
+        if "dative" in text_blob or "accusative" in text_blob or "case" in text_blob:
+            tags.append("case_marking")
+        if "plural" in text_blob or "singular" in text_blob or "inflect" in text_blob:
+            tags.append("inflection")
+        if "order" in text_blob or "before" in text_blob or "after" in text_blob:
+            tags.append("word_order")
+        if "clitic" in text_blob:
+            tags.append("cliticization")
+
+        op = str(obj.get("operation_type", "")).strip().lower()
+        if op == "agree":
+            tags.append("agreement")
+        elif op == "negate":
+            tags.append("negation")
+        elif op == "tense_aspect":
+            tags.append("tense_aspect")
+        elif op == "mood":
+            tags.append("mood")
+
+        if not tags:
+            tags.append("grammar_rule")
+        # Keep deterministic order and small size.
+        dedup: list[str] = []
+        for t in tags:
+            if t not in dedup:
+                dedup.append(t)
+        return dedup[:4]
+
+    def _infer_retrieval_hints(self, obj: dict[str, Any]) -> list[str]:
+        hints: list[str] = []
+        for cond in obj.get("trigger_conditions", []) or []:
+            c = str(cond).strip()
+            if c:
+                hints.append(c[:120])
+            if len(hints) >= 2:
+                break
+        op = str(obj.get("operation_type", "")).strip().lower()
+        if op and len(hints) < 2:
+            hints.append(f"operation_type={op}")
+        return hints
+
+    def _infer_verifier_hints(self, obj: dict[str, Any]) -> list[str]:
+        hints: list[str] = []
+        constraints = obj.get("output_constraints", []) or []
+        if isinstance(constraints, list):
+            for c in constraints:
+                if isinstance(c, dict):
+                    desc = str(c.get("description", "")).strip()
+                    if desc:
+                        hints.append(f"Check: {desc[:140]}")
+                if len(hints) >= 2:
+                    break
+        if not hints:
+            trig = (obj.get("trigger_conditions", []) or [""])[0]
+            trig_s = str(trig).strip()
+            if trig_s:
+                hints.append(f"Verify rule applies only when: {trig_s[:140]}")
+        return hints[:2]
 
     def _build_user_prompt(self, chunk: ExtractionChunk) -> str:
         language_code, language_name = self._resolve_language(chunk.language)

@@ -5,7 +5,7 @@ import json
 import os
 from pathlib import Path
 
-from grammetarl import RuleIndex, TranslationVerifier, build_mbg_from_pdf, load_cards
+from grammetarl import ExampleAgent, RuleIndex, TranslationVerifier, build_mbg_from_pdf, load_cards
 from grammetarl.llm_extract import MBGExtractor
 from grammetarl.migration import migrate_legacy_layout
 from grammetarl.ocr import DeepSeekOCRLocalProvider, NoOCRProvider, OpenAICompatibleVisionOCR
@@ -51,6 +51,21 @@ def cmd_build(args: argparse.Namespace) -> None:
     # If precomputed OCR is provided, skip building OCR provider entirely.
     ocr_provider = None if ocr_pages_jsonl else _make_ocr_provider(args)
 
+    example_agent = None
+    example_output_jsonl = None
+    if args.enable_example_agent:
+        example_agent = ExampleAgent(
+            endpoint=args.llm_endpoint,
+            model=args.llm_model,
+            api_key=api_key,
+            timeout=args.llm_timeout,
+            min_confidence=args.example_agent_min_confidence,
+        )
+        if args.example_agent_output:
+            example_output_jsonl = Path(args.example_agent_output)
+        else:
+            example_output_jsonl = output_jsonl.with_name(f"{output_jsonl.stem}_examples.jsonl")
+
     cards = build_mbg_from_pdf(
         pdf_path=Path(args.pdf) if args.pdf else None,
         output_jsonl=output_jsonl,
@@ -58,6 +73,10 @@ def cmd_build(args: argparse.Namespace) -> None:
         source_id=args.source_id,
         extractor=extractor,
         ocr_provider=ocr_provider,
+        example_agent=example_agent,
+        example_output_jsonl=example_output_jsonl,
+        extract_mode=args.extract_mode,
+        batch_pages=args.batch_pages,
         max_chunk_chars=args.max_chunk_chars,
         render_dpi=args.render_dpi,
         work_dir=Path(args.work_dir) if args.work_dir else ws.default_mbg_work_dir,
@@ -148,6 +167,18 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_build.add_argument("--language", required=True, help="Language code, e.g. lb")
     p_build.add_argument("--source-id", required=True, help="Source book identifier")
+    p_build.add_argument(
+        "--extract-mode",
+        choices=["chapter", "page_batch", "block"],
+        default="chapter",
+        help="Extraction granularity: chapter, page_batch, or block",
+    )
+    p_build.add_argument(
+        "--batch-pages",
+        type=int,
+        default=3,
+        help="Page count per batch when --extract-mode page_batch is used",
+    )
     p_build.add_argument("--max-chunk-chars", type=int, default=4200)
     p_build.add_argument("--render-dpi", type=int, default=220)
     p_build.add_argument("--work-dir", default=None)
@@ -172,6 +203,22 @@ def build_parser() -> argparse.ArgumentParser:
         "--ocr-pages-dir",
         default=None,
         help="Directory containing precomputed OCR outputs (expects pages_ocr.jsonl inside)",
+    )
+    p_build.add_argument(
+        "--enable-example-agent",
+        action="store_true",
+        help="After each extracted grammar card, generate and save a teaching example sidecar",
+    )
+    p_build.add_argument(
+        "--example-agent-output",
+        default=None,
+        help="Optional JSONL path for Example Agent sidecar output",
+    )
+    p_build.add_argument(
+        "--example-agent-min-confidence",
+        type=int,
+        default=7,
+        help="Minimum confidence required to keep an Example Agent result",
     )
 
     p_build.add_argument("--llm-endpoint", default="http://10.6.32.16:8000/v1")
