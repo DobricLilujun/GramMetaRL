@@ -44,9 +44,9 @@ Current practical workflow is OCR-first:
 	- [grammetarl/training](grammetarl/training)
 	- [configs](configs)
 
-Legacy top-level folders [agent_env](agent_env), [tools](tools),
-[rewards](rewards), and [training](training) are now compatibility wrappers
-that forward to the canonical modules under [grammetarl](grammetarl).
+RL scaffold and tool/reward modules live under
+[grammetarl](grammetarl) (subpackages `agent_env/`, `tools/`, `rewards/`,
+`training/`). Configs live under [grammetarl/configs](grammetarl/configs).
 
 ## 3. Install and Environment
 
@@ -103,7 +103,7 @@ Default namespace resolution order:
 2. env `GRAMMETARL_NAMESPACE`
 3. fallback `default`
 
-Path templates are configurable in [configs/project/paths.yaml](configs/project/paths.yaml).
+Path templates are configurable in [grammetarl/configs/project/paths.yaml](grammetarl/configs/project/paths.yaml).
 
 Migrate legacy outputs into the new layout:
 

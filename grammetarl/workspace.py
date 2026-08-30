@@ -18,7 +18,11 @@ def resolve_namespace(explicit_namespace: str | None = None) -> str:
 
 
 def _read_path_templates(project_root: Path) -> dict[str, str]:
-    cfg = project_root / "configs" / "project" / "paths.yaml"
+    # Configs live under the package directory (grammetarl/configs/). Also accept a
+    # project-root configs/ dir for backwards compatibility.
+    pkg_cfg = Path(__file__).resolve().parent / "configs" / "project" / "paths.yaml"
+    root_cfg = project_root / "configs" / "project" / "paths.yaml"
+    cfg = pkg_cfg if pkg_cfg.exists() else root_cfg
     if not cfg.exists():
         return {}
 
@@ -128,6 +132,9 @@ class WorkspacePaths:
 
         data = project_root / "data"
         configs = project_root / "configs"
+        pkg_configs = Path(__file__).resolve().parent / "configs"
+        if not configs.exists() and pkg_configs.exists():
+            configs = pkg_configs
         prompts = project_root / "prompts"
         notebooks = project_root / "notebook"
 

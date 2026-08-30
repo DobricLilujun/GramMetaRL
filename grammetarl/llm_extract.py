@@ -107,89 +107,115 @@ class MBGExtractor:
             serialized = json.dumps(normalized, ensure_ascii=False, sort_keys=True)
             normalized["id"] = f"AUTO_{hashlib.sha1(serialized.encode('utf-8')).hexdigest()[:12]}"
 
-        # Accept richer schema outputs and coerce to current MBGCard schema.
+        # --- scope: accept rich dict OR string; never silently drop ---
         scope_val = normalized.get("scope")
         if isinstance(scope_val, dict):
             syntactic_domain = str(scope_val.get("syntactic_domain", "")).strip()
             constituent_target = str(scope_val.get("constituent_target", "")).strip()
             linear_domain = str(scope_val.get("linear_domain", "")).strip()
-            scope_parts = [p for p in [syntactic_domain, constituent_target, linear_domain] if p]
+            semantic_scope = str(scope_val.get("semantic_pragmatic_scope", "")).strip()
+            scope_parts = [p for p in [syntactic_domain, constituent_target, linear_domain, semantic_scope] if p]
             normalized["scope"] = " | ".join(scope_parts) if scope_parts else "unspecified"
         elif scope_val is None:
             normalized["scope"] = "unspecified"
         else:
             normalized["scope"] = str(scope_val).strip() or "unspecified"
 
-        if "trigger_conditions" not in normalized and "trigger_condition" in normalized:
-            trigger_value = normalized.get("trigger_condition")
-            if isinstance(trigger_value, list):
-                normalized["trigger_conditions"] = [str(v) for v in trigger_value if str(v).strip()]
-            elif trigger_value is None:
-                normalized["trigger_conditions"] = []
-            else:
-                normalized["trigger_conditions"] = [str(trigger_value)]
+        # --- trigger_conditions: accept list-of-objects OR list-of-strings ---
+        raw_triggers = normalized.get("trigger_conditions")
+        if raw_triggers is None and "trigger_condition" in normalized:
+            raw_triggers = normalized.get("trigger_condition")
+        trig_strs: list[str] = []
+        for item in raw_triggers if isinstance(raw_triggers, list) else [raw_triggers]:
+            if item is None:
+                continue
+            if isinstance(item, dict):
+                cond = str(item.get("condition", "")).strip()
+                if cond:
+                    trig_strs.append(cond)
+            elif isinstance(item, str) and item.strip():
+                trig_strs.append(item.strip())
+        normalized["trigger_conditions"] = trig_strs
 
-        if "operation_steps" not in normalized and "operation_step" in normalized:
-            step_value = normalized.get("operation_step")
-            if isinstance(step_value, list):
-                normalized["operation_steps"] = [str(v) for v in step_value if str(v).strip()]
-            elif step_value is None:
-                normalized["operation_steps"] = []
-            else:
-                normalized["operation_steps"] = [str(step_value)]
+        # --- operation_steps: accept list-of-objects OR list-of-strings ---
+        raw_steps = normalized.get("operation_steps")
+        if raw_steps is None and "operation_step" in normalized:
+            raw_steps = normalized.get("operation_step")
+        step_strs: list[str] = []
+        for item in raw_steps if isinstance(raw_steps, list) else [raw_steps]:
+            if item is None:
+                continue
+            if isinstance(item, dict):
+                picked = ""
+                for k in ("step", "action", "text", "description"):
+                    v = str(item.get(k, "")).strip()
+                    if v:
+                        picked = v
+                        break
+                if picked:
+                    step_strs.append(picked)
+            elif isinstance(item, str) and item.strip():
+                step_strs.append(item.strip())
+        normalized["operation_steps"] = step_strs
 
-        for key in ["phenomenon_tags", "trigger_conditions", "operation_steps", "retrieval_hints", "verifier_hints"]:
+        for key in ["phenomenon_tags", "retrieval_hints", "verifier_hints"]:
             val = normalized.get(key)
             if val is None:
                 normalized[key] = []
             elif isinstance(val, str):
                 normalized[key] = [val]
             elif isinstance(val, list):
-                normalized[key] = [str(v) for v in val if str(v).strip()]
+                normalized[key] = [str(v).strip() for v in val if str(v).strip()]
             else:
                 normalized[key] = [str(val)]
 
-        if not normalized.get("phenomenon_tags"):
-            normalized["phenomenon_tags"] = self._infer_phenomenon_tags(normalized)
-
-        if not normalized.get("retrieval_hints"):
-            normalized["retrieval_hints"] = self._infer_retrieval_hints(normalized)
-
-        if not normalized.get("verifier_hints"):
-            normalized["verifier_hints"] = self._infer_verifier_hints(normalized)
-
+        # --- output_constraints: map rich prompt kinds -> schema kinds WITHOUT losing them ---
         constraints = normalized.get("output_constraints", [])
         if isinstance(constraints, dict):
             constraints = [constraints]
         elif isinstance(constraints, str):
-            constraints = [{"kind": "note", "description": constraints}]
+            constraints = [constraints]
         elif not isinstance(constraints, list):
             constraints = []
-
-        valid_kinds = {
-            "must_include_regex",
-            "must_exclude_regex",
-            "token_count_range",
-            "llm_check",
-            "note",
-        }
+        valid_kinds = {"must_include_regex", "must_exclude_regex", "token_count_range", "llm_check", "note"}
         norm_constraints: list[dict[str, Any]] = []
         for c in constraints:
+            if isinstance(c, str):
+                norm_constraints.append({"kind": "note", "description": c})
+                continue
             if not isinstance(c, dict):
-                norm_constraints.append({"kind": "note", "description": str(c)})
                 continue
             c2 = dict(c)
-            kind = str(c2.get("kind", "note"))
-            if kind not in valid_kinds:
-                kind = "note"
-            c2["kind"] = kind
-            if "description" not in c2 or not str(c2.get("description", "")).strip():
-                c2["description"] = "auto-normalized constraint"
-            if "value" in c2 and c2["value"] is not None and not isinstance(c2["value"], str):
+            c2.pop("rule_id", None)
+            kind = str(c2.get("kind", "")).strip().lower()
+            desc = str(c2.get("description", "")).strip()
+            value = c2.get("value")
+            if value is not None:
+                value = str(value)
+            # rich kind -> machine-checkable schema kind
+            if kind == "required_order":
+                c2["kind"] = "must_include_regex"; c2["value"] = value or desc
+            elif kind in ("required_form", "agreement", "case"):
+                c2["kind"] = "must_include_regex"; c2["value"] = value or desc
+            elif kind == "forbidden_form":
+                c2["kind"] = "must_exclude_regex"; c2["value"] = value or desc
+            elif kind == "count":
+                c2["kind"] = "token_count_range"
+            elif kind in valid_kinds:
+                c2["kind"] = kind
+            else:  # grammaticality, position, cooccurrence, or unknown
+                c2["kind"] = "llm_check"
+            if not str(c2.get("description", "")).strip():
+                c2["description"] = desc or f"{c2['kind']} check"
+            if "value" in c2 and c2["value"] is not None:
                 c2["value"] = str(c2["value"])
+            if c2.get("kind") in ("must_include_regex", "must_exclude_regex") and not str(c2.get("value", "")).strip():
+                # no usable pattern; keep as a deferred llm_check so the verifier still has something to inspect
+                c2["kind"] = "llm_check"
             norm_constraints.append(c2)
         normalized["output_constraints"] = norm_constraints
 
+        # --- examples: map rich prompt example shape -> schema shape (keep all fields) ---
         examples = normalized.get("examples", [])
         if isinstance(examples, dict):
             examples = [examples]
@@ -200,11 +226,19 @@ class MBGExtractor:
             if not isinstance(ex, dict):
                 continue
             ex2 = dict(ex)
-            ex2.setdefault("source_sentence", "")
-            ex2.setdefault("target_sentence", "")
+            ex2["source_sentence"] = str(
+                ex2.get("source_sentence") or ex2.get("sentence") or ex2.get("src") or ""
+            ).strip()
+            ex2["target_sentence"] = str(
+                ex2.get("target_sentence") or ex2.get("translation") or ex2.get("gloss") or ""
+            ).strip()
+            if ex2.get("gloss") is None and ex2.get("source_sentence"):
+                ex2["gloss"] = None
+            ex2.setdefault("note", None)
             norm_examples.append(ex2)
         normalized["examples"] = norm_examples
 
+        # --- dependencies: accept target_rule_id + relation; drop rule_status noise ---
         deps = normalized.get("dependencies", [])
         if isinstance(deps, dict):
             deps = [deps]
@@ -222,8 +256,8 @@ class MBGExtractor:
                 continue
             dep2["rule_id"] = rule_id
             dep2["relation"] = relation
-            if "note" in dep2 and dep2["note"] is not None:
-                dep2["note"] = str(dep2["note"])
+            if "note" in dep2 and dep2["note"] is None:
+                dep2["note"] = str(dep2.get("description", ""))
             norm_deps.append(dep2)
         normalized["dependencies"] = norm_deps
 
@@ -234,21 +268,19 @@ class MBGExtractor:
                 normalized["priority"] = 50
 
         valid_operation_types = {
-            "reorder",
-            "insert",
-            "delete",
-            "inflect",
-            "agree",
-            "mark_case",
-            "negate",
-            "tense_aspect",
-            "mood",
-            "clitic",
-            "lexical_override",
-            "fallback",
+            "reorder", "insert", "delete", "inflect", "agree", "mark_case",
+            "negate", "tense_aspect", "mood", "clitic", "lexical_override", "fallback",
         }
         op_val = str(normalized.get("operation_type", "")).strip().lower()
         normalized["operation_type"] = op_val if op_val in valid_operation_types else "fallback"
+
+        # --- inferred hints (only fill when empty; never overwrite real content) ---
+        if not normalized.get("phenomenon_tags"):
+            normalized["phenomenon_tags"] = self._infer_phenomenon_tags(normalized)
+        if not normalized.get("retrieval_hints"):
+            normalized["retrieval_hints"] = self._infer_retrieval_hints(normalized)
+        if not normalized.get("verifier_hints"):
+            normalized["verifier_hints"] = self._infer_verifier_hints(normalized)
 
         return normalized
 

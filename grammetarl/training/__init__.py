@@ -1,3 +1,3 @@
-from .build_dataset import build_min_dataset
+from .build_dataset import build_lexicon, build_training_set
 
-__all__ = ["build_min_dataset"]
+__all__ = ["build_lexicon", "build_training_set"]

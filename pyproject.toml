@@ -26,3 +26,31 @@ dependencies = [
 
 [project.scripts]
 grammetarl = "main:main"
+
+# ---------------------------------------------------------------------------
+# Optional RL / training stack.
+#
+# NOTE: verl 0.9.0 requires transformers>=5.5.3 and torch>=2.9, which CONFLICT
+# with the pinned torch==2.6.0 / transformers==4.46.3 used by the OCR +
+# MBG-extraction pipeline above. Do NOT install this extra into the same
+# environment as the extraction pipeline. Use a dedicated RL virtualenv, e.g.:
+#
+#   uv venv .venv-rl --python 3.11
+#   uv pip install --python .venv-rl/bin/python "verl[rollout]@0.9.0"
+#   # or, for a lighter FSDP2+vLLM setup:
+#   uv pip install --python .venv-rl/bin/python \
+#       "verl==0.9.0" "ray[default]>=2.41.0" "hydra-core" "accelerate" \
+#       "vllm>=0.18.0" "torch==2.9.1" "transformers>=5.5.3"
+#
+# The entrypoints in grammetarl/training/ import verl lazily, so the package
+# still imports (and the extraction pipeline keeps working) without verl.
+# ---------------------------------------------------------------------------
+[project.optional-dependencies]
+rl = [
+    "verl==0.9.0",
+    "ray[default]>=2.41.0",
+    "hydra-core",
+    "accelerate",
+    "trl<=0.9.6",
+    "wandb",
+]
