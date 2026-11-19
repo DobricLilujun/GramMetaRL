@@ -105,7 +105,7 @@ class MBGExtractor:
             language_code=language_code,
             language_name=language_name,
         )
-        content, _usage = chat_text(
+        content, meta = chat_text(
             endpoint=self.endpoint,
             model=self.model,
             messages=[
@@ -118,6 +118,12 @@ class MBGExtractor:
             temperature=0.1,
             reasoning_effort=self.reasoning_effort,
         )
+        if meta.get("finish_reason") == "length":
+            print(
+                f"[MBG][WARN] completion truncated at max_tokens={self.max_tokens} "
+                f"(section={chunk.section_id}); salvaging complete cards",
+                flush=True,
+            )
         cards_raw = self._extract_json(content)
 
         cards: list[MBGCard] = []
@@ -473,18 +479,55 @@ class MBGExtractor:
         return code, LANGUAGE_CODE_TO_NAME.get(code, code)
 
     def _extract_json(self, raw_text: str) -> list[dict[str, Any]]:
-        stripped = raw_text.strip()
-        if stripped.startswith("["):
-            parsed = json.loads(stripped)
-            if not isinstance(parsed, list):
-                raise ValueError("Model output is not a JSON array")
-            return parsed
+        """Parse the card array, salvaging every COMPLETE object from a truncated response.
 
-        # Recovery: some models wrap JSON in markdown fences.
-        match = re.search(r"\[.*\]", stripped, flags=re.DOTALL)
-        if not match:
-            raise ValueError("No JSON array found in model response")
-        parsed = json.loads(match.group(0))
+        A thinking model can spend the token budget on reasoning and then emit a long array that
+        gets cut mid-object. Raising on the whole section used to discard the good cards with it.
+        """
+        stripped = raw_text.strip()
+        text = stripped if stripped.startswith("[") else ""
+        if not text:
+            # Recovery: some models wrap JSON in markdown fences or prose.
+            match = re.search(r"\[.*", stripped, flags=re.DOTALL)
+            text = match.group(0) if match else ""
+        if not text:
+            obj_match = re.search(r"\{.*\}", stripped, flags=re.DOTALL)
+            if not obj_match:
+                raise ValueError("No JSON array or object found in model response")
+            text = "[" + obj_match.group(0) + "]"
+
+        try:
+            parsed = json.loads(text)
+            if isinstance(parsed, dict):
+                return [parsed]
+            if isinstance(parsed, list):
+                return [p for p in parsed if isinstance(p, dict)]
+        except json.JSONDecodeError:
+            pass
+
+        decoder = json.JSONDecoder()
+        i = text.find("[") + 1
+        salvaged: list[dict[str, Any]] = []
+        while i < len(text):
+            while i < len(text) and text[i] in " \n\r\t,":
+                i += 1
+            if i >= len(text) or text[i] != "{":
+                break
+            try:
+                obj, end = decoder.raw_decode(text, i)
+            except json.JSONDecodeError:
+                break
+            if isinstance(obj, dict):
+                salvaged.append(obj)
+            i = end
+        if not salvaged:
+            raise ValueError(
+                "No complete card object could be parsed (response truncated before the first "
+                "closing brace?)"
+            )
+        print(f"[MBG][WARN] salvaged {len(salvaged)} complete card(s) from a malformed/truncated response",
+              flush=True)
+        return salvaged
         if not isinstance(parsed, list):
             raise ValueError("Recovered payload is not a list")
         return parsed

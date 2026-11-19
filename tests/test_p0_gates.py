@@ -139,12 +139,13 @@ def test_chat_text_sends_token_budget_and_falls_back_to_reasoning(monkeypatch):
         })
 
     monkeypatch.setattr(llm_http.requests, "post", fake_post)
-    text, usage = llm_http.chat_text("http://x/v1", "m", [{"role": "user", "content": "hi"}],
-                                     max_tokens=4096, reasoning_effort="minimal")
+    text, meta = llm_http.chat_text("http://x/v1", "m", [{"role": "user", "content": "hi"}],
+                                    max_tokens=4096, reasoning_effort="minimal")
     assert sent[0]["max_tokens"] == 4096
     assert sent[0]["reasoning_effort"] == "minimal"
     assert text.startswith("[{")
-    assert usage["completion_tokens"] == 3
+    assert meta["finish_reason"] == "stop"
+    assert meta["usage"]["completion_tokens"] == 3
 
 
 def test_chat_text_raises_an_actionable_error_when_both_fields_are_null(monkeypatch):
@@ -166,3 +167,21 @@ def test_chat_text_raises_an_actionable_error_when_both_fields_are_null(monkeypa
         raise AssertionError("expected RuntimeError")
     except RuntimeError as exc:
         assert "max_tokens=32" in str(exc)
+
+
+def test_extract_json_salvages_complete_cards_from_a_truncated_array():
+    """A cut-off tail must not discard the cards that did complete."""
+    extractor = MBGExtractor(endpoint="http://unused.invalid", model="unused")
+    truncated = (
+        '[{"id": "LB_A", "scope": "clause"}, '
+        '{"id": "LB_B", "scope": "noun phrase"}, '
+        '{"id": "LB_C", "scope": "unter'
+    )
+    parsed = extractor._extract_json(truncated)
+    assert [p["id"] for p in parsed] == ["LB_A", "LB_B"]
+
+
+def test_extract_json_handles_fenced_output():
+    extractor = MBGExtractor(endpoint="http://unused.invalid", model="unused")
+    parsed = extractor._extract_json('Here you go:\n```json\n[{"id": "LB_A"}]\n```')
+    assert [p["id"] for p in parsed] == ["LB_A"]

@@ -33,10 +33,12 @@ def chat_text(
     temperature: float | None = None,
     reasoning_effort: str | None = None,
 ) -> tuple[str, dict[str, Any]]:
-    """POST /chat/completions and return (text, usage).
+    """POST /chat/completions and return (text, meta).
 
     `text` is message.content, falling back to reasoning_content when a thinking server leaves
     content null (the JSON we want may already be in the reasoning text).
+    `meta` = {"usage": ..., "finish_reason": ...} — finish_reason == "length" means the answer was
+    cut off, which is the difference between 'the model is bad at JSON' and 'we ran out of budget'.
     """
     payload: dict[str, Any] = {"model": model, "messages": messages, "max_tokens": int(max_tokens)}
     if temperature is not None:
@@ -76,4 +78,4 @@ def chat_text(
             "On thinking servers a too-small max_tokens truncates the reasoning phase and "
             "leaves content null; raise max_tokens or set a reasoning effort."
         )
-    return str(text), usage
+    return str(text), {"usage": usage, "finish_reason": finish}
