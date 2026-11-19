@@ -108,3 +108,61 @@ def test_chrf_is_bounded_and_discriminative():
     assert abs(_chr_f(ref, ref) - 1.0) < 1e-9
     assert _chr_f("He went to school.", ref) < 0.5
     assert _chr_f("Hie ass an d'Schoul gaangen", ref) > _chr_f("He went to school.", ref)
+
+
+def test_chat_text_sends_token_budget_and_falls_back_to_reasoning(monkeypatch):
+    """Thinking servers (e.g. a local strata/llama.cpp Qwen build) return content=null while
+    reasoning, and burn the whole context window when no max_tokens is sent."""
+    import json
+
+    from grammetarl import llm_http
+
+    sent: list[dict] = []
+
+    class FakeResp:
+        def __init__(self, payload: dict) -> None:
+            self._payload = payload
+
+        def raise_for_status(self) -> None:
+            return None
+
+        def json(self) -> dict:
+            return self._payload
+
+    def fake_post(url, headers=None, data=None, timeout=None):  # noqa: ANN001, ARG001
+        sent.append(json.loads(data))
+        return FakeResp({
+            "choices": [{"message": {"role": "assistant", "content": None,
+                                      "reasoning_content": "[{\"id\": \"X\"}]"},
+                         "finish_reason": "stop"}],
+            "usage": {"completion_tokens": 3},
+        })
+
+    monkeypatch.setattr(llm_http.requests, "post", fake_post)
+    text, usage = llm_http.chat_text("http://x/v1", "m", [{"role": "user", "content": "hi"}],
+                                     max_tokens=4096, reasoning_effort="minimal")
+    assert sent[0]["max_tokens"] == 4096
+    assert sent[0]["reasoning_effort"] == "minimal"
+    assert text.startswith("[{")
+    assert usage["completion_tokens"] == 3
+
+
+def test_chat_text_raises_an_actionable_error_when_both_fields_are_null(monkeypatch):
+    from grammetarl import llm_http
+
+    class FakeResp:
+        def raise_for_status(self) -> None:
+            return None
+
+        def json(self) -> dict:
+            return {"choices": [{"message": {"role": "assistant", "content": None},
+                                 "finish_reason": "length"}],
+                    "usage": {"completion_tokens": 512}}
+
+    monkeypatch.setattr(llm_http.requests, "post",
+                        lambda url, headers=None, data=None, timeout=None: FakeResp())
+    try:
+        llm_http.chat_text("http://x/v1", "m", [{"role": "user", "content": "hi"}], max_tokens=32)
+        raise AssertionError("expected RuntimeError")
+    except RuntimeError as exc:
+        assert "max_tokens=32" in str(exc)

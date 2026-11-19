@@ -5,8 +5,7 @@ import re
 import unicodedata
 from dataclasses import dataclass
 
-import requests
-
+from .llm_http import DEFAULT_MAX_TOKENS, chat_text
 from .prompt_manager import render_prompt
 from .schema import MBGCard, RuleConstraint
 
@@ -33,11 +32,13 @@ class TranslationVerifier:
         llm_model: str | None = None,
         api_key: str | None = None,
         normalize: bool = True,
+        max_tokens: int = DEFAULT_MAX_TOKENS,
     ) -> None:
         self.llm_endpoint = llm_endpoint.rstrip("/") if llm_endpoint else None
         self.llm_model = llm_model
         self.api_key = api_key
         self.normalize = normalize
+        self.max_tokens = max_tokens
 
     @staticmethod
     def normalize_text(text: str) -> str:
@@ -123,10 +124,6 @@ class TranslationVerifier:
         rule: MBGCard,
         constraint: RuleConstraint,
     ) -> tuple[bool, str]:
-        headers = {"Content-Type": "application/json"}
-        if self.api_key:
-            headers["Authorization"] = f"Bearer {self.api_key}"
-
         prompt = render_prompt(
             "validator_user.j2",
             sentence=sentence,
@@ -136,22 +133,18 @@ class TranslationVerifier:
             constraint_description=constraint.description,
         )
         system_prompt = render_prompt("validator_system.j2")
-        payload = {
-            "model": self.llm_model,
-            "messages": [
+        content, _usage = chat_text(
+            endpoint=self.llm_endpoint,
+            model=self.llm_model,
+            messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": prompt},
             ],
-            "temperature": 0.0,
-        }
-        r = requests.post(
-            f"{self.llm_endpoint}/chat/completions",
-            headers=headers,
-            data=json.dumps(payload),
+            api_key=self.api_key,
             timeout=120,
+            max_tokens=self.max_tokens,
+            temperature=0.0,
         )
-        r.raise_for_status()
-        content = r.json()["choices"][0]["message"]["content"]
 
         match = re.search(r"\{.*\}", content, flags=re.DOTALL)
         if not match:

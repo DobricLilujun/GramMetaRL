@@ -6,8 +6,7 @@ import hashlib
 from dataclasses import dataclass
 from typing import Any
 
-import requests
-
+from .llm_http import DEFAULT_MAX_TOKENS, chat_text
 from .prompt_manager import render_prompt
 from .schema import MBGCard
 
@@ -88,11 +87,15 @@ class MBGExtractor:
         model: str,
         api_key: str | None = None,
         timeout: int = 240,
+        max_tokens: int = DEFAULT_MAX_TOKENS,
+        reasoning_effort: str | None = None,
     ) -> None:
         self.endpoint = endpoint.rstrip("/")
         self.model = model
         self.api_key = api_key
         self.timeout = timeout
+        self.max_tokens = max_tokens
+        self.reasoning_effort = reasoning_effort
 
     def extract_cards(self, chunk: ExtractionChunk) -> list[MBGCard]:
         user_prompt = self._build_user_prompt(chunk)
@@ -102,26 +105,19 @@ class MBGExtractor:
             language_code=language_code,
             language_name=language_name,
         )
-        payload = {
-            "model": self.model,
-            "temperature": 0.1,
-            "messages": [
+        content, _usage = chat_text(
+            endpoint=self.endpoint,
+            model=self.model,
+            messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
-        }
-        headers = {"Content-Type": "application/json"}
-        if self.api_key:
-            headers["Authorization"] = f"Bearer {self.api_key}"
-
-        r = requests.post(
-            f"{self.endpoint}/chat/completions",
-            headers=headers,
-            data=json.dumps(payload),
+            api_key=self.api_key,
             timeout=self.timeout,
+            max_tokens=self.max_tokens,
+            temperature=0.1,
+            reasoning_effort=self.reasoning_effort,
         )
-        r.raise_for_status()
-        content = r.json()["choices"][0]["message"]["content"]
         cards_raw = self._extract_json(content)
 
         cards: list[MBGCard] = []

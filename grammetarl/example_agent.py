@@ -6,10 +6,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-import requests
 from pydantic import BaseModel, Field
 
 from .llm_extract import LANGUAGE_CODE_TO_NAME
+from .llm_http import DEFAULT_MAX_TOKENS, chat_text
 from .prompt_manager import render_prompt
 from .schema import MBGCard
 
@@ -57,6 +57,8 @@ class ExampleAgent:
     api_key: str | None = None
     timeout: int = 240
     min_confidence: int = 7
+    max_tokens: int = DEFAULT_MAX_TOKENS
+    reasoning_effort: str | None = None
 
     def __post_init__(self) -> None:
         self.endpoint = self.endpoint.rstrip("/")
@@ -85,26 +87,19 @@ class ExampleAgent:
             extracted_grammar=json.dumps(card.as_dict(), ensure_ascii=False, indent=2),
             source_text=source_text,
         )
-        payload = {
-            "model": self.model,
-            "temperature": 0.2,
-            "messages": [
+        content, _usage = chat_text(
+            endpoint=self.endpoint,
+            model=self.model,
+            messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
-        }
-        headers = {"Content-Type": "application/json"}
-        if self.api_key:
-            headers["Authorization"] = f"Bearer {self.api_key}"
-
-        r = requests.post(
-            f"{self.endpoint}/chat/completions",
-            headers=headers,
-            data=json.dumps(payload),
+            api_key=self.api_key,
             timeout=self.timeout,
+            max_tokens=self.max_tokens,
+            temperature=0.2,
+            reasoning_effort=self.reasoning_effort,
         )
-        r.raise_for_status()
-        content = r.json()["choices"][0]["message"]["content"]
         parsed = self._extract_json_or_null(content)
         if parsed is None:
             return None

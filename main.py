@@ -41,6 +41,8 @@ def cmd_build(args: argparse.Namespace) -> None:
         model=args.llm_model,
         api_key=api_key,
         timeout=args.llm_timeout,
+        max_tokens=args.llm_max_tokens,
+        reasoning_effort=args.llm_reasoning_effort,
     )
     ocr_pages_jsonl: Path | None = None
     if args.ocr_pages_jsonl:
@@ -60,6 +62,8 @@ def cmd_build(args: argparse.Namespace) -> None:
             api_key=api_key,
             timeout=args.llm_timeout,
             min_confidence=args.example_agent_min_confidence,
+            max_tokens=args.llm_max_tokens,
+            reasoning_effort=args.llm_reasoning_effort,
         )
         if args.example_agent_output:
             example_output_jsonl = Path(args.example_agent_output)
@@ -225,6 +229,18 @@ def build_parser() -> argparse.ArgumentParser:
     p_build.add_argument("--llm-model", default="nvidia/Qwen3.6-35B-A3B-NVFP4")
     p_build.add_argument("--llm-api-key-env", default="OPENAI_API_KEY")
     p_build.add_argument("--llm-timeout", type=int, default=240)
+    p_build.add_argument(
+        "--llm-max-tokens",
+        type=int,
+        default=4096,
+        help="Completion budget. Thinking servers return content=null if this truncates the "
+             "reasoning phase; letting the server default to the full context window is catastrophic.",
+    )
+    p_build.add_argument(
+        "--llm-reasoning-effort",
+        default=None,
+        help="Optional reasoning effort for thinking servers (minimal/low/high); unset = model default.",
+    )
     p_build.set_defaults(func=cmd_build)
 
     p_init = sub.add_parser("init-workspace", help="Create standardized workspace folders")
