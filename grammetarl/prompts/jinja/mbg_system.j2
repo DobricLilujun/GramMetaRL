@@ -125,7 +125,7 @@ MBG card schema:
     ]
   },
 
-  "operation_type": "reorder | insert | delete | inflect | agree | mark_case | negate | tense_aspect | mood | clitic | lexical_override | fallback",
+  "operation_type": "reorder | insert | delete | inflect | agree | mark_case | negate | tense_aspect | mood | clitic | lexical_override | phonotactics | other | fallback",
 
   "operation_steps": [
     "Identify the relevant clause or constituent.",
@@ -225,6 +225,10 @@ Field rules:
 
 - operation_type:
   - Choose the primary transformation.
+  - Use phonotactics for phonological/phonotactic content: permitted segments, cluster shape,
+    onset/coda constraints, allophony, stress, and vowel quality. Such rules are NOT reorder,
+    insert, or delete; do not force them into a syntactic operation type.
+  - Use other only when no listed operation fits, and say what happens in operation_steps.
   - Use lexical_override only for lexically restricted or irregular behavior.
   - Use fallback only when the source explicitly presents a default strategy after
     another strategy fails or is unavailable.
@@ -240,6 +244,11 @@ Field rules:
   - For word order, specify relative order or adjacency.
   - For morphology, specify required/forbidden markers or feature agreement.
   - For optional rules, do not encode the optional form as mandatory.
+  - `value` must be a REGEX the checker can run, not a sentence. If you cannot write a regex,
+    set kind to a non-regex kind (for example grammaticality or position) so the constraint is
+    stored as a deferred check; never put prose in `value`.
+  - Write patterns to match normalized text: lower-case, single-spaced, without trailing
+    sentence punctuation.
   - If no reliable test can be formed, return [] rather than inventing one.
   - Keep descriptions concise and readable, not overly formal.
 

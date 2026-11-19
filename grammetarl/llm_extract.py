@@ -35,6 +35,52 @@ LANGUAGE_CODE_TO_NAME = {
 }
 
 
+_NONE_TOKENS = {"", "none", "null", "n/a", "na", "nan", "-", "unknown"}
+
+VALID_OPERATION_TYPES = {
+    "reorder", "insert", "delete", "inflect", "agree", "mark_case", "negate",
+    "tense_aspect", "mood", "clitic", "lexical_override", "phonotactics", "other",
+    "fallback",
+}
+
+VALID_RULE_STATUSES = {"categorical", "default", "optional", "variable", "lexical_exception", "uncertain"}
+
+VALID_EXCEPTION_TYPES = {"exception", "optional_variant", "dialectal_variant", "register_variant", "lexicalized_form"}
+
+
+def _clean_str(value: object) -> str:
+    """Stringify a value, collapsing None and sentinel strings to the empty string.
+
+    Fixes the previous `str(None) == 'None'` leakage that put literal 'None' into `scope`.
+    """
+    if value is None:
+        return ""
+    if isinstance(value, (dict, list)):
+        return ""
+    text = str(value).strip()
+    if text.lower() in _NONE_TOKENS:
+        return ""
+    return text
+
+
+def looks_like_prose(pattern: str) -> bool:
+    """True when a 'pattern' string is really a natural-language sentence, not a matcher.
+
+    The extraction prompt puts free text in the constraint `value` slot; feeding that to
+    re.search makes every check fail, so `grammar_reward` becomes a constant. Reject those.
+    """
+    if not pattern:
+        return True
+    import re as _re
+
+    try:
+        _re.compile(pattern)
+    except _re.error:
+        return True
+    # Two or more bare words separated by whitespace => prose, not a matcher.
+    return bool(_re.search(r"[A-Za-z\u00c0-\u024f]{3,}(?:\s+[A-Za-z\u00c0-\u024f]{3,}){1,}", pattern))
+
+
 class MBGExtractor:
     def __init__(
         self,
@@ -107,19 +153,17 @@ class MBGExtractor:
             serialized = json.dumps(normalized, ensure_ascii=False, sort_keys=True)
             normalized["id"] = f"AUTO_{hashlib.sha1(serialized.encode('utf-8')).hexdigest()[:12]}"
 
-        # --- scope: accept rich dict OR string; never silently drop ---
+        # --- scope: accept rich dict OR string; never silently drop; never leak 'None' ---
         scope_val = normalized.get("scope")
         if isinstance(scope_val, dict):
-            syntactic_domain = str(scope_val.get("syntactic_domain", "")).strip()
-            constituent_target = str(scope_val.get("constituent_target", "")).strip()
-            linear_domain = str(scope_val.get("linear_domain", "")).strip()
-            semantic_scope = str(scope_val.get("semantic_pragmatic_scope", "")).strip()
-            scope_parts = [p for p in [syntactic_domain, constituent_target, linear_domain, semantic_scope] if p]
+            scope_parts = [
+                _clean_str(scope_val.get(k))
+                for k in ("syntactic_domain", "constituent_target", "linear_domain", "semantic_pragmatic_scope")
+            ]
+            scope_parts = [p for p in scope_parts if p]
             normalized["scope"] = " | ".join(scope_parts) if scope_parts else "unspecified"
-        elif scope_val is None:
-            normalized["scope"] = "unspecified"
         else:
-            normalized["scope"] = str(scope_val).strip() or "unspecified"
+            normalized["scope"] = _clean_str(scope_val) or "unspecified"
 
         # --- trigger_conditions: accept list-of-objects OR list-of-strings ---
         raw_triggers = normalized.get("trigger_conditions")
@@ -212,10 +256,24 @@ class MBGExtractor:
             if c2.get("kind") in ("must_include_regex", "must_exclude_regex") and not str(c2.get("value", "")).strip():
                 # no usable pattern; keep as a deferred llm_check so the verifier still has something to inspect
                 c2["kind"] = "llm_check"
+            if c2.get("kind") in ("must_include_regex", "must_exclude_regex") and looks_like_prose(
+                str(c2.get("value", ""))
+            ):
+                # A prose value in a regex slot matches nothing (or matches by accident).
+                # Downgrade instead of emitting a fake machine check: the reward must not be noise.
+                desc = str(c2.get("description", "")).strip()
+                c2["kind"] = "llm_check"
+                c2["description"] = f"{desc or str(c2.get('value', '')).strip()}"
+                c2["value"] = None
             norm_constraints.append(c2)
         normalized["output_constraints"] = norm_constraints
 
         # --- examples: map rich prompt example shape -> schema shape (keep all fields) ---
+        # Orientation rule for a target-language grammar card: the book's example sentence IS
+        # the target-language string, and `translation` (if given) is the English/source side.
+        # Feeding {sentence -> source_sentence} makes verifiers check the constraint against the
+        # wrong (English) side, so the pairing must be sentence=target, translation=source.
+        card_language = _clean_str(normalized.get("language")).lower()
         examples = normalized.get("examples", [])
         if isinstance(examples, dict):
             examples = [examples]
@@ -226,17 +284,22 @@ class MBGExtractor:
             if not isinstance(ex, dict):
                 continue
             ex2 = dict(ex)
-            ex2["source_sentence"] = str(
-                ex2.get("source_sentence") or ex2.get("sentence") or ex2.get("src") or ""
-            ).strip()
-            ex2["target_sentence"] = str(
-                ex2.get("target_sentence") or ex2.get("translation") or ex2.get("gloss") or ""
-            ).strip()
-            if ex2.get("gloss") is None and ex2.get("source_sentence"):
-                ex2["gloss"] = None
+            book_sentence = _clean_str(ex2.get("sentence")) or _clean_str(ex2.get("target_sentence"))
+            en_side = _clean_str(ex2.get("translation")) or _clean_str(ex2.get("source_sentence"))
+            gloss = _clean_str(ex2.get("gloss"))
+            if book_sentence and not en_side:
+                # No source-language side available: keep the target string, leave src empty
+                # rather than duplicating it (an identical src/tgt pair is degenerate).
+                en_side = ""
+            ex2["source_sentence"] = en_side
+            ex2["target_sentence"] = book_sentence
+            ex2["gloss"] = gloss or None
             ex2.setdefault("note", None)
+            if not ex2["target_sentence"]:
+                continue
             norm_examples.append(ex2)
         normalized["examples"] = norm_examples
+        del card_language  # orientation is language-independent given `translation`; kept for clarity
 
         # --- dependencies: accept target_rule_id + relation; drop rule_status noise ---
         deps = normalized.get("dependencies", [])
@@ -267,12 +330,47 @@ class MBGExtractor:
             except Exception:
                 normalized["priority"] = 50
 
-        valid_operation_types = {
-            "reorder", "insert", "delete", "inflect", "agree", "mark_case",
-            "negate", "tense_aspect", "mood", "clitic", "lexical_override", "fallback",
-        }
-        op_val = str(normalized.get("operation_type", "")).strip().lower()
-        normalized["operation_type"] = op_val if op_val in valid_operation_types else "fallback"
+        # --- statement / confidence / rule_status / exceptions_and_variants ---
+        # These were requested by the prompt but silently dropped by the schema, so the single
+        # most informative field (the rule statement) never reached retrieval or the agent.
+        normalized["statement"] = _clean_str(normalized.get("statement"))
+        if "confidence" in normalized:
+            try:
+                conf = float(normalized["confidence"])
+                normalized["confidence"] = max(0.0, min(1.0, conf))
+            except (TypeError, ValueError):
+                normalized["confidence"] = None
+        status = _clean_str(normalized.get("rule_status")).lower()
+        normalized["rule_status"] = status if status in VALID_RULE_STATUSES else None
+
+        variants = normalized.get("exceptions_and_variants", [])
+        if isinstance(variants, dict):
+            variants = [variants]
+        elif not isinstance(variants, list):
+            variants = []
+        norm_variants: list[dict[str, Any]] = []
+        for var in variants:
+            if isinstance(var, str):
+                norm_variants.append({"type": "exception", "description": var})
+                continue
+            if not isinstance(var, dict):
+                continue
+            desc = _clean_str(var.get("description")) or _clean_str(var.get("statement"))
+            if not desc:
+                continue
+            vtype = _clean_str(var.get("type")).lower()
+            norm_variants.append(
+                {
+                    "type": vtype if vtype in VALID_EXCEPTION_TYPES else "exception",
+                    "description": desc,
+                    "condition": _clean_str(var.get("condition")) or None,
+                    "preferred_form": _clean_str(var.get("preferred_form")) or None,
+                }
+            )
+        normalized["exceptions_and_variants"] = norm_variants
+
+        op_val = _clean_str(normalized.get("operation_type")).lower()
+        normalized["operation_type"] = op_val if op_val in VALID_OPERATION_TYPES else "fallback"
 
         # --- inferred hints (only fill when empty; never overwrite real content) ---
         if not normalized.get("phenomenon_tags"):
@@ -315,6 +413,8 @@ class MBGExtractor:
             tags.append("tense_aspect")
         elif op == "mood":
             tags.append("mood")
+        elif op == "phonotactics":
+            tags.append("phonotactics")
 
         if not tags:
             tags.append("grammar_rule")

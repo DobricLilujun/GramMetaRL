@@ -17,8 +17,35 @@ OperationType = Literal[
     "mood",
     "clitic",
     "lexical_override",
+    "phonotactics",
+    "other",
     "fallback",
 ]
+
+
+RuleStatus = Literal[
+    "categorical",
+    "default",
+    "optional",
+    "variable",
+    "lexical_exception",
+    "uncertain",
+]
+
+ExceptionType = Literal[
+    "exception",
+    "optional_variant",
+    "dialectal_variant",
+    "register_variant",
+    "lexicalized_form",
+]
+
+
+class RuleExceptionVariant(BaseModel):
+    type: ExceptionType = "exception"
+    description: str
+    condition: str | None = None
+    preferred_form: str | None = None
 
 
 class RuleConstraint(BaseModel):
@@ -59,12 +86,19 @@ class RuleDependency(BaseModel):
 class MBGCard(BaseModel):
     id: str = Field(description="Unique and stable rule ID")
     language: str = Field(description="Language identifier, e.g. lb, kmr, qu")
+    statement: str = Field(
+        default="",
+        description="Concise falsifiable statement of the rule, in English",
+    )
+    rule_status: RuleStatus | None = None
+    confidence: float | None = Field(default=None, ge=0.0, le=1.0)
     phenomenon_tags: list[str] = Field(default_factory=list)
     trigger_conditions: list[str] = Field(default_factory=list)
     scope: str = Field(description="What structure this rule applies to")
     operation_type: OperationType
     operation_steps: list[str] = Field(default_factory=list)
     output_constraints: list[RuleConstraint] = Field(default_factory=list)
+    exceptions_and_variants: list[RuleExceptionVariant] = Field(default_factory=list)
     examples: list[RuleExample] = Field(default_factory=list)
     source: SourceInfo
     priority: int = Field(default=50, ge=0, le=100)
@@ -75,11 +109,13 @@ class MBGCard(BaseModel):
     def as_index_text(self) -> str:
         parts = [
             self.id,
+            self.statement,
             self.scope,
             " ".join(self.phenomenon_tags),
             " ".join(self.trigger_conditions),
             " ".join(self.operation_steps),
             " ".join(self.retrieval_hints),
+            " ".join(e.description for e in self.exceptions_and_variants),
         ]
         return "\n".join(p for p in parts if p)
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import unicodedata
 from dataclasses import dataclass
 
 import requests
@@ -31,10 +32,25 @@ class TranslationVerifier:
         llm_endpoint: str | None = None,
         llm_model: str | None = None,
         api_key: str | None = None,
+        normalize: bool = True,
     ) -> None:
         self.llm_endpoint = llm_endpoint.rstrip("/") if llm_endpoint else None
         self.llm_model = llm_model
         self.api_key = api_key
+        self.normalize = normalize
+
+    @staticmethod
+    def normalize_text(text: str) -> str:
+        """NFKC + casefold + whitespace collapse + strip sentence-final punctuation.
+
+        Without this, clause-final constraints (a pattern ending in `$`) fail on a trailing
+        period, and case-insensitive rules silently miss. Patterns are matched against this
+        normalized form, so write them case-insensitively.
+        """
+        out = unicodedata.normalize("NFKC", text).casefold()
+        out = re.sub(r"\s+", " ", out).strip()
+        out = re.sub(r"[.,!?;:\"'’””]+$", "", out)
+        return out
 
     def verify(self, sentence: str, translation: str, rules: list[MBGCard]) -> VerificationReport:
         results = [self._verify_single_rule(sentence, translation, rule) for rule in rules]
@@ -56,7 +72,8 @@ class TranslationVerifier:
         passed = True
 
         for cons in rule.output_constraints:
-            ok, msg = self._check_constraint(cons, translation)
+            haystack = self.normalize_text(translation) if self.normalize else translation
+            ok, msg = self._check_constraint(cons, haystack)
             messages.append(msg)
             if not ok:
                 passed = False

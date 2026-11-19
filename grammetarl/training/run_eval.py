@@ -20,26 +20,44 @@ from grammetarl.tools import (
 # corresponding packages are present, otherwise skipped gracefully.
 # ---------------------------------------------------------------------------
 
-def _chr_f(hyp: str, ref: str) -> float:
-    """Lightweight chrF (character n-gram F1) without external deps."""
-    if not hyp or not ref:
+def _chr_f(hyp: str, ref: str, max_order: int = 6, beta: float = 2.0) -> float:
+    """Dependency-free chrF (Popovic 2015): mean over char n-gram orders of the F-score.
+
+    The previous implementation counted *distinct* n-gram types and averaged both sides in
+    the denominator, which is not a precision/recall F-score: it returned 2.015 for a string
+    compared with itself. This version is a proper multiset precision/recall F-score and is
+    bounded by 1.0. For the paper, report sacrebleu chrF/COMET; this is the fast RL-side proxy.
+    """
+    if not hyp.strip() or not ref.strip():
         return 0.0
 
-    def ngrams(s: str, n: int) -> dict:
+    def norm(s: str) -> str:
+        return " ".join(s.split())
+
+    def multiset_counts(s: str, n: int) -> dict[str, int]:
         out: dict[str, int] = {}
         for i in range(len(s) - n + 1):
             g = s[i:i + n]
             out[g] = out.get(g, 0) + 1
         return out
 
-    def f1(a: str, b: str, n: int) -> float:
-        pa, pb = ngrams(a, n), ngrams(b, n)
-        inter = sum(min(pa.get(g, 0), pb.get(g, 0)) for g in pa)
-        denom = max(1, (len(pa) + len(pb)) / 2)
-        return inter / denom
-
-    f1 = 0.5 * (f1(hyp, ref, 1) + f1(hyp, ref, 2) + f1(hyp, ref, 3))
-    return f1
+    h, r = norm(hyp), norm(ref)
+    beta2 = beta * beta
+    scores: list[float] = []
+    for n in range(1, max_order + 1):
+        if len(h) < n or len(r) < n:
+            continue
+        hc, rc = multiset_counts(h, n), multiset_counts(r, n)
+        matches = sum(min(count, rc.get(g, 0)) for g, count in hc.items())
+        total_h = sum(hc.values())
+        total_r = sum(rc.values())
+        precision = matches / total_h if total_h else 0.0
+        recall = matches / total_r if total_r else 0.0
+        if precision == 0.0 or recall == 0.0:
+            scores.append(0.0)
+            continue
+        scores.append((1 + beta2) * precision * recall / (beta2 * precision + recall))
+    return sum(scores) / len(scores) if scores else 0.0
 
 
 def replay_trajectory(

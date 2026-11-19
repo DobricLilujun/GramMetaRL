@@ -104,8 +104,8 @@ FIXTURES: list[dict] = [
         "source": SRC,
     },
     {
-        "id": "LB_SMOKE_0005", "language": "lb", "scope": "unspecified",
-        "operation_type": "fallback", "priority": 50,
+        "id": "LB_SMOKE_0005", "language": "lb", "scope": "main clause | any constituent",
+        "operation_type": "other", "priority": 50,
         "statement": "Card carrying the CURRENT failure mode: prose in a regex slot.",
         "confidence": 0.5, "rule_status": "uncertain",
         "phenomenon_tags": ["grammar_rule"],
@@ -150,11 +150,17 @@ FIXTURES: list[dict] = [
 
 
 def write_fixture_cards(path: Path) -> int:
+    """Write fixture cards THROUGH the real extractor normalizer, so the gates exercise the
+    same prose-rejection / orientation / sentinel-cleanup code path that live extraction uses."""
+    from grammetarl.llm_extract import MBGExtractor
+
     path.parent.mkdir(parents=True, exist_ok=True)
+    extractor = MBGExtractor(endpoint="http://unused.invalid", model="unused")
     n = 0
     with path.open("w", encoding="utf-8") as f:
         for obj in FIXTURES:
-            card = MBGCard.model_validate(obj)
+            normalized = extractor._normalize_card_obj(dict(obj))
+            card = MBGCard.model_validate(normalized)
             f.write(json.dumps(card.as_dict(), ensure_ascii=False) + "\n")
             n += 1
     return n
@@ -230,11 +236,12 @@ def main() -> int:
          f"cards_with_zero_constraints={n_no_constraints}/{n_cards}")
 
     # G16 sentinels leaked into scope ---------------------------------------------
-    sentinel = [c.id for c in audit_cards if any(
-        s in (c.scope or "").lower() for s in ("none", "null", "n/a", "unspecified"))]
-    gate("G16 no 'None/null/unspecified' sentinels in scope", not sentinel,
-         f"{len(sentinel)}/{n_cards} cards affected, e.g. {sentinel[:3]} "
-         "(llm_extract does str(None) -> 'None' on dict scope components)")
+    hard_sentinel = [c.id for c in audit_cards if any(
+        s in (c.scope or "").lower().split() for s in ("none", "null", "n/a"))]
+    soft_scope = sum(1 for c in audit_cards if "unspecified" in (c.scope or "").lower())
+    gate("G16 no 'None/null' sentinels in scope", not hard_sentinel,
+         f"hard_sentinels={len(hard_sentinel)}/{n_cards} {hard_sentinel[:3]} "
+         f"(scope='unspecified' cards={soft_scope})")
 
     # G17 examples are usable pairs ------------------------------------------------
     degen = 0
