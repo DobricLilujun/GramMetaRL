@@ -287,14 +287,17 @@ def main() -> int:
          f"cards_with_failing_self_test={len(failed_selftest)} {failed_selftest[:2] or ''}")
 
     # G5c normalization robustness: does a clause-final constraint survive punctuation?
-    import re as _re
-
-    anchored = r"\b(ass|gaangen|gemach)$"
-    clean = bool(_re.search(anchored, "well hie gaangen ass"))
-    punct = bool(_re.search(anchored, "well hie gaangen ass."))
-    gate("G5c verifier normalizes punctuation before matching", clean == punct,
-         f"anchored-constraint clean_match={clean} punctuated_match={punct} "
-         "-> TranslationVerifier matches raw strings with no normalization layer")
+    anchor_card = MBGCard.model_validate({
+        "id": "LB_SMOKE_ANCHOR", "language": "lb", "scope": "subordinate clause", "operation_type": "reorder",
+        "output_constraints": [{"kind": "must_include_regex", "description": "verb final",
+                                "value": r"\b(well|datt)\b.*\b(ass|gaangen|gemach)$"}],
+        "source": SRC,
+    })
+    clean = v.verify("x", "well hie gaangen ass", [anchor_card]).overall_passed
+    punct = v.verify("x", "well hie gaangen ass.", [anchor_card]).overall_passed
+    gate("G5c verifier normalizes punctuation before matching", clean and punct,
+         f"clean_match={clean} punctuated_match={punct} (normalized form is NFKC+casefold+no "
+         "trailing punctuation; patterns must be written case-insensitively)")
 
     # G5d example orientation for a target-language card
     warn("G5d example orientation (en->lb)",
