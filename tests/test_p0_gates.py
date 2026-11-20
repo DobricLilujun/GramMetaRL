@@ -87,7 +87,19 @@ def test_example_without_translation_is_not_duplicated():
     ex = card.examples[0]
     assert ex.target_sentence == "Strof [ʃtʀoːf]"
     assert ex.source_sentence == ""
-    assert card.operation_type == "phonotactics"  # not collapsed to fallback/reorder
+    assert card.operation_type == "phonotactics"
+
+
+def test_example_copied_into_both_slots_is_not_a_pair():
+    """Observed in real extraction: the model put the book sentence in sentence AND translation."""
+    card = _card({
+        "id": "LB_T_9", "language": "lb", "scope": "word", "operation_type": "phonotactics",
+        "examples": [{"sentence": "Interieur [ˈɛ̃ːntɛʀjœːʀ]", "translation": "Interieur [ˈɛ̃ːntɛʀjœːʀ]"}],
+        "source": SOURCE,
+    })
+    ex = card.examples[0]
+    assert ex.target_sentence == "Interieur [ˈɛ̃ːntɛʀjœːʀ]"
+    assert ex.source_sentence == ""  # not collapsed to fallback/reorder
 
 
 def test_verifier_normalizes_punctuation_and_case():

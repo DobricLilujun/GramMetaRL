@@ -293,6 +293,9 @@ class MBGExtractor:
                 # No source-language side available: keep the target string, leave src empty
                 # rather than duplicating it (an identical src/tgt pair is degenerate).
                 en_side = ""
+            if en_side and en_side == book_sentence:
+                # The model duplicated the book sentence into both slots: not a translation pair.
+                en_side = ""
             ex2["source_sentence"] = en_side
             ex2["target_sentence"] = book_sentence
             ex2["gloss"] = gloss or None
