@@ -402,11 +402,35 @@ def main() -> int:
         rows = [json.loads(l) for l in train.open("r", encoding="utf-8") if l.strip()][:200]
         mean_src_tokens = sum(len(r.get("src", "").split()) for r in rows) / max(1, len(rows))
         gold_nonempty = sum(1 for r in rows if r.get("gold_rules"))
+        sub_path = ws.root / "data" / "processed" / "pairs_subsentences.jsonl"
+        n_sub = sum(1 for l in sub_path.open("r", encoding="utf-8") if l.strip()) if sub_path.exists() else 0
         gate("G12 train rows are sentences with gold_rules",
-             mean_src_tokens >= 4 and gold_nonempty > 0,
-             f"mean_src_tokens={mean_src_tokens:.2f} rows_with_gold_rules={gold_nonempty}/{len(rows)}")
+             mean_src_tokens >= 4 and gold_nonempty > 0 and len(rows) >= 300,
+             f"mean_src_tokens={mean_src_tokens:.2f} rows_with_gold_rules={gold_nonempty}/{len(rows)} "
+             f"sentence_rows={len(rows)} (need >=300) subsentence_drills={n_sub}. "
+             "Grammar-book examples are mostly word/paradigm snippets: sentence-grade pairs "
+             "must come from an external parallel corpus or rule-targeted synthesis (P4).")
     else:
         gate("G12 train dataset exists", False, str(train))
+
+    # G20 split leakage: a rule id or an exact pair in both splits makes
+    # "did the policy learn this rule?" unanswerable.
+    valid = ws.root / "data" / "processed" / "valid.jsonl"
+    if train.exists() and valid.exists():
+        def _rows(path):
+            return [json.loads(l) for l in path.open("r", encoding="utf-8") if l.strip()]
+
+        tr_rows, va_rows = _rows(train), _rows(valid)
+        shared_rules = {r for x in tr_rows for r in (x.get("gold_rules") or [])} & \
+            {r for x in va_rows for r in (x.get("gold_rules") or [])}
+        shared_pairs = {(str(x.get("src", "")).lower(), str(x.get("tgt_ref", "")).lower()) for x in tr_rows} & \
+            {(str(x.get("src", "")).lower(), str(x.get("tgt_ref", "")).lower()) for x in va_rows}
+        gate("G20 train/valid share no rule id and no exact pair",
+             not (shared_rules or shared_pairs),
+             f"shared_rules={len(shared_rules)} shared_pairs={len(shared_pairs)} "
+             f"train={len(tr_rows)} valid={len(va_rows)}")
+    else:
+        warn("G20 train/valid split files present", "run build-dataset to produce valid.jsonl")
 
     # G13 end-to-end eval replay (run_eval) ---------------------------------------
     from grammetarl.training.run_eval import replay_trajectory

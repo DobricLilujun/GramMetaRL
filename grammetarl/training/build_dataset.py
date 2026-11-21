@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import random
 from pathlib import Path
 
+from grammetarl.schema import MBGCard
 from grammetarl.workspace import get_workspace_paths
 
 
@@ -84,6 +86,137 @@ def _parse_entry(entry: dict) -> dict:
         "pos": pos,
         "translations": translations,
         "morphology": morphology[:8],
+    }
+
+
+def _stable_id(seed: str) -> str:
+    """Deterministic id. The previous code used Python's hash(), which is salted per process,
+    so ids and the train/valid split were not reproducible across runs."""
+    return hashlib.sha1(seed.encode("utf-8")).hexdigest()[:16]
+
+
+def load_cards_light(cards_path: Path) -> list[MBGCard]:
+    """Load cards without importing the PDF/OCR stack."""
+    cards: list[MBGCard] = []
+    with cards_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                cards.append(MBGCard.model_validate_json(line))
+    return cards
+
+
+def _classify_example(src: str, tgt: str) -> str:
+    """Classify a card example pair by whether it can serve as a translation sentence.
+
+    Grammar-book examples are mostly word/paradigm snippets with IPA, e.g.
+      "(I) ask vs. (you) ask" -> "froen [ˈfʀoːən] vs. frees [fʀeːs]"
+    Those are valuable for morphological drills but useless as MT training pairs
+    (gate G12: mean src length 3.0 tokens). Keep them, but out of the sentence set.
+    """
+    text = f"{src} {tgt}"
+    if "[" in text and "]" in text:
+        return "ipa_gloss"
+    low = f"{src} {tgt}".lower()
+    if " vs " in low or " vs. " in low or ">" in text or "~" in text:
+        return "paradigm"
+    if len(src.split()) >= 5 and any(c in src for c in "!?") or (
+        len(src.split()) >= 6 and src[:1].isalpha()
+    ):
+        return "sentence"
+    return "phrase"
+
+
+def build_sentence_dataset(
+    cards_path: Path,
+    out_train: Path,
+    out_valid: Path,
+    lang_pair: str = "en->lb",
+    valid_ratio: float = 0.1,
+    seed: int = 0,
+    out_subsentence: Path | None = None,
+) -> dict[str, object]:
+    """Build sentence-level TranslationExample rows from the grammar cards' own example pairs.
+
+    This replaces the word-gloss rows that made the multi-turn grammar environment untrainable
+    (gate G12: mean src length was 1.6 tokens and gold_rules was empty in 200/200 rows).
+
+    Split discipline: split BY CARD, so every example of one rule stays in one split. Otherwise
+    a rule seen in train also appears in valid and 'did the policy learn the rule' is unanswerable.
+    """
+    cards = load_cards_light(cards_path)
+
+    by_card: dict[str, list[dict[str, object]]] = {}
+    sub_sentences: list[dict[str, object]] = []
+    seen_pairs: set[tuple[str, str]] = set()
+    skipped_no_source = 0
+    class_counts: dict[str, int] = {}
+    for card in cards:
+        rows: list[dict[str, object]] = []
+        for ex in card.examples:
+            src = (ex.source_sentence or "").strip()
+            tgt = (ex.target_sentence or "").strip()
+            if not tgt:
+                # Monolingual card example: keep it for grammar-verification, not as a pair.
+                skipped_no_source += 1
+                continue
+            key = (src.lower(), tgt.lower())
+            if key in seen_pairs:
+                continue
+            seen_pairs.add(key)
+            kind = _classify_example(src, tgt)
+            class_counts[kind] = class_counts.get(kind, 0) + 1
+            row = {
+                "id": f"card_{_stable_id(card.id + '|' + src + '|' + tgt)}",
+                "src": src,
+                "tgt_ref": tgt,
+                "lang_pair": lang_pair,
+                "difficulty": kind,
+                "phenomena_tags": list(card.phenomenon_tags),
+                "gold_rules": [card.id],
+                "gold_lexicon": [],
+                "source_pages": [card.source.page_start, card.source.page_end],
+            }
+            if kind == "sentence":
+                rows.append(row)
+            else:
+                sub_sentences.append(row)
+        if rows:
+            by_card[card.id] = rows
+
+    card_ids = sorted(by_card)
+    random.Random(seed).shuffle(card_ids)
+    n_valid_cards = int(round(len(card_ids) * valid_ratio))
+    valid_ids, train_ids = card_ids[:n_valid_cards], card_ids[n_valid_cards:]
+
+    train = [r for cid in train_ids for r in by_card[cid]]
+    valid = [r for cid in valid_ids for r in by_card[cid]]
+    random.Random(seed).shuffle(train)
+    random.Random(seed + 1).shuffle(valid)
+
+    for path, rows in ((out_train, train), (out_valid, valid)):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("w", encoding="utf-8") as f:
+            for r in rows:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    if out_subsentence is not None:
+        out_subsentence.parent.mkdir(parents=True, exist_ok=True)
+        with out_subsentence.open("w", encoding="utf-8") as f:
+            for r in sub_sentences:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+    return {
+        "cards_with_pairs": len(by_card),
+        "train_rows": len(train),
+        "valid_rows": len(valid),
+        "monolingual_examples_skipped": skipped_no_source,
+        "example_classes": class_counts,
+        "subsentence_rows": len(sub_sentences),
+        "subsentence_output": str(out_subsentence) if out_subsentence else None,
+        "train_card_ids": len(train_ids),
+        "valid_card_ids": len(valid_ids),
+        "train_output": str(out_train),
+        "valid_output": str(out_valid),
     }
 
 
@@ -187,33 +320,90 @@ def _pos_to_tags(pos: str) -> list[str]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Build lexicon and translation training set from LOD")
+    parser = argparse.ArgumentParser(description="Build lexicon + translation training set")
     parser.add_argument("--lod", default=None, help="Path to LOD JSONL (default: assets/lb/new_lod-art.jsonl)")
     parser.add_argument("--max-entries", type=int, default=5000, help="Max LOD entries to scan (speed)")
     parser.add_argument("--namespace", default=None, help="Workspace namespace for default output paths")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--valid-ratio", type=float, default=0.1)
+    parser.add_argument(
+        "--from-cards",
+        default=None,
+        help="MBG cards JSONL; sentence-level pairs come from the cards' own example pairs "
+        "(default: data/rules/mbg_cards.jsonl when present)",
+    )
+    parser.add_argument("--lang-pair", default="en->lb")
+    parser.add_argument("--no-lexicon", action="store_true", help="Skip the LOD lexicon build")
+    parser.add_argument(
+        "--lexicon-pairs",
+        action="store_true",
+        help="Also write the old word-gloss rows (to data/processed/train_lexicon.jsonl)",
+    )
     args = parser.parse_args()
 
     ws = get_workspace_paths(namespace=args.namespace)
     ws.ensure_layout()
+    valid_path = ws.root / "data" / "processed" / (
+        "valid.jsonl" if ws.namespace == "default" else f"valid_{ws.namespace}.jsonl"
+    )
+
+    cards_path = Path(args.from_cards) if args.from_cards else (ws.root / "data" / "rules" / "mbg_cards.jsonl")
+    if not cards_path.exists():
+        alt = ws.mbg_cards_file
+        cards_path = alt if alt.exists() else cards_path
+
+    if cards_path.exists():
+        stats = build_sentence_dataset(
+            cards_path,
+            ws.train_dataset_file,
+            valid_path,
+            lang_pair=args.lang_pair,
+            valid_ratio=args.valid_ratio,
+            seed=args.seed,
+            out_subsentence=ws.root / "data" / "processed" / "pairs_subsentences.jsonl",
+        )
+        print(
+            f"Sentence dataset from cards ({cards_path}): "
+            f"cards_with_pairs={stats['cards_with_pairs']} "
+            f"train={stats['train_rows']} valid={stats['valid_rows']} "
+            f"(split by card: train_cards={stats['train_card_ids']} valid_cards={stats['valid_card_ids']}; "
+            f"monolingual examples kept out of the pair set: {stats['monolingual_examples_skipped']})"
+        )
+        print(f"  example classes: {stats['example_classes']}")
+        print(f"  subsentence drills -> {stats['subsentence_output']} ({stats['subsentence_rows']} rows)")
+        print(f"  -> {stats['train_output']}\n  -> {stats['valid_output']}")
+    else:
+        print(
+            f"[WARN] no cards at {cards_path}; falling back to LOD word-gloss rows. "
+            "Word glosses cannot train the multi-turn grammar environment (gate G12)."
+        )
 
     lod_path = Path(args.lod) if args.lod else (Path(ws.root) / "assets" / "lb" / "new_lod-art.jsonl")
-    if not lod_path.exists():
-        raise FileNotFoundError(f"LOD lexicon not found: {lod_path}")
+    if args.no_lexicon:
+        pass
+    elif not lod_path.exists():
+        print(f"[WARN] LOD lexicon not found: {lod_path} (skipping lexicon)")
+    else:
+        n_lex = build_lexicon(lod_path, ws.lexicon_file, max_entries=args.max_entries)
+        print(f"Lexicon entries written: {n_lex} -> {ws.lexicon_file}")
 
-    n_lex = build_lexicon(lod_path, ws.lexicon_file, max_entries=args.max_entries)
-    n_train, n_valid = build_training_set(
-        lod_path,
-        ws.train_dataset_file,
-        ws.root / "data" / "processed" / ("valid.jsonl" if ws.namespace == "default" else f"valid_{ws.namespace}.jsonl"),
-        max_entries=args.max_entries,
-        seed=args.seed,
-        valid_ratio=args.valid_ratio,
-    )
-    print(f"Lexicon entries written: {n_lex} -> {ws.lexicon_file}")
-    print(f"Training examples: {n_train} -> {ws.train_dataset_file}")
-    print(f"Validation examples: {n_valid}")
+    if args.lexicon_pairs:
+        if not lod_path.exists():
+            raise FileNotFoundError(f"LOD lexicon not found: {lod_path}")
+        lex_out = ws.root / "data" / "processed" / (
+            "train_lexicon.jsonl" if ws.namespace == "default" else f"train_lexicon_{ws.namespace}.jsonl"
+        )
+        n_train, n_valid = build_training_set(
+            lod_path,
+            lex_out,
+            ws.root / "data" / "processed" / (
+                "valid_lexicon.jsonl" if ws.namespace == "default" else f"valid_lexicon_{ws.namespace}.jsonl"
+            ),
+            max_entries=args.max_entries,
+            seed=args.seed,
+            valid_ratio=args.valid_ratio,
+        )
+        print(f"Lexicon word-gloss rows (NOT the training set): {n_train} train / {n_valid} valid -> {lex_out}")
 
 
 if __name__ == "__main__":
