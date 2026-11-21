@@ -60,6 +60,10 @@ class RuleConstraint(BaseModel):
     value: str | None = None
     min_tokens: int | None = None
     max_tokens: int | None = None
+    # What the pattern applies to. Without this field a word-level anchored pattern such as
+    # ^(dat|hatt|et|seng)$ gets searched against a whole sentence, which can never match, so the
+    # rule fails on every correct translation (measured: 81% constraint failure on real pairs).
+    level: Literal["token", "phrase", "sentence", "any"] | None = None
 
 
 class RuleExample(BaseModel):

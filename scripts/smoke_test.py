@@ -413,6 +413,21 @@ def main() -> int:
     else:
         gate("G12 train dataset exists", False, str(train))
 
+    # G21 applicability: trigger_conditions are free-text, so the verifier checks output
+    # constraints on sentences the rule was never meant to govern. Measured on 400 real
+    # en->lb pairs: 87.7% of retrieved-rule checks fail, mostly because the rule does not apply.
+    trig_total = sum(len(c.trigger_conditions) for c in cards)
+    trig_exec = sum(
+        1
+        for c in cards
+        for t in c.trigger_conditions
+        if any(ch in str(t) for ch in ("\\b", "^", "$", "[", "|", "(?"))
+    )
+    gate("G21 trigger conditions are executable (applicability checkable)",
+         trig_total > 0 and trig_exec == trig_total,
+         f"trigger_conditions={trig_total} regex_form={trig_exec} "
+         f"({trig_exec}/{trig_total} = {trig_exec / max(1, trig_total):.0%})")
+
     # G20 split leakage: a rule id or an exact pair in both splits makes
     # "did the policy learn this rule?" unanswerable.
     valid = ws.root / "data" / "processed" / "valid.jsonl"

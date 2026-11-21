@@ -15,6 +15,10 @@ class RuleCheckResult:
     rule_id: str
     passed: bool
     messages: list[str]
+    # True when a must_exclude pattern matched nothing at all, so the "pass" proves nothing.
+    # Anchored excludes such as ^(?!zur).*der$ searched over a whole sentence always match zero
+    # tokens, which inflated apparent rule firing (measured on 400 real en->lb pairs).
+    vacuous: bool = False
 
 
 @dataclass(slots=True)
@@ -71,11 +75,14 @@ class TranslationVerifier:
     ) -> RuleCheckResult:
         messages: list[str] = []
         passed = True
+        vacuums = 0
 
         for cons in rule.output_constraints:
             haystack = self.normalize_text(translation) if self.normalize else translation
-            ok, msg = self._check_constraint(cons, haystack)
+            ok, msg, vacuous = self._check_constraint(cons, haystack)
             messages.append(msg)
+            if vacuous:
+                vacuums += 1
             if not ok:
                 passed = False
 
@@ -90,32 +97,101 @@ class TranslationVerifier:
         if not rule.output_constraints:
             messages.append("No machine-checkable constraints on this rule.")
 
-        return RuleCheckResult(rule_id=rule.id, passed=passed, messages=messages)
+        return RuleCheckResult(
+            rule_id=rule.id,
+            passed=passed,
+            messages=messages,
+            vacuous=vacuums > 0,
+        )
 
-    def _check_constraint(self, c: RuleConstraint, translation: str) -> tuple[bool, str]:
+    # --- level-aware matching -------------------------------------------------------
+    # A card constraint operates at some linguistic level. Extraction routinely produces
+    # word-level anchored patterns (^word$) that cannot match a sentence, so the level must be
+    # resolved before matching, otherwise every correct translation fails the rule.
+
+    @staticmethod
+    def _is_anchored(pattern: str) -> bool:
+        return pattern.startswith("^") or pattern.endswith("$")
+
+    # A pattern spans more than one word if it mentions spaces or unbounded interior spans.
+    _PHRASAL_MARKERS = (" ", r"\s", ".*", ".+", "{2", r"\W")
+
+    @classmethod
+    def _is_phrasal(cls, pattern: str) -> bool:
+        return any(m in pattern for m in cls._PHRASAL_MARKERS)
+
+    @classmethod
+    def _resolve_level(cls, c: RuleConstraint, pattern: str) -> str:
+        """Explicit `level` wins; otherwise infer.
+
+        \b(well|datt)\b.*\b(ass|gaangen)$ is sentence-level even though it is anchored,
+        while ^(dat|hatt|et|seng)$ is a word-level form inventory.
+        """
+        if c.level:
+            return c.level
+        if cls._is_anchored(pattern) and not cls._is_phrasal(pattern):
+            return "token"
+        return "sentence"
+
+    @staticmethod
+    def _tokens(text: str) -> list[str]:
+        return [t for t in re.split(r"\s+", text.strip()) if t]
+
+    @classmethod
+    def _pattern_hits(cls, pattern: str, text: str, level: str) -> tuple[int, str]:
+        """Return (n_matches, how). Anchored patterns are matched token-wise."""
+        try:
+            if level == "token":
+                n = 0
+                for tok in cls._tokens(text):
+                    bare = tok.strip("\"“”‘’()[]{}«»,.;:!?-")
+                    for candidate in {tok, bare}:
+                        if candidate and re.search(pattern, candidate):
+                            n += 1
+                            break
+                return n, "token-wise"
+            return len(re.findall(pattern, text)), "whole-string"
+        except re.error as exc:
+            return -1, f"invalid regex: {exc}"
+
+    def _check_constraint(self, c: RuleConstraint, translation: str) -> tuple[bool, str, bool]:
         if c.kind == "must_include_regex":
             if not c.value:
-                return False, "must_include_regex missing value"
-            ok = re.search(c.value, translation) is not None
-            return ok, f"must_include_regex({c.value}) => {ok}"
+                return False, "must_include_regex missing value", False
+            level = self._resolve_level(c, c.value)
+            n, how = self._pattern_hits(c.value, translation, level)
+            if n < 0:
+                return False, f"must_include_regex({c.value}) => {how}", False
+            if n == 0 and level == "token":
+                # Anchored pattern also failed token-wise; report the level so the card can be fixed.
+                return False, f"must_include_regex({c.value}) => False [{how}; anchored]", False
+            return n > 0, f"must_include_regex({c.value}) => {n} hit(s) [{how}]", False
 
         if c.kind == "must_exclude_regex":
             if not c.value:
-                return False, "must_exclude_regex missing value"
-            ok = re.search(c.value, translation) is None
-            return ok, f"must_exclude_regex({c.value}) => {ok}"
+                return False, "must_exclude_regex missing value", False
+            level = self._resolve_level(c, c.value)
+            n_tok, _ = self._pattern_hits(c.value, translation, "token")
+            n_str, how = self._pattern_hits(c.value, translation, "sentence")
+            if n_tok < 0 or n_str < 0:
+                return False, f"must_exclude_regex({c.value}) => invalid regex", False
+            hits = max(n_tok, n_str)
+            if hits == 0:
+                # Nothing matched: the exclusion is untested, which is not evidence of correctness.
+                return True, f"must_exclude_regex({c.value}) => 0 hits [{how}] VACUOUS", True
+            return False, f"must_exclude_regex({c.value}) => {hits} violation(s)", False
 
         if c.kind == "token_count_range":
             toks = translation.split()
             min_t = c.min_tokens if c.min_tokens is not None else 0
             max_t = c.max_tokens if c.max_tokens is not None else 10**9
             ok = min_t <= len(toks) <= max_t
-            return ok, f"token_count_range({min_t}, {max_t}) => {len(toks)}"
+            return ok, f"token_count_range({min_t}, {max_t}) => {len(toks)}", False
 
         if c.kind in {"llm_check", "note"}:
-            return True, f"Deferred check: {c.description}"
+            return True, f"Deferred check: {c.description}", True
 
-        return False, f"Unknown constraint kind: {c.kind}"
+        return False, f"Unknown constraint kind: {c.kind}", False
 
     def _llm_check(
         self,
