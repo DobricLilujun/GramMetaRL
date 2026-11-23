@@ -236,7 +236,18 @@ class MBGExtractor:
             constraints = [constraints]
         elif not isinstance(constraints, list):
             constraints = []
-        valid_kinds = {"must_include_regex", "must_exclude_regex", "token_count_range", "llm_check", "note"}
+        valid_kinds = {
+            "must_include_regex",
+            "must_exclude_regex",
+            "must_include_any_regex",
+            "token_count_range",
+            "equivalence",
+            "optionality",
+            "llm_check",
+            "note",
+        }
+        # Legacy / prompt-vocabulary names that must not silently degrade into llm_check.
+        kind_aliases = {"must_not_include_regex": "must_exclude_regex", "forbidden_shape": "must_exclude_regex"}
         norm_constraints: list[dict[str, Any]] = []
         for c in constraints:
             if isinstance(c, str):
@@ -260,6 +271,8 @@ class MBGExtractor:
                 c2["kind"] = "must_exclude_regex"; c2["value"] = value or desc
             elif kind == "count":
                 c2["kind"] = "token_count_range"
+            elif kind in kind_aliases:
+                c2["kind"] = kind_aliases[kind]
             elif kind in valid_kinds:
                 c2["kind"] = kind
             else:  # grammaticality, position, cooccurrence, or unknown
@@ -268,7 +281,10 @@ class MBGExtractor:
                 c2["description"] = desc or f"{c2['kind']} check"
             if "value" in c2 and c2["value"] is not None:
                 c2["value"] = str(c2["value"])
-            if c2.get("kind") in ("must_include_regex", "must_exclude_regex") and not str(c2.get("value", "")).strip():
+            has_alternatives = bool(c2.get("values")) and c2.get("kind") == "must_include_any_regex"
+            if c2.get("kind") in ("must_include_regex", "must_exclude_regex") and not has_alternatives and not str(
+                c2.get("value", "")
+            ).strip():
                 # no usable pattern; keep as a deferred llm_check so the verifier still has something to inspect
                 c2["kind"] = "llm_check"
             if c2.get("kind") in ("must_include_regex", "must_exclude_regex") and looks_like_prose(

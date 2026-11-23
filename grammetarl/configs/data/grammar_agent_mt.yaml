@@ -1,6 +1,0 @@
-train_jsonl: data/processed/train.jsonl
-valid_jsonl: data/processed/valid.jsonl
-rules_jsonl: data/rules/mbg_cards.jsonl
-lexicon_jsonl: data/lexicon/dictionary.jsonl
-lang_pair: X->Y
-num_workers: 4

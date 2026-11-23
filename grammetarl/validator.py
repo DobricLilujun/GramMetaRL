@@ -133,12 +133,23 @@ class TranslationVerifier:
                 applicability="not_applicable",
             )
 
+        # A verdict must come from a constraint that could actually decide something. Deferred kinds
+        # (equivalence/optionality), vacuous patterns, and un-routed llm_check constraints all
+        # contribute a message but no decision - otherwise a card with nothing executable would be
+        # reported "satisfied", which is a silent false positive in the reward.
+        decided = 0
         for cons in rule.output_constraints:
             haystack = self.normalize_text(translation) if self.normalize else translation
             ok, msg, vacuous = self._check_constraint(cons, haystack)
             messages.append(msg)
             if vacuous:
                 vacuums += 1
+                continue
+            if cons.kind in ("equivalence", "optionality", "note"):
+                continue
+            if cons.kind == "llm_check" and not (self.llm_endpoint and self.llm_model):
+                continue
+            decided += 1
             if not ok:
                 passed = False
 
@@ -154,7 +165,7 @@ class TranslationVerifier:
             messages.append("No machine-checkable constraints on this rule.")
 
         verdict = "unknown"
-        if applicability == "applicable" and rule.output_constraints:
+        if applicability == "applicable" and decided:
             verdict = "satisfied" if passed else "violated"
 
         return RuleCheckResult(

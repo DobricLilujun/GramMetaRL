@@ -6,6 +6,7 @@ Run: /raid/yewei/.venvs/gm-lite/bin/python -m pytest tests -q
 from __future__ import annotations
 
 from grammetarl import MBGCard, TranslationVerifier
+from grammetarl.rewards.grammar_reward import grammar_reward_verdicts
 from grammetarl.llm_extract import MBGExtractor, looks_like_prose
 from grammetarl.training.run_eval import _chr_f
 
@@ -124,7 +125,7 @@ def _app_card(pattern, side="target", level="phrase"):
             "source_text": "a dative preposition is followed by the feminine article der",
             "kind": "regex", "side": side, "pattern": pattern, "level": level, "accepted": True,
         }],
-        "output_constraints": [{"kind": "must_not_include_regex", "description": "no zur+der",
+        "output_constraints": [{"kind": "must_exclude_regex", "description": "no zur+der",
                                 "value": "zur der"}],
         "examples": [{"sentence": "On the gallery", "translation": "Op der Aeltere-Galerie"}],
         "source": SOURCE,
@@ -144,13 +145,25 @@ def test_inapplicable_rule_cannot_change_the_reward():
     v = TranslationVerifier()
     applies = v.verify("On the gallery", "Op der Galerie ass.", [card])
     does_not = v.verify("He went to school", "Hie ass an d'Schoul gaangen.", [card])
-    assert applies.results[0].verdict == "satisfied"
+    # Exclusions are ONE-SIDED evidence: they can penalize, but a clean sentence is not
+    # certification. A never-firing exclusion contributes no verdict at all.
+    assert applies.results[0].verdict == "unknown", applies.results[0].message
     assert does_not.results[0].verdict == "not_applicable"
     assert does_not.decided == 0
     base = grammar_reward_verdicts(applies.verdicts())
     with_noise = grammar_reward_verdicts(applies.verdicts() + does_not.verdicts())
     assert base == with_noise
+    assert grammar_reward_verdicts(applies.verdicts()) == 0.0
     assert grammar_reward_verdicts(does_not.verdicts()) == 0.0
+
+
+def test_exclusion_can_penalize_when_it_fires():
+    """The other half of one-sided evidence: when the forbidden shape IS present, it must bite."""
+    card = _app_card("op der")
+    # needs both: the applicability trigger ("op der") and the forbidden shape ("zur der")
+    rep = TranslationVerifier().verify("On the gallery", "Op der Galerie ass zur der Lamp.", [card])
+    assert rep.results[0].verdict == "violated", rep.results[0].messages
+    assert grammar_reward_verdicts(rep.verdicts()) < 0.0
 
 
 def test_not_applicable_skips_constraint_evaluation():
@@ -257,3 +270,62 @@ def test_extract_json_handles_fenced_output():
     extractor = MBGExtractor(endpoint="http://unused.invalid", model="unused")
     parsed = extractor._extract_json('Here you go:\n```json\n[{"id": "LB_A"}]\n```')
     assert [p["id"] for p in parsed] == ["LB_A"]
+
+
+def test_deferred_kinds_never_produce_a_reward_term():
+    """"nominative = accusative" cannot be a containment check. It must abstain, not guess."""
+    from grammetarl.schema import MBGCard, RuleConstraint, RuleExample
+
+    card = MBGCard(
+        id="LB_equiv",
+        namespace="default",
+        language="lb",
+        scope="syntax",
+        operation_type="inflect",
+        source={"source_id": "test", "page_start": 1, "page_end": 1},
+        statement="Nominative and accusative forms are identical for adjectives.",
+        phenomenon_tags=["case"],
+        trigger_conditions=[],
+        output_constraints=[
+            RuleConstraint(kind="equivalence", description="nom = acc", values=["nom", "acc"]),
+            RuleConstraint(kind="optionality", description="particle may be omitted", values=["huesch"]),
+        ],
+        examples=[RuleExample(source_language="en", source_sentence="the big house",
+                              target_language="lb", target_sentence="déi grouss Haus")],
+    )
+    report = TranslationVerifier(require_applicability=False).verify(
+        "the big house", "déi grouss Haus", [card]
+    )
+    assert all(r.verdict == "unknown" for r in report.results), [r.verdict for r in report.results]
+    assert report.decided == 0
+    assert grammar_reward_verdicts(report.verdicts()) == 0.0
+
+
+def test_disjunction_constraint_is_decidable():
+    """A wrong allomorph set becomes a real disjunction over attested forms, and can pass."""
+    from grammetarl.schema import MBGCard, RuleConstraint, RuleExample
+
+    card = MBGCard(
+        id="LB_disj",
+        namespace="default",
+        language="lb",
+        scope="syntax",
+        operation_type="inflect",
+        source={"source_id": "test", "page_start": 1, "page_end": 1},
+        statement="The neuter demonstrative appears as datt or dat.",
+        phenomenon_tags=["demonstrative"],
+        trigger_conditions=[],
+        output_constraints=[
+            RuleConstraint(kind="must_include_any_regex", description="datt or dat",
+                           values=[r"\bdatt\b", r"\bdat\b"], level="token")
+        ],
+        examples=[RuleExample(source_language="en", source_sentence="that house",
+                              target_language="lb", target_sentence="datt Haus")],
+    )
+    v = TranslationVerifier(require_applicability=False)
+    ok = v.verify("that house", "dat Haus", [card])
+    bad = v.verify("that house", "se Haus", [card])
+    assert ok.results[0].verdict == "satisfied", ok.results[0].message
+    assert bad.results[0].verdict == "violated", bad.results[0].message
+    assert grammar_reward_verdicts(ok.verdicts()) > 0.0
+    assert grammar_reward_verdicts(bad.verdicts()) < 0.0
