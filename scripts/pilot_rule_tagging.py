@@ -106,6 +106,13 @@ def main() -> None:
     parser.add_argument("--src-field", default="input_text")
     parser.add_argument("--tgt-field", default="target_text")
     parser.add_argument("--rows", type=int, default=600)
+    parser.add_argument(
+        "--from-file",
+        default=None,
+        help="Tag a locally ingested pool (grammetarl/data_sources/external_pairs.py) instead "
+        "of streaming from the HF datasets-server",
+    )
+    parser.add_argument("--source-filter", default=None, help="Only rows whose `source` matches")
     parser.add_argument("--min-tokens", type=int, default=5)
     parser.add_argument("--max-tokens", type=int, default=40)
     parser.add_argument("--cards", default="data/rules/mbg_cards.jsonl")
@@ -121,8 +128,23 @@ def main() -> None:
     compilable = [c for c in cards if _has_executable(c)]
     print(f"cards={len(cards)} with_constraints={len(compilable)}")
 
-    rows = fetch_rows(args.dataset, args.config, args.split, args.rows, args.prefix)
-    print(f"fetched rows (direction filter): {len(rows)}")
+    if args.from_file:
+        rows = []
+        with Path(args.from_file).open("r", encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                row = json.loads(line)
+                if args.source_filter and row.get("source") != args.source_filter:
+                    continue
+                rows.append(row)
+                if len(rows) >= args.rows:
+                    break
+        print(f"loaded rows from {args.from_file}: {len(rows)} "
+              f"(source_filter={args.source_filter})")
+    else:
+        rows = fetch_rows(args.dataset, args.config, args.split, args.rows, args.prefix)
+        print(f"fetched rows (direction filter): {len(rows)}")
 
     index = RuleIndex(cards)
     verifier = TranslationVerifier()
@@ -182,7 +204,8 @@ def main() -> None:
                     "phenomena_tags": sorted({t for c in cand if c.id in fired for t in c.phenomenon_tags}),
                     "gold_rules": fired,
                     "gold_lexicon": [],
-                    "source": args.dataset,
+                    "source": row.get("source") or args.dataset,
+                    "license": row.get("license", "unknown"),
                 }
             )
 

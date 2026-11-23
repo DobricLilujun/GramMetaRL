@@ -399,15 +399,16 @@ def main() -> int:
     # G12 dataset shape (sentences, not glosses) ----------------------------------
     train = ws.train_dataset_file
     if train.exists():
-        rows = [json.loads(l) for l in train.open("r", encoding="utf-8") if l.strip()][:200]
+        all_rows = [json.loads(l) for l in train.open("r", encoding="utf-8") if l.strip()]
+        rows = all_rows[:200]  # sample for the length statistics; volume is counted over all_rows
         mean_src_tokens = sum(len(r.get("src", "").split()) for r in rows) / max(1, len(rows))
         gold_nonempty = sum(1 for r in rows if r.get("gold_rules"))
         sub_path = ws.root / "data" / "processed" / "pairs_subsentences.jsonl"
         n_sub = sum(1 for l in sub_path.open("r", encoding="utf-8") if l.strip()) if sub_path.exists() else 0
         gate("G12 train rows are sentences with gold_rules",
-             mean_src_tokens >= 4 and gold_nonempty > 0 and len(rows) >= 300,
+             mean_src_tokens >= 4 and gold_nonempty > 0 and len(all_rows) >= 300,
              f"mean_src_tokens={mean_src_tokens:.2f} rows_with_gold_rules={gold_nonempty}/{len(rows)} "
-             f"sentence_rows={len(rows)} (need >=300) subsentence_drills={n_sub}. "
+             f"sentence_rows={len(all_rows)} (need >=300) subsentence_drills={n_sub}. "
              "Grammar-book examples are mostly word/paradigm snippets: sentence-grade pairs "
              "must come from an external parallel corpus or rule-targeted synthesis (P4).")
     else:
@@ -440,10 +441,33 @@ def main() -> int:
             {r for x in va_rows for r in (x.get("gold_rules") or [])}
         shared_pairs = {(str(x.get("src", "")).lower(), str(x.get("tgt_ref", "")).lower()) for x in tr_rows} & \
             {(str(x.get("src", "")).lower(), str(x.get("tgt_ref", "")).lower()) for x in va_rows}
-        gate("G20 train/valid share no rule id and no exact pair",
-             not (shared_rules or shared_pairs),
-             f"shared_rules={len(shared_rules)} shared_pairs={len(shared_pairs)} "
+        gate("G20 train/valid share no exact pair",
+             not shared_pairs,
+             f"shared_pairs={len(shared_pairs)} shared_rules={len(shared_rules)} "
+             f"(shared rules are allowed: rules recur across sentences) "
              f"train={len(tr_rows)} valid={len(va_rows)}")
+
+        # G23: the rule-level held-out split is what tests rule generalization.
+        held = ws.root / "data" / "processed" / "valid_rules_heldout.jsonl"
+        if held.exists():
+            h_rows = _rows(held)
+            rules_file = ws.root / "data" / "processed" / "heldout_rules.json"
+            if not rules_file.exists():
+                gate("G23 rule-level held-out split excludes those rules from train", False,
+                     "heldout_rules.json missing; rerun build-dataset --external-tagged")
+                held_out_ids, train_rules, unlicensed = set(), set(), 0
+            else:
+                held_out_ids = set(json.loads(rules_file.read_text("utf-8")))
+                train_rules = {r for x in tr_rows for r in (x.get("gold_rules") or [])}
+                unlicensed = sum(1 for x in tr_rows + h_rows if not x.get("license"))
+            gate("G23 rule-level held-out split excludes those rules from train",
+                 bool(held_out_ids) and not (train_rules & held_out_ids) and unlicensed == 0,
+                 f"rules_in_train={len(train_rules)} rules_held_out={len(held_out_ids)} "
+                 f"overlap={len(train_rules & held_out_ids)} heldout_rows={len(h_rows)} "
+                 f"rows_without_license={unlicensed}")
+        else:
+            warn("G23 rule-level held-out split exists",
+                 "run build-dataset --external-tagged to produce valid_rules_heldout.jsonl")
     else:
         warn("G20 train/valid split files present", "run build-dataset to produce valid.jsonl")
 

@@ -220,6 +220,81 @@ def build_sentence_dataset(
     }
 
 
+def build_from_tagged_external(
+    tagged_paths: list[Path],
+    out_train: Path,
+    out_valid: Path,
+    out_rule_heldout: Path,
+    lang_pair: str = "en->lb",
+    valid_ratio: float = 0.1,
+    heldout_rule_ratio: float = 0.15,
+    seed: int = 0,
+) -> dict[str, object]:
+    """Merge verifier-tagged external pairs with card sentence examples.
+
+    Two splits, because the paper asks two different questions:
+      train/valid          pair-level split -> "can the policy translate"
+      train/valid_heldout  RULE-level split  -> "did the policy learn rules it never saw"
+    The rule-level split is what makes the grammar claim falsifiable: every row whose
+    gold_rules intersect a held-out rule set is removed from train entirely.
+    """
+    rows: list[dict[str, object]] = []
+    licenses: dict[str, int] = {}
+    for path in tagged_paths:
+        if not path.exists():
+            continue
+        with path.open("r", encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                r = json.loads(line)
+                if not r.get("gold_rules"):
+                    continue
+                licenses[r.get("license", "unknown")] = licenses.get(r.get("license", "unknown"), 0) + 1
+                rows.append(r)
+
+    rule_ids = sorted({rid for r in rows for rid in r["gold_rules"]})
+    random.Random(seed).shuffle(rule_ids)
+    n_heldout = int(round(len(rule_ids) * heldout_rule_ratio))
+    heldout_rules = set(rule_ids[:n_heldout])
+
+    heldout_rows = [r for r in rows if set(r["gold_rules"]) & heldout_rules]
+    pool = [r for r in rows if not (set(r["gold_rules"]) & heldout_rules)]
+
+    random.Random(seed).shuffle(pool)
+    n_valid = int(round(len(pool) * valid_ratio))
+    valid, train = pool[:n_valid], pool[n_valid:]
+    random.Random(seed + 1).shuffle(train)
+
+    for path, data in ((out_train, train), (out_valid, valid), (out_rule_heldout, heldout_rows)):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("w", encoding="utf-8") as f:
+            for r in data:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+
+    # The falsifiable claim is: a rule held out of train never appears in train.
+    # Held-out rows may still mention non-held-out rules, so compare against the held-out
+    # rule SET, not the union of rules appearing in held-out rows.
+    rules_path = out_rule_heldout.parent / "heldout_rules.json"
+    rules_path.write_text(json.dumps(sorted(heldout_rules), ensure_ascii=False, indent=1), "utf-8")
+
+    train_rules = {rid for r in train for rid in r["gold_rules"]}
+    return {
+        "rows_total": len(rows),
+        "train_rows": len(train),
+        "valid_rows": len(valid),
+        "heldout_rows": len(heldout_rows),
+        "rules_total": len(rule_ids),
+        "rules_heldout": len(heldout_rules),
+        "rule_overlap": len(train_rules & heldout_rules),
+        "heldout_rules_file": str(rules_path),
+        "licenses": licenses,
+        "train_output": str(out_train),
+        "valid_output": str(out_valid),
+        "heldout_output": str(out_rule_heldout),
+    }
+
+
 def build_lexicon(lod_path: Path, out_path: Path, max_entries: int | None = None) -> int:
     """Write one lexicon record per (lemma, pos) that has at least one translation."""
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -335,6 +410,13 @@ def main() -> None:
     parser.add_argument("--lang-pair", default="en->lb")
     parser.add_argument("--no-lexicon", action="store_true", help="Skip the LOD lexicon build")
     parser.add_argument(
+        "--external-tagged",
+        nargs="*",
+        default=None,
+        help="Verifier-tagged external pairs (scripts/pilot_rule_tagging.py output); "
+        "enables the rule-level held-out split",
+    )
+    parser.add_argument(
         "--lexicon-pairs",
         action="store_true",
         help="Also write the old word-gloss rows (to data/processed/train_lexicon.jsonl)",
@@ -347,12 +429,14 @@ def main() -> None:
         "valid.jsonl" if ws.namespace == "default" else f"valid_{ws.namespace}.jsonl"
     )
 
+    tagged = args.external_tagged or []
+
     cards_path = Path(args.from_cards) if args.from_cards else (ws.root / "data" / "rules" / "mbg_cards.jsonl")
     if not cards_path.exists():
         alt = ws.mbg_cards_file
         cards_path = alt if alt.exists() else cards_path
 
-    if cards_path.exists():
+    if cards_path.exists() and not tagged:
         stats = build_sentence_dataset(
             cards_path,
             ws.train_dataset_file,
@@ -372,7 +456,7 @@ def main() -> None:
         print(f"  example classes: {stats['example_classes']}")
         print(f"  subsentence drills -> {stats['subsentence_output']} ({stats['subsentence_rows']} rows)")
         print(f"  -> {stats['train_output']}\n  -> {stats['valid_output']}")
-    else:
+    elif not tagged:
         print(
             f"[WARN] no cards at {cards_path}; falling back to LOD word-gloss rows. "
             "Word glosses cannot train the multi-turn grammar environment (gate G12)."
@@ -386,6 +470,26 @@ def main() -> None:
     else:
         n_lex = build_lexicon(lod_path, ws.lexicon_file, max_entries=args.max_entries)
         print(f"Lexicon entries written: {n_lex} -> {ws.lexicon_file}")
+
+    if tagged:
+        stats = build_from_tagged_external(
+            [Path(t) for t in tagged],
+            ws.train_dataset_file,
+            valid_path,
+            ws.root / "data" / "processed" / "valid_rules_heldout.jsonl",
+            lang_pair=args.lang_pair,
+            valid_ratio=args.valid_ratio,
+            seed=args.seed,
+        )
+        print(
+            f"Tagged external data: rows={stats['rows_total']} "
+            f"train={stats['train_rows']} valid={stats['valid_rows']} "
+            f"rule-heldout={stats['heldout_rows']} "
+            f"(rules {stats['rules_heldout']}/{stats['rules_total']} held out, "
+            f"overlap={stats['rule_overlap']})"
+        )
+        print(f"  licenses: {stats['licenses']}")
+        print(f"  -> {stats['train_output']}\n  -> {stats['valid_output']}\n  -> {stats['heldout_output']}")
 
     if args.lexicon_pairs:
         if not lod_path.exists():
