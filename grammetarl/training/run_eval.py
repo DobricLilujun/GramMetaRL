@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 
 from grammetarl.agent_env import GrammarFirstEnv
 from grammetarl.rewards import aggregate_reward
@@ -66,6 +67,9 @@ def replay_trajectory(
     cards_path: str | None = None,
     lexicon_path: str | None = None,
     namespace: str | None = None,
+    policy_endpoint: str | None = None,
+    policy_model: str | None = None,
+    policy_api_key: str | None = None,
 ) -> dict:
     """Run one deterministic grammar-first trajectory and score it."""
     env = GrammarFirstEnv()
@@ -90,16 +94,21 @@ def replay_trajectory(
     applied = grammar_rule_apply(
         rule_ids=rule_ids, src_sentence=src,
         cards_path=cards_path, namespace=namespace,
+        llm_endpoint=policy_endpoint, llm_model=policy_model, api_key=policy_api_key,
     )
     action_names.append("CALL_APPLY_RULES")
 
-    hypothesis = str(applied.get("draft", src))
+    # No policy configured -> no draft. Copying the source is not a translation; it is scored as
+    # such rather than passed off as a hypothesis.
+    draft = applied.get("draft")
+    hypothesis = str(draft) if draft else src
 
     # 4) verify
     report = grammar_verify(
         src_sentence=src, hypothesis=hypothesis, applied_rule_ids=rule_ids,
         cards_path=cards_path, namespace=namespace,
     )
+    action_names.append("CALL_GRAMMAR_VERIFY")
     grammar_passed = bool(report.get("overall_passed", False))
     checked_rules = int(report.get("checked_rules", 0))
     verdicts = list(report.get("verdicts", []))
@@ -132,6 +141,15 @@ def main() -> None:
     parser.add_argument("--lexicon", default=None)
     parser.add_argument("--namespace", default=None)
     parser.add_argument("--limit", type=int, default=20)
+    parser.add_argument(
+        "--policy-endpoint",
+        default=None,
+        help="OpenAI-compatible endpoint for the translation policy; without it the replay has no "
+        "hypothesis (copying the source is scored as such, not passed off as a translation)",
+    )
+    parser.add_argument("--policy-model", default=None)
+    parser.add_argument("--policy-api-key-env", default=None)
+    parser.add_argument("--show", type=int, default=3, help="Print the first N hypotheses")
     args = parser.parse_args()
 
     from grammetarl.workspace import get_workspace_paths
@@ -160,7 +178,15 @@ def main() -> None:
                 cards_path=args.cards,
                 lexicon_path=args.lexicon,
                 namespace=args.namespace,
+                policy_endpoint=args.policy_endpoint,
+                policy_model=args.policy_model,
+                policy_api_key=os.environ.get(args.policy_api_key_env) if args.policy_api_key_env else None,
             )
+            if len(results) < args.show:
+                print(f"[eval] en : {rec.get('src', '')[:90]}")
+                print(f"[eval] ref: {rec.get('tgt_ref', '')[:90]}")
+                print(f"[eval] hyp: {res['hypothesis'][:90]}  chrF={res['chr_f']:.3f} "
+                      f"decided={res['decided']} reward={res['reward']:.3f}")
             results.append(res)
             count += 1
 

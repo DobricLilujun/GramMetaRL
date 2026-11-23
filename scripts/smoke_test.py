@@ -183,6 +183,9 @@ def is_prose_pattern(value: str) -> bool:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--policy-endpoint", default=None, help="OpenAI-compatible policy for G10/G13")
+    ap.add_argument("--policy-model", default=None)
+    ap.add_argument("--policy-api-key-env", default=None)
     ap.add_argument("--cards", default=str(FIXTURE_CARDS), help="cards JSONL to audit")
     ap.add_argument("--limit", type=int, default=3, help="train.jsonl rows for the eval replay")
     args = ap.parse_args()
@@ -363,10 +366,17 @@ def main() -> int:
          env_error or (f"steps={len(state['actions'])} done={done} "
                        f"retrieved={len(state['retrieved_rules'])} "
                        f"dict_hits={len(state['dictionary_entries'])}"))
-    warn("G8b verify is reachable from the action space",
-         "AgentAction has only CALL_GRAMMAR_SEARCH / CALL_DICTIONARY / CALL_APPLY_RULES / "
-         "RETURN_TRANSLATION: the verifier is unreachable from the env even though the PRD "
-         "makes grammar_verify pass rate a headline metric.")
+    from grammetarl.agent_env.action_schema import AgentAction
+
+    verify_env = GrammarFirstEnv(cards_path=FIXTURE_CARDS)
+    verify_env.reset(sample_id="g8b", src_sentence="The man went to school.")
+    verify_env.step("CALL_GRAMMAR_SEARCH", {"query": "man school", "top_k": 2})
+    obs_v, _ = verify_env.step("CALL_GRAMMAR_VERIFY", {"translation": "Ee Mann ass an d'Schoul gaangen."})
+    gate("G8b verifier is reachable from the action space",
+         hasattr(AgentAction, "CALL_GRAMMAR_VERIFY") and obs_v.get("verification") is not None,
+         f"verdicts={(obs_v.get('verification') or {}).get('verdicts')} "
+         f"decided={(obs_v.get('verification') or {}).get('decided_rules')} "
+         f"error={(obs_v.get('verification') or {}).get('error')}")
 
     # G9 dictionary against the real LOD lexicon ----------------------------------
     lex_hits = dictionary_lookup(token="Mann", max_results=3)
@@ -374,10 +384,25 @@ def main() -> int:
          f"{ws.lexicon_file} exists={ws.lexicon_file.exists()} hits('Mann')={len(lex_hits)}")
 
     # G10 grammar_apply is not a placeholder --------------------------------------
-    applied = grammar_rule_apply(["LB_SMOKE_0001"], "The man went to school.", cards_path=args.cards)
-    gate("G10 grammar_apply draft is not the source sentence",
-         applied.get("draft") != "The man went to school.",
-         f"draft==src: {applied.get('draft') == 'The man went to school.'}")
+    # The fixture card is the one with known constraints; args.cards may be an unrelated set.
+    applied = grammar_rule_apply(["LB_SMOKE_0001"], "The man went to school.", cards_path=FIXTURE_CARDS)
+    gate("G10a grammar_apply never fabricates a draft (no policy -> draft is None)",
+         applied.get("draft") is None and bool(applied.get("rule_bundle")),
+         f"draft={applied.get('draft')!r} bundle={len(applied.get('rule_bundle', []))} "
+         f"notes={applied.get('notes')}")
+    if args.policy_endpoint and args.policy_model:
+        import os
+
+        gen = grammar_rule_apply(
+            ["LB_SMOKE_0001"], "The man bought two large red apples for his grandmother.",
+            cards_path=FIXTURE_CARDS, llm_endpoint=args.policy_endpoint, llm_model=args.policy_model,
+            api_key=os.environ.get(args.policy_api_key_env) if args.policy_api_key_env else None,
+        )
+        gate("G10b grammar_apply produces a real target-language draft with a policy",
+             bool(gen.get("draft")) and gen["draft"] != "The man bought two large red apples for his grandmother.",
+             f"draft={gen.get('draft')!r} notes={gen.get('notes')}")
+    else:
+        warn("G10b policy-backed draft", "pass --policy-endpoint/--policy-model to test generation")
 
     # G11 per-call index rebuild cost ---------------------------------------------
     t0 = time.perf_counter()
@@ -488,10 +513,14 @@ def main() -> int:
     from grammetarl.training.run_eval import replay_trajectory
 
     sample = {"src": "The man went to school.", "tgt_ref": "Ee Mann ass an d'Schoul gaangen."}
-    rep = replay_trajectory(src=sample["src"], reference=sample["tgt_ref"], cards_path=args.cards)
+    rep = replay_trajectory(
+        src=sample["src"], reference=sample["tgt_ref"], cards_path=args.cards,
+        policy_endpoint=args.policy_endpoint, policy_model=args.policy_model,
+        policy_api_key=(os.environ.get(args.policy_api_key_env) if args.policy_api_key_env else None),
+    )
     gate("G13 replay produces a hypothesis different from the source",
          rep["hypothesis"] != sample["src"],
-         f"chrF={rep['chr_f']:.3f} reward={rep['reward']:.3f} grammar_passed={rep['grammar_passed']} "
+         f"chrF={rep['chr_f']:.3f} reward={rep['reward']:.3f} decided={rep.get('decided')} "
          f"checked={rep['checked_rules']} hyp={rep['hypothesis']!r}")
     agg = aggregate_reward(hypothesis=rep["hypothesis"], reference=sample["tgt_ref"],
                            grammar_passed=rep["grammar_passed"], checked_rules=rep["checked_rules"],
