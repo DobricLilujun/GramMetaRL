@@ -433,6 +433,12 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--valid-ratio", type=float, default=0.1)
     parser.add_argument(
+        "--out-dir",
+        default=None,
+        help="Write splits into this subdirectory of data/processed, so an audited-label dataset and "
+        "a constraint-only dataset can coexist instead of overwriting each other",
+    )
+    parser.add_argument(
         "--from-cards",
         default=None,
         help="MBG cards JSONL; sentence-level pairs come from the cards' own example pairs "
@@ -456,9 +462,16 @@ def main() -> None:
 
     ws = get_workspace_paths(namespace=args.namespace)
     ws.ensure_layout()
-    valid_path = ws.root / "data" / "processed" / (
-        "valid.jsonl" if ws.namespace == "default" else f"valid_{ws.namespace}.jsonl"
-    )
+    # --out-dir lets an audited-label dataset and a constraint-only dataset coexist instead of
+    # silently overwriting each other's splits.
+    out_dir = ws.root / "data" / "processed"
+    if args.out_dir:
+        out_dir = out_dir / args.out_dir
+        out_dir.mkdir(parents=True, exist_ok=True)
+    suffix = "" if ws.namespace == "default" else f"_{ws.namespace}"
+    train_path = out_dir / f"train{suffix}.jsonl"
+    valid_path = out_dir / f"valid{suffix}.jsonl"
+    heldout_path = out_dir / f"valid_rules_heldout{suffix}.jsonl"
 
     tagged = args.external_tagged or []
 
@@ -470,7 +483,7 @@ def main() -> None:
     if cards_path.exists():
         stats = build_sentence_dataset(
             cards_path,
-            ws.train_dataset_file,
+            train_path,
             valid_path,
             lang_pair=args.lang_pair,
             valid_ratio=args.valid_ratio,
@@ -505,9 +518,9 @@ def main() -> None:
     if tagged:
         stats = build_from_tagged_external(
             [Path(t) for t in tagged],
-            ws.train_dataset_file,
+            train_path,
             valid_path,
-            ws.root / "data" / "processed" / "valid_rules_heldout.jsonl",
+            heldout_path,
             lang_pair=args.lang_pair,
             valid_ratio=args.valid_ratio,
             seed=args.seed,
