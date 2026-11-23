@@ -416,11 +416,13 @@ def main() -> int:
 
     # G21 applicability: trigger_conditions are free-text, so the verifier checks output
     # constraints on sentences the rule was never meant to govern. Measured on 400 real
-    # en->lb pairs: 87.7% of retrieved-rule checks fail, mostly because the rule does not apply.
-    trig_total = sum(len(c.trigger_conditions) for c in cards)
+    # en->lb pairs: 85.2% of retrieved-rule checks fail, mostly because the rule does not apply.
+    # Note the cards DO state triggers (100 prose triggers over 87 cards); they are simply never
+    # evaluated, which is why this gate counts them and then fails on executability.
+    trig_total = sum(len(c.trigger_conditions) for c in audit_cards)
     trig_exec = sum(
         1
-        for c in cards
+        for c in audit_cards
         for t in c.trigger_conditions
         if any(ch in str(t) for ch in ("\\b", "^", "$", "[", "|", "(?"))
     )

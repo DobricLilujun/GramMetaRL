@@ -67,12 +67,13 @@ A commercially-clean subset means CC0-only (4,258 pairs) — flag before any non
 | G23 rule-level split + licenses | **PASS** | held-out rules absent from train, every row licensed |
 | G10 `grammar_apply` | **FAIL** | tool returns the source sentence as the draft (placeholder) |
 | G13 eval replay | **FAIL** | hypothesis == source; consequence of G10 |
-| G21 applicability | **FAIL** | only **7** trigger conditions exist across 87 cards, 0 in executable form |
+| G21 applicability | **FAIL** | 100 trigger conditions exist across 87 cards, but only **5 (5%)** are in executable form |
 
 The 85% failure rate is now explained: rules are retrieved for 97.8% of all sentences and
 checked without any applicability test, so most checks are of rules that do not govern the
 sentence. Three concrete fixes, in order:
-1. emit executable `trigger_conditions` during extraction (the 7/87 gap is the first number to fix);
+1. compile the existing 100 prose triggers into executable applicability predicates
+   (only 5/100 are regex-shaped today, and the verifier never evaluates triggers at all);
 2. three-valued verifier: `violated / satisfied / not-applicable` (no reward term when not applicable);
 3. re-measure fire/fail per card on the 25,025 labeled pairs; drop or re-synthesize cards that
    stay dead (23 of 61 executable cards never fired once).
