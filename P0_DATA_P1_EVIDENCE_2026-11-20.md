@@ -106,3 +106,27 @@ sentence. Three concrete fixes, in order:
 2. three-valued verifier: `violated / satisfied / not-applicable` (no reward term when not applicable);
 3. re-measure fire/fail per card on the 25,025 labeled pairs; drop or re-synthesize cards that
    stay dead (23 of 61 executable cards never fired once).
+
+
+## 2c. Constraint precision (judged-applicable checks against human translations)
+
+`scripts/audit_constraint_precision.py` replays the cached applicability judgements and runs only the
+machine constraints (no LLM in the loop):
+
+| card set | applicable checks | satisfied | violated | violation rate |
+|---|---|---|---|---|
+| `mbg_cards_app` (as extracted) | 138 | 50 | 88 | **63.8%** |
+| `mbg_cards_repaired` (4 constraints downgraded on evidence) | 110 | 59 | 51 | **46.4%** |
+
+Professional human translations should satisfy the grammar of their own language, so a ~46-64%
+violation rate means the compiled programs are wrong. Root causes from the counter-examples:
+  - identifiers pasted into regex slots (`same_suffix_for_definite_and_indefinite`);
+  - **negative or paradigm-identity statements compiled as `must_include`** ("nouns do not take case
+    markers", "nominative and accusative forms are identical") - not expressible as containment at
+    all. These need equivalence/optionality constraint kinds, which is exactly the P3
+    "rules as code" argument, now with numbers;
+  - wrong allomorph sets (`datts|wéinis` vs the book's own example `datt s du`).
+
+Repair is non-destructive: downgraded checks become `llm_check` and every change is annotated in the
+constraint description, so a later re-compilation can undo it. New gate G25 asserts no prose or
+identifier sits in a regex slot: it FAILs on `mbg_cards_app` and PASSes on `mbg_cards_repaired`.

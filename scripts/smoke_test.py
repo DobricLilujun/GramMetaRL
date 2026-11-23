@@ -456,6 +456,19 @@ def main() -> int:
          f"trigger_conditions={trig_total} regex_form={trig_exec} "
          f"({trig_exec}/{trig_total} = {trig_exec / max(1, trig_total):.0%})")
 
+    # G25 constraint hygiene: a regex slot holding prose or a bare identifier can only ever fail,
+    # which is how a "grammar reward" turns into a constant penalty.
+    from grammetarl.llm_extract import looks_like_prose
+
+    bad_values = [
+        (c.id, x.kind, x.value)
+        for c in audit_cards
+        for x in c.output_constraints
+        if x.kind in ("must_include_regex", "must_exclude_regex") and looks_like_prose(x.value or "")
+    ]
+    gate("G25 no prose/identifier in a regex constraint slot", not bad_values,
+         f"bad_values={len(bad_values)} {bad_values[:3]}")
+
     # G24 applicability coverage of the card set under review: how many cards can the verifier
     # actually decide applicability for?
     cards_with_app = sum(1 for c in audit_cards if any(p.accepted for p in c.applicability))
