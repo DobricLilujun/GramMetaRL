@@ -150,6 +150,7 @@ def main() -> None:
     verifier = TranslationVerifier()
     by_id = {c.id: c for c in cards}
 
+    verdict_counter: collections.Counter[str] = collections.Counter()
     fired_counter: collections.Counter[str] = collections.Counter()
     failed_counter: collections.Counter[str] = collections.Counter()
     vacuous_counter: collections.Counter[str] = collections.Counter()
@@ -184,13 +185,17 @@ def main() -> None:
                 "llm_check" not in str(m) for m in msgs
             ):
                 continue
+            verdict = getattr(res, "verdict", "unknown")
+            verdict_counter[verdict] += 1
             if bool(getattr(res, "vacuous", False)) and passed:
                 vacuous_counter[rid] += 1
                 continue
-            if passed:
+            # Verdict-aware counting: only decided checks are evidence. Counting a
+            # not_applicable/unknown check as "fired" inflates apparent coverage.
+            if verdict == "satisfied":
                 fired.append(rid)
                 fired_counter[rid] += 1
-            else:
+            elif verdict == "violated":
                 failed_counter[rid] += 1
         if fired:
             pairs_fired += 1
@@ -227,6 +232,14 @@ def main() -> None:
     for r in tagged[:3]:
         print(f"  rules={r['gold_rules']}\n    en: {r['src'][:90]}\n    lb: {r['tgt_ref'][:90]}")
     print(f"vacuous (never-testable) exclusions counted separately: {sum(vacuous_counter.values())}")
+    total_v = sum(verdict_counter.values())
+    decided = verdict_counter["satisfied"] + verdict_counter["violated"]
+    print("verdict distribution over retrieved-rule checks:")
+    for k in ("satisfied", "violated", "not_applicable", "unknown"):
+        n = verdict_counter[k]
+        print(f"  {k:15s} {n:7d} ({n / max(1, total_v):5.1%})")
+    print(f"  decided={decided} / {total_v} checks -> noise-free share of checks = "
+          f"{(total_v - decided) / max(1, total_v):.1%} abstained")
     print("worst misfiring cards (constraint fails on natural translations):")
     for rid, n in failed_counter.most_common(10):
         print(f"  {n:4d}  {rid}")

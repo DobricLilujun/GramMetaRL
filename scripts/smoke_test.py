@@ -267,7 +267,7 @@ def main() -> int:
          "manufactures 'word_order'/'agreement' noise")
 
     # G5 verifier actually discriminates ------------------------------------------
-    v = TranslationVerifier()
+    v = TranslationVerifier(require_applicability=False)
     card1 = next(c for c in cards if c.id == "LB_SMOKE_0001")
     good = v.verify("He went to school", "Hie ass an d'Schoul gaangen.", [card1]).overall_passed
     bad = v.verify("He went to school", "Hie an d'Schoul gaangen ass.", [card1]).overall_passed

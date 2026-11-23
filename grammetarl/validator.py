@@ -44,6 +44,7 @@ class TranslationVerifier:
         llm_model: str | None = None,
         api_key: str | None = None,
         normalize: bool = True,
+        require_applicability: bool = True,
         max_tokens: int = DEFAULT_MAX_TOKENS,
     ) -> None:
         self.llm_endpoint = llm_endpoint.rstrip("/") if llm_endpoint else None
@@ -51,6 +52,10 @@ class TranslationVerifier:
         self.api_key = api_key
         self.normalize = normalize
         self.max_tokens = max_tokens
+        # Diagnostic callers (constraint-quality gates) set this False to evaluate output
+        # constraints regardless of applicability. The RL path must keep True: a rule that does not
+        # govern the sentence must not emit a penalty.
+        self.require_applicability = require_applicability
 
     @staticmethod
     def normalize_text(text: str) -> str:
@@ -89,6 +94,8 @@ class TranslationVerifier:
         the reward layer must abstain rather than guess.
         """
         preds = [p for p in rule.applicability if p.accepted and p.kind == "regex" and p.pattern]
+        if not self.require_applicability:
+            return "applicable", ["applicability not required by caller"]
         if not preds:
             return "unknown", ["no accepted applicability predicate"]
         msgs: list[str] = []

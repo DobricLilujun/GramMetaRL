@@ -43,6 +43,35 @@ Per-corpus 1,500-pair samples:
 | Tech-in-GOV (CC0) | 93% | 53% | 25/61 | 83.2% |
 | LuxAlign (NC) | 98% | 52% | 26/61 | 84.8% |
 
+
+## 2b. Correction after the three-valued verifier (same 3,000-pair sample)
+
+The 51.7% "labelable" figure above counts a constraint as evidence even when the rule never
+governed the sentence. Once checks require decided applicability, the honest numbers are:
+
+| | no applicability (old cards) | compiled applicability (21/87 cards) |
+|---|---|---|
+| decided checks | **0 / 15,285 (0%)** | **890 / 15,268 (5.8%)** |
+| satisfied / violated | - | 368 / 522 |
+| provably not applicable (would have been false penalties) | 0 | **1,543 (10.1%)** |
+| applicability undecidable (triggers still prose) | 100% | **84.1%** |
+| pairs with >=1 decided label | 0 | **93 / 3,000 (3.1%)** |
+| executable cards producing decidable checks | 0 | **6 / 61** |
+
+Reading: the three-valued verifier removes a whole class of guaranteed-false penalties, but it
+also exposes that the *usable* grammar signal is only 5.8% of checks. Applicability compilation
+is the bottleneck, not retrieval and not the constraint engine:
+  - 21 predicates accepted, 73 rejected, and **69 of the rejections are the model honestly
+    answering `llm_check`** (e.g. "the referent is a female person" is not surface-observable);
+  - therefore rule induction must optimize for *decidability*: every card should ship at least
+    one surface-observable trigger. Decidability rate (5.8% today) becomes a reported property of
+    the card set.
+
+Two ways to raise it: (a) execute `llm_check` predicates offline at dataset-build time (never in
+the RL hot loop), then keep the machine-checked output constraint as the label; (b) re-compile
+triggers with surface-observable proxies plus a card-design guideline that requires one regex-
+decidable trigger per card.
+
 ## 3. Dataset splits (P0 → trainable, P1 → falsifiable)
 
 `python -m grammetarl.training.build_dataset --no-lexicon --external-tagged data/processed/tagged_all.jsonl`
