@@ -23,3 +23,7 @@ data/processed/*
 # rows carrying CC BY-NC material stay out of the repo and are reproducible via MANIFEST + ingest.
 !data/processed/labeled_mbg_cards_app.jsonl
 !data/processed/labeled_mbg_cards_repaired.jsonl
+
+# generated per-namespace workspace configs (only configs/project/ is authored)
+grammetarl/configs/*/
+!grammetarl/configs/project/
