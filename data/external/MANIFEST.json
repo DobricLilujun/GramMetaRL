@@ -1,0 +1,33 @@
+{
+  "generated_from": {
+    "techgov_lu_en": "https://data.public.lu/en/datasets/meisproochegen-iwwersetzungskorpus-fir-dletzebuergescht/",
+    "luxalign_v3_lb_en": "https://huggingface.co/datasets/fredxlpy/LuxAlign"
+  },
+  "pairs_file": "/raid/yewei/projects_yewei/GramMetaRL/data/external/pairs_en_lb.jsonl",
+  "total_pairs": 48436,
+  "sources": {
+    "techgov_lu_en": {
+      "raw": 10880,
+      "written": 8972,
+      "rejected": 1905,
+      "duplicate": 3,
+      "license": "CC0-1.0",
+      "commercial_ok": true,
+      "path": "/raid/yewei/projects_yewei/GramMetaRL/data/external/raw/techingov_lu_en/LU-EN/LU-EN.jsonl",
+      "url": "https://data.public.lu/en/datasets/meisproochegen-iwwersetzungskorpus-fir-dletzebuergescht/",
+      "note": "Tech-in-GOV 2025: professional translations, public domain"
+    },
+    "luxalign_v3_lb_en": {
+      "raw": 43357,
+      "written": 39464,
+      "rejected": 3893,
+      "duplicate": 0,
+      "license": "CC-BY-NC-4.0",
+      "commercial_ok": false,
+      "path": "/raid/yewei/projects_yewei/GramMetaRL/data/external/raw/luxalign_v3_lb_en.json",
+      "url": "https://huggingface.co/datasets/fredxlpy/LuxAlign",
+      "note": "RTL.lu news-derived; dataset card warns pairs are semantically similar, not always exact translations"
+    }
+  },
+  "usage_note": "License recorded per row. CC-BY-NC sources must not be used in any commercial artefact; LuxAlign pairs are not guaranteed exact translations and are used as verifier probes / candidate labels, never as gold MT references."
+}

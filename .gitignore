@@ -1,6 +1,25 @@
-data/
+data/*
 artifacts/
 **/__pycache__/**
 assets/
 paper/
 .venv/
+
+# Card sets and audited labels ARE version-controlled: they are the artifact the paper reports on,
+# and losing them means losing the experiment. Bulk corpora and derived splits stay out of git.
+!data/rules/
+data/rules/*
+!data/rules/mbg_cards.jsonl
+!data/rules/mbg_cards_qwen38_full.jsonl
+!data/rules/mbg_cards_app.jsonl
+!data/rules/mbg_cards_repaired.jsonl
+!data/rules/mbg_cards_recompiled.jsonl
+!data/external/
+data/external/*
+!data/external/MANIFEST.json
+!data/processed/
+data/processed/*
+# audited labels below are 100% CC0-1.0 (Tech-in-GOV), so they are safe to publish;
+# rows carrying CC BY-NC material stay out of the repo and are reproducible via MANIFEST + ingest.
+!data/processed/labeled_mbg_cards_app.jsonl
+!data/processed/labeled_mbg_cards_repaired.jsonl
