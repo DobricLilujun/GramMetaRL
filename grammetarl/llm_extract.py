@@ -76,8 +76,21 @@ def looks_like_prose(pattern: str) -> bool:
         _re.compile(pattern)
     except _re.error:
         return True
-    # Two or more bare words separated by whitespace => prose, not a matcher.
-    return bool(_re.search(r"[A-Za-z\u00c0-\u024f]{3,}(?:\s+[A-Za-z\u00c0-\u024f]{3,}){1,}", pattern))
+    # Observed in real extraction: 'same_suffix_for_definite_and_indefinite' - an identifier, not
+    # a matcher. It has no whitespace so the bare-word test below misses it, and as a regex it can
+    # only match that literal text, so it silently always fails (measured: this class accounts for
+    # a large share of the 63.8% constraint-violation rate on professional human translations).
+    if _re.fullmatch(r"[A-Za-z][A-Za-z0-9]*(?:[_\-][A-Za-z0-9]+)+", pattern.strip()):
+        return True
+
+    # No regex machinery at all AND several whitespace-separated tokens => an English clause was
+    # pasted into the pattern slot. The machinery test is what keeps legitimate literal patterns
+    # alive: must_not_include 'zur der' (a cliticization rule) and 'datt s du' (the book's own
+    # clitic example) are plain words and must NOT be rejected.
+    machinery = any(tok in pattern for tok in ("\\b", "\\s", "\\w", "\\d", "^", "$", "[", "]", "(", ")", "|", "?", "*", "+", "{", "."))
+    if machinery:
+        return False
+    return len(pattern.split()) >= 4
 
 
 class MBGExtractor:
