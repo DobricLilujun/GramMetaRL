@@ -27,3 +27,11 @@ data/processed/*
 # generated per-namespace workspace configs (only configs/project/ is authored)
 grammetarl/configs/*/
 !grammetarl/configs/project/
+
+# audit/recompile evidence: small JSON, it is what the paper claims rest on
+!artifacts/audit/
+artifacts/audit/*
+!artifacts/audit/precision_*.json
+!artifacts/recompile/
+artifacts/recompile/*
+!artifacts/recompile/report.json
