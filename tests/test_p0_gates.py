@@ -115,6 +115,66 @@ def test_verifier_normalizes_punctuation_and_case():
     assert report.overall_passed is True
 
 
+def _app_card(pattern, side="target", level="phrase"):
+    """Card whose applicability predicate is admitted (fires on its own example target)."""
+    return _card({
+        "id": "LB_T_7", "language": "lb", "scope": "dative NP", "operation_type": "clitic",
+        "trigger_conditions": ["a dative preposition is followed by the feminine article der"],
+        "applicability": [{
+            "source_text": "a dative preposition is followed by the feminine article der",
+            "kind": "regex", "side": side, "pattern": pattern, "level": level, "accepted": True,
+        }],
+        "output_constraints": [{"kind": "must_not_include_regex", "description": "no zur+der",
+                                "value": "zur der"}],
+        "examples": [{"sentence": "On the gallery", "translation": "Op der Aeltere-Galerie"}],
+        "source": SOURCE,
+    })
+
+
+def test_inapplicable_rule_cannot_change_the_reward():
+    """The invariant that makes the grammar term usable in RL.
+
+    Retrieval puts at least one executable card in front of the policy for ~98% of sentences and
+    most of those rules do not govern the sentence. If an inapplicable rule contributes a term the
+    reward is mostly noise (measured: 85.2% check failures on 48k real pairs).
+    """
+    from grammetarl.rewards.grammar_reward import grammar_reward_verdicts
+
+    card = _app_card("op der")
+    v = TranslationVerifier()
+    applies = v.verify("On the gallery", "Op der Galerie ass.", [card])
+    does_not = v.verify("He went to school", "Hie ass an d'Schoul gaangen.", [card])
+    assert applies.results[0].verdict == "satisfied"
+    assert does_not.results[0].verdict == "not_applicable"
+    assert does_not.decided == 0
+    base = grammar_reward_verdicts(applies.verdicts())
+    with_noise = grammar_reward_verdicts(applies.verdicts() + does_not.verdicts())
+    assert base == with_noise
+    assert grammar_reward_verdicts(does_not.verdicts()) == 0.0
+
+
+def test_not_applicable_skips_constraint_evaluation():
+    card = _app_card("op der")
+    rep = TranslationVerifier().verify("He left.", "Hie ass fort.", [card])
+    msgs = " ".join(rep.results[0].messages)
+    assert "must_not_include_regex" not in msgs  # never evaluated for an inapplicable rule
+    assert rep.results[0].verdict == "not_applicable"
+
+
+def test_unknown_applicability_is_not_a_verdict():
+    """Cards without admitted predicates abstain instead of guessing."""
+    card = _card({
+        "id": "LB_T_8", "language": "lb", "scope": "word", "operation_type": "inflect",
+        "output_constraints": [{"kind": "must_include_regex", "description": "x",
+                                "value": "bauen"}],
+        "examples": [{"sentence": "I build", "translation": "ech bauen"}],
+        "source": SOURCE,
+    })
+    rep = TranslationVerifier().verify("I build.", "ech bauen.", [card])
+    assert rep.results[0].verdict == "unknown"
+    assert rep.decided == 0
+
+
 def test_chrf_is_bounded_and_discriminative():
     ref = "Hie ass an d'Schoul gaangen."
     assert abs(_chr_f(ref, ref) - 1.0) < 1e-9

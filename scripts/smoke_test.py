@@ -431,6 +431,17 @@ def main() -> int:
          f"trigger_conditions={trig_total} regex_form={trig_exec} "
          f"({trig_exec}/{trig_total} = {trig_exec / max(1, trig_total):.0%})")
 
+    # G24 applicability coverage of the card set under review: how many cards can the verifier
+    # actually decide applicability for?
+    cards_with_app = sum(1 for c in audit_cards if any(p.accepted for p in c.applicability))
+    preds_total = sum(len(c.applicability) for c in audit_cards)
+    preds_ok = sum(1 for c in audit_cards for pr in c.applicability if pr.accepted)
+    gate("G24 cards carry admitted applicability predicates",
+         cards_with_app >= max(1, int(0.5 * len(audit_cards))),
+         f"predicates={preds_total} accepted={preds_ok} "
+         f"cards_with_applicability={cards_with_app}/{len(audit_cards)} "
+         f"(verifier abstains on the rest)")
+
     # G20 split leakage: a rule id or an exact pair in both splits makes
     # "did the policy learn this rule?" unanswerable.
     valid = ws.root / "data" / "processed" / "valid.jsonl"
