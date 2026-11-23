@@ -130,3 +130,43 @@ violation rate means the compiled programs are wrong. Root causes from the count
 Repair is non-destructive: downgraded checks become `llm_check` and every change is annotated in the
 constraint description, so a later re-compilation can undo it. New gate G25 asserts no prose or
 identifier sits in a regex slot: it FAILs on `mbg_cards_app` and PASSes on `mbg_cards_repaired`.
+
+## 2d. Constraint kinds: measured cost of "card -> executable program" (P3 evidence)
+
+Same 1,200 CC0 Tech-in-GOV pairs, same cached applicability judgements (4,196 decisions), zero new
+model calls per re-measurement. Verdicts come only from machine constraints.
+
+| card set | applicable checks | satisfied | violated | violation rate | verified labels | distinct rules |
+|---|---|---|---|---|---|---|
+| `mbg_cards_app` (as extracted) | 493 | 137 | 356 | 72.2% | 133 | 11 |
+| `mbg_cards_repaired` (evidence-driven downgrade) | 325 | 144 | 181 | 55.7% | 140 | 11 |
+| `mbg_cards_recompiled` (kind re-choice + admission tests) | 371 | 167 | 204 | **55.0%** | **162** | 11 |
+
+Kind re-compilation changed 48 constraints:
+27 -> `must_include_any_regex` (real disjunctions), 17 -> `must_include_regex`, 19 -> `llm_check`,
+8 -> `optionality`, 3 -> `equivalence`, 5 -> `must_exclude_regex`; 11 got no proposal, 7 were rejected.
+
+Two findings that only a machine check can produce:
+
+1. **~13% of the rules that extraction turned into output constraints cannot be expressed as a
+   containment test at all** (8 optionality + 3 equivalence out of the recompiled set). Examples:
+   "nominative and accusative forms are identical", "the particle may be omitted". They are kept as
+   explicit *deferred* checks that abstain, and deciding them requires a morphology engine - the
+   concrete, measurable motivation for P3 (rules as code).
+2. **Admission tests caught compilation errors without any human linguist**: 2 exclusions fired on
+   their own card's example sentence (a rule contradicting its own illustration), 4 includes never
+   fired on any own example. Those were rejected rather than shipped.
+
+Accounting corrections made along the way (each one moved a reported number):
+- undecidable constraints used to certify: a card whose constraints were all deferred / vacuous /
+  un-routed llm_check was reported "satisfied". Now a verdict requires >=1 decidable constraint.
+- exclusions are one-sided evidence: an absent forbidden shape carries no information, so it no
+  longer yields "satisfied"; its presence still penalizes. This lowered `satisfied` (179 -> 144)
+  while making the labels trustworthy.
+- legacy kind names (`must_not_include_regex`) silently degraded to `llm_check` in the extractor's
+  mapping, so a supposedly machine-checkable exclusion was never checked.
+
+Residual problem, quantified: the single most productive card (`LB_0c9c0e28da81`, definite article
+full vs contracted forms) is applicable 154 times and still wrong 43.5% of the time on professional
+translations. Yield is capped by constraint precision, not by data volume: 162 verified labels out of
+1,200 pairs (13.5%), concentrated in 11 rules.
