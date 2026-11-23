@@ -102,12 +102,14 @@ def replay_trajectory(
     )
     grammar_passed = bool(report.get("overall_passed", False))
     checked_rules = int(report.get("checked_rules", 0))
+    verdicts = list(report.get("verdicts", []))
 
     reward = aggregate_reward(
         hypothesis=hypothesis,
         reference=reference,
         grammar_passed=grammar_passed,
         checked_rules=checked_rules,
+        verdicts=verdicts,
         action_names=action_names,
     )
     return {
@@ -116,6 +118,8 @@ def replay_trajectory(
         "chr_f": _chr_f(hypothesis, reference),
         "grammar_passed": grammar_passed,
         "checked_rules": checked_rules,
+        "verdicts": verdicts,
+        "decided": int(report.get("decided_rules", 0)),
         "reward": reward,
         "actions": action_names,
     }

@@ -135,6 +135,7 @@ def build_sentence_dataset(
     valid_ratio: float = 0.1,
     seed: int = 0,
     out_subsentence: Path | None = None,
+    extra_rows: list[dict] | None = None,
 ) -> dict[str, object]:
     """Build sentence-level TranslationExample rows from the grammar cards' own example pairs.
 
@@ -183,6 +184,18 @@ def build_sentence_dataset(
                 sub_sentences.append(row)
         if rows:
             by_card[card.id] = rows
+
+    # Rule-tagged external pairs join the SAME buckets, keyed by their gold rule. A card-example
+    # pair and an externally-mined pair for the same rule must never sit in different splits.
+    for row in extra_rows or []:
+        rules = row.get("gold_rules") or []
+        if not rules:
+            continue
+        key = (str(row.get("src", "")).lower(), str(row.get("tgt_ref", "")).lower())
+        if key in seen_pairs:
+            continue
+        seen_pairs.add(key)
+        by_card.setdefault(rules[0], []).append(row)
 
     card_ids = sorted(by_card)
     random.Random(seed).shuffle(card_ids)
@@ -394,6 +407,24 @@ def _pos_to_tags(pos: str) -> list[str]:
     return mapping.get(pos, [])
 
 
+def load_tagged(paths: str | None) -> list[dict]:
+    """Rule-labeled external pairs produced by scripts/pilot_rule_tagging.py (comma-separated)."""
+    rows: list[dict] = []
+    for raw in (paths or "").split(","):
+        raw = raw.strip()
+        if not raw:
+            continue
+        path = Path(raw)
+        if not path.exists():
+            print(f"[WARN] tagged pair file missing: {path}")
+            continue
+        with path.open("r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip():
+                    rows.append(json.loads(line))
+    return rows
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build lexicon + translation training set")
     parser.add_argument("--lod", default=None, help="Path to LOD JSONL (default: assets/lb/new_lod-art.jsonl)")
@@ -436,7 +467,7 @@ def main() -> None:
         alt = ws.mbg_cards_file
         cards_path = alt if alt.exists() else cards_path
 
-    if cards_path.exists() and not tagged:
+    if cards_path.exists():
         stats = build_sentence_dataset(
             cards_path,
             ws.train_dataset_file,

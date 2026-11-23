@@ -19,6 +19,10 @@ class RuleCheckResult:
     # Anchored excludes such as ^(?!zur).*der$ searched over a whole sentence always match zero
     # tokens, which inflated apparent rule firing (measured on 400 real en->lb pairs).
     vacuous: bool = False
+    # Three-valued outcome. `not_applicable` and `unknown` must contribute NO reward term:
+    # checking a rule that does not govern the sentence is a guaranteed false penalty.
+    verdict: str = "unknown"  # satisfied | violated | not_applicable | unknown
+    applicability: str = "unknown"  # applicable | not_applicable | unknown
 
 
 @dataclass(slots=True)
@@ -27,6 +31,10 @@ class VerificationReport:
     translation: str
     overall_passed: bool
     results: list[RuleCheckResult]
+    decided: int = 0  # rules with an actual verdict (satisfied/violated)
+
+    def verdicts(self) -> list[str]:
+        return [r.verdict for r in self.results]
 
 
 class TranslationVerifier:
@@ -58,14 +66,43 @@ class TranslationVerifier:
         return out
 
     def verify(self, sentence: str, translation: str, rules: list[MBGCard]) -> VerificationReport:
-        results = [self._verify_single_rule(sentence, translation, rule) for rule in rules]
-        overall = all(r.passed for r in results)
+        src_norm = self.normalize_text(sentence) if self.normalize else sentence
+        tgt_norm = self.normalize_text(translation) if self.normalize else translation
+        results = [self._verify_single_rule(src_norm, tgt_norm, rule) for rule in rules]
+        decided = [r for r in results if r.verdict in ("satisfied", "violated")]
+        overall = all(r.verdict != "violated" for r in results)
         return VerificationReport(
             sentence=sentence,
             translation=translation,
             overall_passed=overall,
             results=results,
+            decided=len(decided),
         )
+
+    # --- applicability -----------------------------------------------------------
+    def _applicability(self, rule: MBGCard, src_norm: str, tgt_norm: str) -> tuple[str, list[str]]:
+        """Decide whether the rule is in play at all.
+
+        Only self-test-admitted regex predicates count. Any-of semantics: the grammar books state
+        triggers as alternative conditions ("when X" / "when Y"), so one satisfied predicate is
+        enough to make the rule applicable. With no usable predicate the answer is `unknown`, and
+        the reward layer must abstain rather than guess.
+        """
+        preds = [p for p in rule.applicability if p.accepted and p.kind == "regex" and p.pattern]
+        if not preds:
+            return "unknown", ["no accepted applicability predicate"]
+        msgs: list[str] = []
+        for p in preds:
+            text = tgt_norm if p.side == "target" else src_norm
+            n, how = self._pattern_hits(p.pattern, text, p.level)
+            if n < 0:
+                msgs.append(f"trigger[{p.side}] {p.pattern!r} => invalid regex")
+                continue
+            holds = (n == 0) if p.negated else (n > 0)
+            msgs.append(f"trigger[{p.side}] {p.pattern!r} => {n} hit(s) [{how}] negated={p.negated}")
+            if holds:
+                return "applicable", msgs
+        return "not_applicable", msgs
 
     def _verify_single_rule(
         self,
@@ -76,6 +113,18 @@ class TranslationVerifier:
         messages: list[str] = []
         passed = True
         vacuums = 0
+
+        applicability, app_msgs = self._applicability(rule, sentence, translation)
+        messages.extend(app_msgs)
+        if applicability == "not_applicable":
+            # Do not evaluate the rule's constraints: it would be a guaranteed false penalty.
+            return RuleCheckResult(
+                rule_id=rule.id,
+                passed=True,
+                messages=messages,
+                verdict="not_applicable",
+                applicability="not_applicable",
+            )
 
         for cons in rule.output_constraints:
             haystack = self.normalize_text(translation) if self.normalize else translation
@@ -97,11 +146,17 @@ class TranslationVerifier:
         if not rule.output_constraints:
             messages.append("No machine-checkable constraints on this rule.")
 
+        verdict = "unknown"
+        if applicability == "applicable" and rule.output_constraints:
+            verdict = "satisfied" if passed else "violated"
+
         return RuleCheckResult(
             rule_id=rule.id,
             passed=passed,
             messages=messages,
             vacuous=vacuums > 0,
+            verdict=verdict,
+            applicability=applicability,
         )
 
     # --- level-aware matching -------------------------------------------------------

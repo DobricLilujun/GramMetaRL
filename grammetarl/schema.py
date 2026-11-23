@@ -87,6 +87,31 @@ class RuleDependency(BaseModel):
     note: str | None = None
 
 
+class TriggerCondition(BaseModel):
+    """Compiled applicability predicate: when is this rule even in play?
+
+    Cards always state triggers in prose, and prose cannot be evaluated, so the verifier used to
+    check output constraints on sentences the rule never governed (measured: 85.2% of checks on
+    48k real en->lb pairs failed, mostly for that reason). A compiled predicate lets the
+    verifier abstain instead.
+    """
+
+    source_text: str = Field(description="The prose trigger this was compiled from")
+    kind: Literal["regex", "llm_check", "note"] = "note"
+    side: Literal["source", "target"] = Field(
+        default="target",
+        description="Which side of the pair the predicate is observable on",
+    )
+    pattern: str | None = None
+    level: Literal["token", "phrase", "sentence", "any"] = "sentence"
+    negated: bool = False
+    accepted: bool = Field(
+        default=False,
+        description="Self-test admission: the pattern fires on at least one of the card's own examples",
+    )
+    reject_reason: str | None = None
+
+
 class MBGCard(BaseModel):
     id: str = Field(description="Unique and stable rule ID")
     language: str = Field(description="Language identifier, e.g. lb, kmr, qu")
@@ -98,6 +123,10 @@ class MBGCard(BaseModel):
     confidence: float | None = Field(default=None, ge=0.0, le=1.0)
     phenomenon_tags: list[str] = Field(default_factory=list)
     trigger_conditions: list[str] = Field(default_factory=list)
+    applicability: list[TriggerCondition] = Field(
+        default_factory=list,
+        description="Executable subset of trigger_conditions; empty means applicability is unknown",
+    )
     scope: str = Field(description="What structure this rule applies to")
     operation_type: OperationType
     operation_steps: list[str] = Field(default_factory=list)

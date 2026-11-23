@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .grammar_reward import grammar_reward
+from .grammar_reward import grammar_reward, grammar_reward_verdicts
 from .mt_reward import mt_reward
 from .tool_reward import tool_reward
 
@@ -10,15 +10,22 @@ def aggregate_reward(
     reference: str,
     grammar_passed: bool,
     checked_rules: int,
-    action_names: list[str],
+    verdicts: list[str] | None = None,
+    action_names: list[str] | None = None,
     w_mt: float = 0.25,
     w_grammar: float = 0.40,
     w_tool: float = 0.20,
     w_trace: float = 0.10,
     w_eff: float = 0.05,
 ) -> float:
+    action_names = action_names or []
     r_mt = mt_reward(hypothesis, reference)
-    r_grammar = grammar_reward(grammar_passed, checked_rules)
+    # Prefer the three-valued form: rules that do not apply must not move the reward.
+    r_grammar = (
+        grammar_reward_verdicts(verdicts)
+        if verdicts is not None
+        else grammar_reward(grammar_passed, checked_rules)
+    )
     r_tool = tool_reward(action_names)
     # Placeholders for future detailed trace/efficiency metrics.
     r_trace = 0.0

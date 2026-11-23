@@ -24,8 +24,15 @@ def grammar_verify(
     selected = [c for c in cards if c.id in set(applied_rule_ids)]
     verifier = TranslationVerifier()
     report = verifier.verify(sentence=src_sentence, translation=hypothesis, rules=selected)
+    verdicts = [r.verdict for r in report.results]
     return {
         "overall_passed": report.overall_passed,
         "checked_rules": len(report.results),
-        "failed_rules": [r.rule_id for r in report.results if not r.passed],
+        "decided_rules": report.decided,
+        "verdicts": verdicts,
+        "applicable_rules": sum(1 for r in report.results if r.applicability == "applicable"),
+        "not_applicable_rules": sum(1 for r in report.results if r.verdict == "not_applicable"),
+        "unknown_applicability_rules": sum(1 for r in report.results if r.applicability == "unknown"),
+        "failed_rules": [r.rule_id for r in report.results if r.verdict == "violated"],
+        "abstained_rules": [r.rule_id for r in report.results if r.verdict == "not_applicable"],
     }
