@@ -1,5 +1,5 @@
 data/*
-artifacts/
+artifacts/*
 **/__pycache__/**
 assets/
 paper/

@@ -1,0 +1,196 @@
+{
+  "stats": {
+    "pairs": 1201,
+    "cached_checks": 3283,
+    "satisfied": 144,
+    "violated": 181,
+    "unknown": 42,
+    "labeled_pairs": 140,
+    "labeled_rules": 11
+  },
+  "violation_rate_on_human_translations": 0.556923076923077,
+  "per_card": {
+    "LB_73a7f3d6dede": {
+      "not_applicable": 79,
+      "applicable": 5,
+      "violated": 5
+    },
+    "LB_8925c39346bf": {
+      "not_applicable": 124,
+      "applicable": 2,
+      "violated": 2
+    },
+    "LB_e934783fef93": {
+      "not_applicable": 146,
+      "applicable": 3,
+      "violated": 3
+    },
+    "LB_0a25767e516e": {
+      "not_applicable": 344,
+      "applicable": 2,
+      "violated": 2
+    },
+    "LB_57f18e8973cc": {
+      "not_applicable": 55,
+      "applicable": 1,
+      "violated": 1
+    },
+    "LB_8e8c0ac9bf52": {
+      "not_applicable": 136,
+      "applicable": 3,
+      "violated": 3
+    },
+    "LB_ab00cf7fe49b": {
+      "applicable": 6,
+      "violated": 6,
+      "not_applicable": 24
+    },
+    "LB_d843e59857e4": {
+      "not_applicable": 16,
+      "applicable": 1,
+      "violated": 1
+    },
+    "LB_363a21684c8f": {
+      "not_applicable": 45,
+      "applicable": 1,
+      "violated": 1
+    },
+    "LB_26d36eb1e29b": {
+      "applicable": 2,
+      "violated": 2,
+      "not_applicable": 4
+    },
+    "LB_043df73a4d65": {
+      "not_applicable": 2,
+      "applicable": 1,
+      "violated": 1
+    },
+    "LB_f73c08e1e60c": {
+      "not_applicable": 31,
+      "applicable": 22,
+      "violated": 20,
+      "satisfied": 2
+    },
+    "LB_7af453fdf249": {
+      "not_applicable": 194,
+      "applicable": 18,
+      "violated": 15,
+      "unknown": 3
+    },
+    "LB_3432e8148f68": {
+      "not_applicable": 321,
+      "applicable": 7,
+      "violated": 5,
+      "satisfied": 2
+    },
+    "LB_3c542bb77f7d": {
+      "not_applicable": 36,
+      "applicable": 3,
+      "violated": 2,
+      "satisfied": 1
+    },
+    "LB_d121073f582e": {
+      "not_applicable": 57,
+      "applicable": 17,
+      "satisfied": 6,
+      "violated": 11
+    },
+    "LB_eba5f250d9ce": {
+      "not_applicable": 291,
+      "applicable": 5,
+      "violated": 3,
+      "satisfied": 2
+    },
+    "LB_4748b3f93481": {
+      "not_applicable": 92,
+      "applicable": 17,
+      "unknown": 7,
+      "violated": 10
+    },
+    "LB_0c9c0e28da81": {
+      "applicable": 154,
+      "violated": 66,
+      "satisfied": 88,
+      "not_applicable": 144
+    },
+    "LB_b8a95b630126": {
+      "not_applicable": 150,
+      "applicable": 10,
+      "violated": 4,
+      "satisfied": 6
+    },
+    "LB_946a24dd25d6": {
+      "applicable": 42,
+      "satisfied": 27,
+      "not_applicable": 60,
+      "violated": 15
+    },
+    "LB_374581869ba8": {
+      "applicable": 6,
+      "violated": 2,
+      "not_applicable": 131,
+      "satisfied": 4
+    },
+    "LB_430c8fe9970a": {
+      "applicable": 6,
+      "satisfied": 5,
+      "not_applicable": 26,
+      "violated": 1
+    },
+    "LB_094bd032b36c": {
+      "not_applicable": 113,
+      "applicable": 2,
+      "unknown": 2
+    },
+    "LB_e201de9bd278": {
+      "not_applicable": 20,
+      "applicable": 1,
+      "satisfied": 1
+    },
+    "LB_20ad587cbb47": {
+      "not_applicable": 64,
+      "applicable": 30,
+      "unknown": 30
+    },
+    "LB_baf7cca40aa2": {
+      "not_applicable": 77
+    },
+    "LB_44a8fa6bbb3a": {
+      "not_applicable": 70
+    },
+    "LB_0004": {
+      "not_applicable": 34
+    },
+    "LB_d43476c38b5b": {
+      "not_applicable": 4
+    },
+    "LB_28068bea6d91": {
+      "not_applicable": 1
+    },
+    "LB_7541967ff8cf": {
+      "not_applicable": 10
+    },
+    "LB_6b1343e99ac4": {
+      "not_applicable": 2
+    },
+    "LB_478dad078661": {
+      "not_applicable": 7
+    },
+    "LB_12f8711db9e4": {
+      "not_applicable": 2
+    },
+    "LB_3ed3f92988a1": {
+      "not_applicable": 1
+    },
+    "LB_c6523b2803ed": {
+      "not_applicable": 1
+    },
+    "LB_e24e4b54cb59": {
+      "not_applicable": 1
+    },
+    "LB_dbe36dff4e9f": {
+      "not_applicable": 1
+    }
+  },
+  "counter_examples": []
+}
