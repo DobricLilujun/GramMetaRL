@@ -243,6 +243,28 @@ class TranslationVerifier:
                 return True, f"must_exclude_regex({c.value}) => 0 hits [{how}] VACUOUS", True
             return False, f"must_exclude_regex({c.value}) => {hits} violation(s)", False
 
+        if c.kind == "must_include_any_regex":
+            alts = [v for v in (c.values or []) if v]
+            if not alts and c.value:
+                alts = [c.value]
+            if not alts:
+                return False, "must_include_any_regex has no alternatives", False
+            level = c.level or self._resolve_level(c, alts[0])
+            hits = []
+            for alt in alts:
+                n, how = self._pattern_hits(alt, translation, level)
+                if n < 0:
+                    return False, f"must_include_any_regex({alt!r}) => {how}", False
+                hits.append(n)
+            total = sum(hits)
+            if total == 0:
+                return False, f"must_include_any_regex({alts}) => 0 hits", False
+            return True, f"must_include_any_regex({alts}) => {total} hit(s)", False
+
+        if c.kind in ("equivalence", "optionality"):
+            # Not decidable without a morphology engine: record it, but emit no verdict downstream.
+            return True, f"DEFERRED {c.kind}: needs a morphology engine (P3)", True
+
         if c.kind == "token_count_range":
             toks = translation.split()
             min_t = c.min_tokens if c.min_tokens is not None else 0

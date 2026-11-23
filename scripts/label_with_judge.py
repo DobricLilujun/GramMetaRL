@@ -193,12 +193,29 @@ def main() -> None:
     with out_path.open("w", encoding="utf-8") as out:
         for i in range(0, len(pairs), args.batch_pairs):
             batch = pairs[i : i + args.batch_pairs]
-            try:
-                verdict_map = judge_batch(batch, cards_by_id, args.endpoint, args.model, api_key,
-                                          args.max_tokens, args.timeout)
-            except Exception as exc:
-                print(f"[JUDGE][WARN] batch {i // args.batch_pairs + 1} failed: {exc}")
-                continue
+            # Reuse cached judgements. Applicability is a property of (pair, rule), so after a
+            # constraint repair we can re-derive labels from the cache with ZERO model calls.
+            verdict_map: dict[str, list[str]] = {}
+            uncached: list[dict] = []
+            for rec in batch:
+                keys = {cid: key(rec["src"], rec["tgt_ref"], cid) for cid in rec["candidate_ids"]}
+                if all(k in cache for k in keys.values()):
+                    verdict_map[rec["pair_id"]] = [cid for cid, k in keys.items() if cache[k]]
+                    stats["cache_hit_checks"] += len(keys)
+                else:
+                    uncached.append(rec)
+            if uncached:
+                try:
+                    fresh = judge_batch(uncached, cards_by_id, args.endpoint, args.model, api_key,
+                                        args.max_tokens, args.timeout)
+                except Exception as exc:
+                    print(f"[JUDGE][WARN] batch {i // args.batch_pairs + 1} failed: {exc}")
+                    continue
+                for rec in uncached:
+                    got = {c for c in fresh.get(rec["pair_id"], []) if c in set(rec["candidate_ids"])}
+                    for cid in rec["candidate_ids"]:
+                        cache[key(rec["src"], rec["tgt_ref"], cid)] = cid in got
+                    verdict_map[rec["pair_id"]] = sorted(got)
             for rec in batch:
                 applicable = [cid for cid in verdict_map.get(rec["pair_id"], []) if cid in set(rec["candidate_ids"])]
                 for cid in rec["candidate_ids"]:

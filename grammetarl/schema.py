@@ -52,7 +52,17 @@ class RuleConstraint(BaseModel):
     kind: Literal[
         "must_include_regex",
         "must_exclude_regex",
+        # Optionality as a disjunction: any one alternative satisfies the rule. This is what a
+        # wrong allomorph set should have been - the book's own example is `datt s du`, not `datts`.
+        "must_include_any_regex",
         "token_count_range",
+        # Semantics containment cannot express. Extraction was forcing these into must_include,
+        # which guarantees a failure on correct translations:
+        #   equivalence - "nominative and accusative forms are identical"
+        #   optionality - "the particle may be omitted in this construction"
+        # They abstain (no reward term) until a morphology engine can decide them (P3).
+        "equivalence",
+        "optionality",
         "llm_check",
         "note",
     ]
@@ -60,6 +70,10 @@ class RuleConstraint(BaseModel):
     value: str | None = None
     min_tokens: int | None = None
     max_tokens: int | None = None
+    values: list[str] = Field(
+        default_factory=list,
+        description="Alternatives for must_include_any_regex / optionality; at least one must match",
+    )
     # What the pattern applies to. Without this field a word-level anchored pattern such as
     # ^(dat|hatt|et|seng)$ gets searched against a whole sentence, which can never match, so the
     # rule fails on every correct translation (measured: 81% constraint failure on real pairs).
