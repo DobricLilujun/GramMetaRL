@@ -40,6 +40,12 @@ def main() -> None:
     ap.add_argument("--top-k", type=int, default=6)
     ap.add_argument("--sample", type=int, default=12)
     ap.add_argument("--out", default="artifacts/audit/constraint_precision.json")
+    ap.add_argument(
+        "--emit-pairs",
+        default=None,
+        help="Write labeled pairs (>=1 satisfied constraint) with the same cache-driven evidence; "
+        "single source of truth for both precision and yield",
+    )
     args = ap.parse_args()
 
     cache: dict[str, bool] = {}
@@ -58,6 +64,7 @@ def main() -> None:
 
     per_card: dict[str, collections.Counter] = collections.defaultdict(collections.Counter)
     examples: list[dict] = []
+    labeled_rows: list[dict] = []
     stats = collections.Counter()
 
     with Path(args.pairs).open("r", encoding="utf-8") as f:
@@ -99,6 +106,21 @@ def main() -> None:
                 verdict = report.results[0].verdict
                 per_card[c.id][verdict] += 1
                 stats[verdict] += 1
+                if verdict == "satisfied":
+                    labeled_rows.append(
+                        {
+                            "id": f"audited_{abs(hash((src, tgt))) % (16**16):016x}",
+                            "src": src,
+                            "tgt_ref": tgt,
+                            "lang_pair": "en->lb",
+                            "difficulty": "audited",
+                            "phenomena_tags": sorted({t for t in c.phenomenon_tags}),
+                            "gold_rules": [c.id],
+                            "gold_lexicon": [],
+                            "source": rec.get("source", "external"),
+                            "license": rec.get("license", "unknown"),
+                        }
+                    )
                 if verdict == "violated" and len(examples) < args.sample:
                     examples.append(
                         {
@@ -114,6 +136,21 @@ def main() -> None:
                             "messages": report.results[0].messages,
                         }
                     )
+
+    if args.emit_pairs:
+        by_pair: dict[str, dict] = {}
+        for r in labeled_rows:
+            k = (r["src"], r["tgt_ref"])
+            row = by_pair.setdefault(k, {**r, "gold_rules": []})
+            row["gold_rules"] = sorted(set(row["gold_rules"] + r["gold_rules"]))
+        outp = Path(args.emit_pairs)
+        outp.parent.mkdir(parents=True, exist_ok=True)
+        with outp.open("w", encoding="utf-8") as f:
+            for row in by_pair.values():
+                f.write(json.dumps(row, ensure_ascii=False) + "\n")
+        stats["labeled_pairs"] = len(by_pair)
+        stats["labeled_rules"] = len({g for row in by_pair.values() for g in row["gold_rules"]})
+        print(f"labeled pairs: {len(by_pair)}  distinct rules: {stats['labeled_rules']} -> {outp}")
 
     ranked = sorted(
         per_card.items(),

@@ -57,7 +57,9 @@ def load_cache(path: Path) -> dict[str, bool]:
         for line in path.open("r", encoding="utf-8"):
             if line.strip():
                 rec = json.loads(line)
-                out[rec["key"]] = bool(rec["applicable"])
+                # First-wins: appending a re-ask must not silently overwrite an earlier judgement,
+                # otherwise the audit numbers move between runs for no reproducible reason.
+                out.setdefault(rec["key"], bool(rec["applicable"]))
     return out
 
 
@@ -199,7 +201,8 @@ def main() -> None:
             uncached: list[dict] = []
             for rec in batch:
                 keys = {cid: key(rec["src"], rec["tgt_ref"], cid) for cid in rec["candidate_ids"]}
-                if all(k in cache for k in keys.values()):
+                partially_cached = any(k in cache for k in keys.values())
+            if all(k in cache for k in keys.values()):
                     verdict_map[rec["pair_id"]] = [cid for cid, k in keys.items() if cache[k]]
                     stats["cache_hit_checks"] += len(keys)
                 else:
