@@ -14,6 +14,8 @@ data/rules/*
 !data/rules/mbg_cards_app.jsonl
 !data/rules/mbg_cards_repaired.jsonl
 !data/rules/mbg_cards_recompiled.jsonl
+!data/rules/mbg_cards_triaged.jsonl
+!data/rules/mbg_cards_precise.jsonl
 !data/external/
 data/external/*
 !data/external/MANIFEST.json
