@@ -262,9 +262,12 @@ class RegexCompiler:
                 nfa.states[e0].eps.add(e0)
                 nfa.states[e].edges.setdefault(c, set()).add(e0)
             nfa.states[s0].final = False
-            # new start must be state 0 for the rest of the code; rebuild instead:
             return self._reroot(nfa, s0, e0)
-        return nfa
+        # Non-search (fullmatch) path: mark the terminal accepting, then re-root. Both steps are
+        # load-bearing: without the final mark every anchored pattern looks empty, and NFA()
+        # reserves state 0 so the real start would otherwise be unreachable.
+        nfa.states[e].final = True
+        return self._reroot(nfa, s, e)
 
     def _reroot(self, nfa: NFA, start: int, end: int) -> NFA:
         """Copy the automaton so that `start` becomes state 0 (invariant used everywhere)."""

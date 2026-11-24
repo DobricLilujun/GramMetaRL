@@ -4,47 +4,24 @@
   "constraints": 97,
   "by_status": {
     "out_of_fragment": 29,
-    "ok": 36,
-    "vacuous": 5,
-    "dead": 27
+    "ok": 63,
+    "dead": 4,
+    "universal": 1
   },
   "out_of_fragment_reasons": {
     "not a regex constraint": 27,
     "construct (?!": 2
   },
   "cards_dead": [
-    "LB_043df73a4d65",
-    "LB_0a25767e516e",
-    "LB_0c9c0e28da81",
-    "LB_12f8711db9e4",
-    "LB_27c64c1f7e4b",
     "LB_28068bea6d91",
-    "LB_3432e8148f68",
-    "LB_374581869ba8",
-    "LB_37643acfef1c",
-    "LB_3c542bb77f7d",
-    "LB_3ed3f92988a1",
-    "LB_473d56626cdb",
     "LB_55952182c95e",
-    "LB_6b1343e99ac4",
     "LB_7bd0259578eb",
-    "LB_8925c39346bf",
-    "LB_9d86392ccf45",
-    "LB_b6ca111c6511",
-    "LB_d121073f582e",
-    "LB_d43476c38b5b",
-    "LB_e201de9bd278",
-    "LB_e51077fe7961",
-    "LB_eba5f250d9ce"
+    "LB_8925c39346bf"
   ],
-  "cards_vacuous": [
-    "LB_094bd032b36c",
-    "LB_20ad587cbb47",
-    "LB_363a21684c8f",
-    "LB_7af453fdf249",
-    "LB_fb5d91622d69"
+  "cards_vacuous": [],
+  "cards_universal": [
+    "LB_d43476c38b5b"
   ],
-  "cards_universal": [],
   "cards_out_of_fragment": [
     "LB_0001",
     "LB_0002",
@@ -78,18 +55,6 @@
   "cards_with_obligation": 59,
   "unsatisfiable_cards": [
     {
-      "card_id": "LB_d121073f582e",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_3ed3f92988a1",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_6b1343e99ac4",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
       "card_id": "LB_55952182c95e",
       "why": "positives /\\ not(exclusions) = empty in SIGMA*"
     },
@@ -103,10 +68,6 @@
     },
     {
       "card_id": "LB_28068bea6d91",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_0c9c0e28da81",
       "why": "positives /\\ not(exclusions) = empty in SIGMA*"
     },
     {
@@ -128,50 +89,6 @@
     {
       "card_id": "LB_363a21684c8f",
       "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_e51077fe7961",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_27c64c1f7e4b",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_0a25767e516e",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_eba5f250d9ce",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_e201de9bd278",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_374581869ba8",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_3432e8148f68",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_d43476c38b5b",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_12f8711db9e4",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_3c542bb77f7d",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
-    },
-    {
-      "card_id": "LB_043df73a4d65",
-      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
     }
   ],
   "satisfiable_witnesses": {
@@ -180,10 +97,14 @@
     "LB_094bd032b36c": "",
     "LB_fb5d91622d69": "",
     "LB_430c8fe9970a": "en",
+    "LB_d121073f582e": "en",
+    "LB_3ed3f92988a1": "er",
+    "LB_6b1343e99ac4": "er",
     "LB_ce9b853ce4ee": "null",
     "LB_d843e59857e4": "null",
     "LB_9789dfb15623": "méiadjective",
     "LB_2e47463db059": "besser",
+    "LB_0c9c0e28da81": "d'",
     "LB_20ad587cbb47": "",
     "LB_34e781490e7b": "dat",
     "LB_ab00cf7fe49b": "d'A",
@@ -192,6 +113,11 @@
     "LB_ae5008a66d74": "eng",
     "LB_d24d2597cb78": "eng",
     "LB_dbe36dff4e9f": "keen",
+    "LB_e51077fe7961": "de",
+    "LB_27c64c1f7e4b": "der",
+    "LB_0a25767e516e": "et",
+    "LB_eba5f250d9ce": "si",
+    "LB_e201de9bd278": "him",
     "LB_946a24dd25d6": "är",
     "LB_baf7cca40aa2": "säin",
     "LB_44a8fa6bbb3a": "eist",
@@ -205,11 +131,17 @@
     "LB_7ba71aa6e282": "um",
     "LB_89efbbfdabf2": "iwwerenb",
     "LB_15af0fc3dca0": "iwwera",
+    "LB_374581869ba8": "en",
     "LB_7af453fdf249": "",
+    "LB_3432e8148f68": "f",
+    "LB_d43476c38b5b": "",
+    "LB_12f8711db9e4": "t",
     "LB_f73c08e1e60c": "hunnge",
     "LB_9a1ce174385f": "haten",
     "LB_73a7f3d6dede": "géif",
-    "LB_353e50a17df4": "datts"
+    "LB_353e50a17df4": "datts",
+    "LB_3c542bb77f7d": "éieren",
+    "LB_043df73a4d65": "A"
   },
   "pair_conflicts": [
     {
@@ -242,204 +174,631 @@
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_043df73a4d65",
+        "LB_0a25767e516e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_043df73a4d65",
+        "LB_0c9c0e28da81"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_043df73a4d65",
+        "LB_20ad587cbb47"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_043df73a4d65",
+        "LB_27c64c1f7e4b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_043df73a4d65",
+        "LB_d43476c38b5b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_043df73a4d65",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_043df73a4d65",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_043df73a4d65",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_043df73a4d65",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0a25767e516e",
+        "LB_0c9c0e28da81"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0a25767e516e",
         "LB_15af0fc3dca0"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
+        "LB_20ad587cbb47"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0a25767e516e",
         "LB_26d36eb1e29b"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
+        "LB_27c64c1f7e4b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0a25767e516e",
         "LB_2e47463db059"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
-        "LB_34e781490e7b"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_353e50a17df4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
-        "LB_430c8fe9970a"
+        "LB_0a25767e516e",
+        "LB_374581869ba8"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
+        "LB_3c542bb77f7d"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0a25767e516e",
+        "LB_3ed3f92988a1"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0a25767e516e",
         "LB_44a8fa6bbb3a"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_478dad078661"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_57f18e8973cc"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
+        "LB_6b1343e99ac4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0a25767e516e",
         "LB_73a7f3d6dede"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_7541967ff8cf"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_7ba71aa6e282"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_89efbbfdabf2"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_8e8c0ac9bf52"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_946a24dd25d6"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_9789dfb15623"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_9a1ce174385f"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_ab00cf7fe49b"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
-        "LB_ae5008a66d74"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_b8a95b630126"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_baf7cca40aa2"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_c6523b2803ed"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_ce9b853ce4ee"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
-        "LB_d24d2597cb78"
+        "LB_0a25767e516e",
+        "LB_d121073f582e"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_d843e59857e4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_dbe36dff4e9f"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
         "LB_e24e4b54cb59"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0a25767e516e",
         "LB_e934783fef93"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
-        "LB_094bd032b36c",
+        "LB_0a25767e516e",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0a25767e516e",
         "LB_f73c08e1e60c"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0a25767e516e",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_12f8711db9e4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_15af0fc3dca0"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_20ad587cbb47"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_26d36eb1e29b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_2e47463db059"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_3432e8148f68"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_34e781490e7b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_353e50a17df4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_3c542bb77f7d"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_44a8fa6bbb3a"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_478dad078661"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_57f18e8973cc"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_73a7f3d6dede"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_7541967ff8cf"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_7ba71aa6e282"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_89efbbfdabf2"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_8e8c0ac9bf52"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_946a24dd25d6"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_9789dfb15623"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_9a1ce174385f"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_ab00cf7fe49b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_ae5008a66d74"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_b8a95b630126"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_baf7cca40aa2"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_ce9b853ce4ee"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_d24d2597cb78"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_d843e59857e4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_dbe36dff4e9f"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_e934783fef93"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_f73c08e1e60c"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_0c9c0e28da81",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_12f8711db9e4",
+        "LB_20ad587cbb47"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_12f8711db9e4",
+        "LB_27c64c1f7e4b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_12f8711db9e4",
+        "LB_374581869ba8"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_12f8711db9e4",
+        "LB_3c542bb77f7d"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_12f8711db9e4",
+        "LB_3ed3f92988a1"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_12f8711db9e4",
+        "LB_6b1343e99ac4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_12f8711db9e4",
+        "LB_ae5008a66d74"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_12f8711db9e4",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_12f8711db9e4",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_12f8711db9e4",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_12f8711db9e4",
+        "LB_fb5d91622d69"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -460,6 +819,13 @@
     {
       "cards": [
         "LB_15af0fc3dca0",
+        "LB_27c64c1f7e4b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_15af0fc3dca0",
         "LB_2e47463db059"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -468,6 +834,13 @@
       "cards": [
         "LB_15af0fc3dca0",
         "LB_353e50a17df4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_15af0fc3dca0",
+        "LB_3c542bb77f7d"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -496,13 +869,6 @@
       "cards": [
         "LB_15af0fc3dca0",
         "LB_7541967ff8cf"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_15af0fc3dca0",
-        "LB_7af453fdf249"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -579,6 +945,27 @@
     {
       "cards": [
         "LB_15af0fc3dca0",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_15af0fc3dca0",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_15af0fc3dca0",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_15af0fc3dca0",
         "LB_fb5d91622d69"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -593,7 +980,21 @@
     {
       "cards": [
         "LB_20ad587cbb47",
+        "LB_27c64c1f7e4b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_20ad587cbb47",
         "LB_2e47463db059"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_20ad587cbb47",
+        "LB_3432e8148f68"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -608,6 +1009,27 @@
       "cards": [
         "LB_20ad587cbb47",
         "LB_353e50a17df4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_20ad587cbb47",
+        "LB_374581869ba8"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_20ad587cbb47",
+        "LB_3c542bb77f7d"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_20ad587cbb47",
+        "LB_3ed3f92988a1"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -636,6 +1058,13 @@
       "cards": [
         "LB_20ad587cbb47",
         "LB_57f18e8973cc"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_20ad587cbb47",
+        "LB_6b1343e99ac4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -740,6 +1169,13 @@
     {
       "cards": [
         "LB_20ad587cbb47",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_20ad587cbb47",
         "LB_d24d2597cb78"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -761,6 +1197,13 @@
     {
       "cards": [
         "LB_20ad587cbb47",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_20ad587cbb47",
         "LB_e24e4b54cb59"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -775,7 +1218,21 @@
     {
       "cards": [
         "LB_20ad587cbb47",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_20ad587cbb47",
         "LB_f73c08e1e60c"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_26d36eb1e29b",
+        "LB_27c64c1f7e4b"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -796,6 +1253,13 @@
     {
       "cards": [
         "LB_26d36eb1e29b",
+        "LB_3c542bb77f7d"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_26d36eb1e29b",
         "LB_44a8fa6bbb3a"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -818,13 +1282,6 @@
       "cards": [
         "LB_26d36eb1e29b",
         "LB_7541967ff8cf"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_26d36eb1e29b",
-        "LB_7af453fdf249"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -915,6 +1372,258 @@
     {
       "cards": [
         "LB_26d36eb1e29b",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_26d36eb1e29b",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_26d36eb1e29b",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_26d36eb1e29b",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_2e47463db059"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_3432e8148f68"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_34e781490e7b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_353e50a17df4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_374581869ba8"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_3c542bb77f7d"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_430c8fe9970a"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_44a8fa6bbb3a"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_478dad078661"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_57f18e8973cc"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_73a7f3d6dede"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_7541967ff8cf"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_7ba71aa6e282"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_89efbbfdabf2"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_8e8c0ac9bf52"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_946a24dd25d6"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_9789dfb15623"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_9a1ce174385f"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_ab00cf7fe49b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_ae5008a66d74"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_b8a95b630126"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_baf7cca40aa2"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_ce9b853ce4ee"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_d24d2597cb78"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_d843e59857e4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_dbe36dff4e9f"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_e934783fef93"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
+        "LB_f73c08e1e60c"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_27c64c1f7e4b",
         "LB_fb5d91622d69"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -929,6 +1638,20 @@
     {
       "cards": [
         "LB_2e47463db059",
+        "LB_374581869ba8"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_2e47463db059",
+        "LB_3c542bb77f7d"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_2e47463db059",
         "LB_430c8fe9970a"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -964,13 +1687,6 @@
     {
       "cards": [
         "LB_2e47463db059",
-        "LB_7af453fdf249"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_2e47463db059",
         "LB_7ba71aa6e282"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1041,6 +1757,13 @@
     {
       "cards": [
         "LB_2e47463db059",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_2e47463db059",
         "LB_d843e59857e4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1055,7 +1778,28 @@
     {
       "cards": [
         "LB_2e47463db059",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_2e47463db059",
         "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_2e47463db059",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_2e47463db059",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -1068,8 +1812,71 @@
     },
     {
       "cards": [
+        "LB_3432e8148f68",
+        "LB_374581869ba8"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3432e8148f68",
+        "LB_3c542bb77f7d"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3432e8148f68",
+        "LB_3ed3f92988a1"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3432e8148f68",
+        "LB_6b1343e99ac4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3432e8148f68",
+        "LB_ae5008a66d74"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3432e8148f68",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3432e8148f68",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3432e8148f68",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
         "LB_34e781490e7b",
-        "LB_7af453fdf249"
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_34e781490e7b",
+        "LB_e51077fe7961"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -1077,6 +1884,27 @@
       "cards": [
         "LB_34e781490e7b",
         "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_353e50a17df4",
+        "LB_374581869ba8"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_353e50a17df4",
+        "LB_3c542bb77f7d"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_353e50a17df4",
+        "LB_3ed3f92988a1"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -1111,14 +1939,14 @@
     {
       "cards": [
         "LB_353e50a17df4",
-        "LB_7541967ff8cf"
+        "LB_6b1343e99ac4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
         "LB_353e50a17df4",
-        "LB_7af453fdf249"
+        "LB_7541967ff8cf"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -1195,6 +2023,13 @@
     {
       "cards": [
         "LB_353e50a17df4",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_353e50a17df4",
         "LB_d843e59857e4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1209,6 +2044,13 @@
     {
       "cards": [
         "LB_353e50a17df4",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_353e50a17df4",
         "LB_e24e4b54cb59"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1216,6 +2058,426 @@
     {
       "cards": [
         "LB_353e50a17df4",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_353e50a17df4",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_353e50a17df4",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_3ed3f92988a1"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_44a8fa6bbb3a"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_478dad078661"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_57f18e8973cc"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_6b1343e99ac4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_7ba71aa6e282"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_89efbbfdabf2"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_946a24dd25d6"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_ae5008a66d74"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_baf7cca40aa2"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_c6523b2803ed"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_ce9b853ce4ee"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_d843e59857e4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_374581869ba8",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_3ed3f92988a1"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_44a8fa6bbb3a"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_478dad078661"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_57f18e8973cc"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_6b1343e99ac4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_7541967ff8cf"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_7ba71aa6e282"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_89efbbfdabf2"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_8e8c0ac9bf52"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_946a24dd25d6"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_9789dfb15623"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_ae5008a66d74"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_b8a95b630126"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_baf7cca40aa2"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_c6523b2803ed"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_ce9b853ce4ee"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_d43476c38b5b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_d843e59857e4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_dbe36dff4e9f"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3c542bb77f7d",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_430c8fe9970a"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_44a8fa6bbb3a"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_478dad078661"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_57f18e8973cc"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_7ba71aa6e282"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_89efbbfdabf2"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_946a24dd25d6"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_ae5008a66d74"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_baf7cca40aa2"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_ce9b853ce4ee"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_d843e59857e4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_dbe36dff4e9f"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_3ed3f92988a1",
         "LB_fb5d91622d69"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1244,7 +2506,7 @@
     {
       "cards": [
         "LB_430c8fe9970a",
-        "LB_7af453fdf249"
+        "LB_6b1343e99ac4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -1294,6 +2556,20 @@
       "cards": [
         "LB_430c8fe9970a",
         "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_430c8fe9970a",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_430c8fe9970a",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -1321,14 +2597,14 @@
     {
       "cards": [
         "LB_44a8fa6bbb3a",
-        "LB_7541967ff8cf"
+        "LB_6b1343e99ac4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
     {
       "cards": [
         "LB_44a8fa6bbb3a",
-        "LB_7af453fdf249"
+        "LB_7541967ff8cf"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -1391,6 +2667,13 @@
     {
       "cards": [
         "LB_44a8fa6bbb3a",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_44a8fa6bbb3a",
         "LB_d843e59857e4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1405,7 +2688,28 @@
     {
       "cards": [
         "LB_44a8fa6bbb3a",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_44a8fa6bbb3a",
         "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_44a8fa6bbb3a",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_44a8fa6bbb3a",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -1426,6 +2730,13 @@
     {
       "cards": [
         "LB_478dad078661",
+        "LB_6b1343e99ac4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_478dad078661",
         "LB_7541967ff8cf"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1433,13 +2744,6 @@
     {
       "cards": [
         "LB_478dad078661",
-        "LB_7af453fdf249"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_478dad078661",
         "LB_7ba71aa6e282"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1496,6 +2800,20 @@
     {
       "cards": [
         "LB_478dad078661",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_478dad078661",
+        "LB_d43476c38b5b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_478dad078661",
         "LB_d843e59857e4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1510,6 +2828,13 @@
     {
       "cards": [
         "LB_478dad078661",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_478dad078661",
         "LB_e24e4b54cb59"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1517,7 +2842,28 @@
     {
       "cards": [
         "LB_478dad078661",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_478dad078661",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_478dad078661",
         "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_57f18e8973cc",
+        "LB_6b1343e99ac4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -1531,13 +2877,6 @@
     {
       "cards": [
         "LB_57f18e8973cc",
-        "LB_7af453fdf249"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_57f18e8973cc",
         "LB_7ba71aa6e282"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1608,6 +2947,20 @@
     {
       "cards": [
         "LB_57f18e8973cc",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_57f18e8973cc",
+        "LB_d43476c38b5b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_57f18e8973cc",
         "LB_d843e59857e4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1622,6 +2975,118 @@
     {
       "cards": [
         "LB_57f18e8973cc",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_57f18e8973cc",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_57f18e8973cc",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_57f18e8973cc",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
+        "LB_7ba71aa6e282"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
+        "LB_89efbbfdabf2"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
+        "LB_946a24dd25d6"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
+        "LB_ae5008a66d74"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
+        "LB_baf7cca40aa2"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
+        "LB_ce9b853ce4ee"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
+        "LB_d843e59857e4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
+        "LB_dbe36dff4e9f"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
+        "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_6b1343e99ac4",
         "LB_fb5d91622d69"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1629,7 +3094,28 @@
     {
       "cards": [
         "LB_73a7f3d6dede",
-        "LB_7af453fdf249"
+        "LB_d43476c38b5b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_73a7f3d6dede",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_73a7f3d6dede",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_73a7f3d6dede",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -1643,13 +3129,6 @@
     {
       "cards": [
         "LB_7541967ff8cf",
-        "LB_7af453fdf249"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7541967ff8cf",
         "LB_7ba71aa6e282"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1734,133 +3213,28 @@
     {
       "cards": [
         "LB_7541967ff8cf",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_7541967ff8cf",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_7541967ff8cf",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_7541967ff8cf",
         "LB_fb5d91622d69"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_7ba71aa6e282"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_89efbbfdabf2"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_8e8c0ac9bf52"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_946a24dd25d6"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_9789dfb15623"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_9a1ce174385f"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_ab00cf7fe49b"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_ae5008a66d74"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_b8a95b630126"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_baf7cca40aa2"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_c6523b2803ed"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_ce9b853ce4ee"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_d24d2597cb78"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_d843e59857e4"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_dbe36dff4e9f"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_e24e4b54cb59"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_e934783fef93"
-      ],
-      "why": "obligations cannot hold together in SIGMA*"
-    },
-    {
-      "cards": [
-        "LB_7af453fdf249",
-        "LB_f73c08e1e60c"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -1930,6 +3304,13 @@
     {
       "cards": [
         "LB_7ba71aa6e282",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_7ba71aa6e282",
         "LB_d843e59857e4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -1944,7 +3325,28 @@
     {
       "cards": [
         "LB_7ba71aa6e282",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_7ba71aa6e282",
         "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_7ba71aa6e282",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_7ba71aa6e282",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -2000,6 +3402,13 @@
     {
       "cards": [
         "LB_89efbbfdabf2",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_89efbbfdabf2",
         "LB_d843e59857e4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -2014,7 +3423,28 @@
     {
       "cards": [
         "LB_89efbbfdabf2",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_89efbbfdabf2",
         "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_89efbbfdabf2",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_89efbbfdabf2",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -2077,6 +3507,27 @@
     {
       "cards": [
         "LB_8e8c0ac9bf52",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_8e8c0ac9bf52",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_8e8c0ac9bf52",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_8e8c0ac9bf52",
         "LB_fb5d91622d69"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -2106,6 +3557,13 @@
       "cards": [
         "LB_946a24dd25d6",
         "LB_ce9b853ce4ee"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_946a24dd25d6",
+        "LB_d121073f582e"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -2175,6 +3633,13 @@
     {
       "cards": [
         "LB_9789dfb15623",
+        "LB_d43476c38b5b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_9789dfb15623",
         "LB_d843e59857e4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -2183,6 +3648,27 @@
       "cards": [
         "LB_9789dfb15623",
         "LB_dbe36dff4e9f"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_9789dfb15623",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_9789dfb15623",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_9789dfb15623",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -2196,7 +3682,56 @@
     {
       "cards": [
         "LB_9a1ce174385f",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_9a1ce174385f",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_9a1ce174385f",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_9a1ce174385f",
         "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_ab00cf7fe49b",
+        "LB_d43476c38b5b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_ab00cf7fe49b",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_ab00cf7fe49b",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_ab00cf7fe49b",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -2231,6 +3766,13 @@
     {
       "cards": [
         "LB_ae5008a66d74",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_ae5008a66d74",
         "LB_d843e59857e4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -2238,7 +3780,28 @@
     {
       "cards": [
         "LB_ae5008a66d74",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_ae5008a66d74",
         "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_ae5008a66d74",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_ae5008a66d74",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -2287,6 +3850,20 @@
     {
       "cards": [
         "LB_b8a95b630126",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_b8a95b630126",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_b8a95b630126",
         "LB_fb5d91622d69"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -2308,6 +3885,20 @@
     {
       "cards": [
         "LB_baf7cca40aa2",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_baf7cca40aa2",
+        "LB_d43476c38b5b"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_baf7cca40aa2",
         "LB_d843e59857e4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -2322,7 +3913,28 @@
     {
       "cards": [
         "LB_baf7cca40aa2",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_baf7cca40aa2",
         "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_baf7cca40aa2",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_baf7cca40aa2",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -2343,6 +3955,13 @@
     {
       "cards": [
         "LB_c6523b2803ed",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_c6523b2803ed",
         "LB_d843e59857e4"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -2357,7 +3976,21 @@
     {
       "cards": [
         "LB_c6523b2803ed",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_c6523b2803ed",
         "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_c6523b2803ed",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -2371,7 +4004,21 @@
     {
       "cards": [
         "LB_ce9b853ce4ee",
+        "LB_d121073f582e"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_ce9b853ce4ee",
         "LB_dbe36dff4e9f"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_ce9b853ce4ee",
+        "LB_e201de9bd278"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -2385,7 +4032,77 @@
     {
       "cards": [
         "LB_ce9b853ce4ee",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_ce9b853ce4ee",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_ce9b853ce4ee",
         "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_d121073f582e",
+        "LB_d843e59857e4"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_d121073f582e",
+        "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_d121073f582e",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_d121073f582e",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_d121073f582e",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_d24d2597cb78",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_d24d2597cb78",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_d24d2597cb78",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -2398,6 +4115,13 @@
     },
     {
       "cards": [
+        "LB_d43476c38b5b",
+        "LB_e934783fef93"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
         "LB_d843e59857e4",
         "LB_dbe36dff4e9f"
       ],
@@ -2406,7 +4130,28 @@
     {
       "cards": [
         "LB_d843e59857e4",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_d843e59857e4",
         "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_d843e59857e4",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_d843e59857e4",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -2420,6 +4165,13 @@
     {
       "cards": [
         "LB_dbe36dff4e9f",
+        "LB_e201de9bd278"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_dbe36dff4e9f",
         "LB_e24e4b54cb59"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -2427,7 +4179,70 @@
     {
       "cards": [
         "LB_dbe36dff4e9f",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_dbe36dff4e9f",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_dbe36dff4e9f",
         "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_e201de9bd278",
+        "LB_e24e4b54cb59"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_e201de9bd278",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_e201de9bd278",
+        "LB_e934783fef93"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_e201de9bd278",
+        "LB_f73c08e1e60c"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_e201de9bd278",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_e24e4b54cb59",
+        "LB_e51077fe7961"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_e24e4b54cb59",
+        "LB_eba5f250d9ce"
       ],
       "why": "obligations cannot hold together in SIGMA*"
     },
@@ -2440,7 +4255,56 @@
     },
     {
       "cards": [
+        "LB_e51077fe7961",
+        "LB_e934783fef93"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_e51077fe7961",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_e51077fe7961",
+        "LB_f73c08e1e60c"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_e51077fe7961",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
         "LB_e934783fef93",
+        "LB_eba5f250d9ce"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_e934783fef93",
+        "LB_fb5d91622d69"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_eba5f250d9ce",
+        "LB_f73c08e1e60c"
+      ],
+      "why": "obligations cannot hold together in SIGMA*"
+    },
+    {
+      "cards": [
+        "LB_eba5f250d9ce",
         "LB_fb5d91622d69"
       ],
       "why": "obligations cannot hold together in SIGMA*"
@@ -2572,10 +4436,10 @@
       "kind": "must_exclude_regex",
       "level": "sentence",
       "pattern": "(lf|ʀm|ʀn)$",
-      "status": "vacuous",
-      "reason": "pattern matches nothing in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "lf",
+      "n_states": 4
     },
     {
       "card_id": "LB_f23b55b3415f",
@@ -2605,10 +4469,10 @@
       "kind": "must_exclude_regex",
       "level": "sentence",
       "pattern": "^s",
-      "status": "vacuous",
-      "reason": "pattern matches nothing in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "s",
+      "n_states": 3
     },
     {
       "card_id": "LB_6aaecaa94cb6",
@@ -2693,10 +4557,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": ".*en$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "en",
+      "n_states": 4
     },
     {
       "card_id": "LB_3ed3f92988a1",
@@ -2704,10 +4568,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": ".*er$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "er",
+      "n_states": 4
     },
     {
       "card_id": "LB_6b1343e99ac4",
@@ -2715,10 +4579,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": ".*er$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "er",
+      "n_states": 4
     },
     {
       "card_id": "LB_ce9b853ce4ee",
@@ -2847,10 +4711,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(den|d'|dem|der)$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "d'",
+      "n_states": 7
     },
     {
       "card_id": "LB_20ad587cbb47",
@@ -2858,10 +4722,10 @@
       "kind": "must_exclude_regex",
       "level": "sentence",
       "pattern": "^(den|d'|dem|der)\\s+[a-z]+\\s+[a-z]+$",
-      "status": "vacuous",
-      "reason": "pattern matches nothing in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "d'",
+      "n_states": 11
     },
     {
       "card_id": "LB_473d56626cdb",
@@ -2869,10 +4733,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(deen|den)$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "den",
+      "n_states": 6
     },
     {
       "card_id": "LB_473d56626cdb",
@@ -2880,10 +4744,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(deem|dem)$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "dem",
+      "n_states": 6
     },
     {
       "card_id": "LB_9d86392ccf45",
@@ -2891,10 +4755,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(déi|d')$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "d'",
+      "n_states": 5
     },
     {
       "card_id": "LB_9d86392ccf45",
@@ -2902,10 +4766,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(där|der)$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "der",
+      "n_states": 6
     },
     {
       "card_id": "LB_37643acfef1c",
@@ -2913,10 +4777,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(dat|d')$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "d'",
+      "n_states": 5
     },
     {
       "card_id": "LB_37643acfef1c",
@@ -2924,10 +4788,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(deem|dem)$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "dem",
+      "n_states": 6
     },
     {
       "card_id": "LB_b6ca111c6511",
@@ -2935,10 +4799,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(déi|d')$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "d'",
+      "n_states": 5
     },
     {
       "card_id": "LB_b6ca111c6511",
@@ -2946,10 +4810,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(deenen|den)$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "den",
+      "n_states": 8
     },
     {
       "card_id": "LB_34e781490e7b",
@@ -3045,10 +4909,10 @@
       "kind": "must_exclude_regex",
       "level": "sentence",
       "pattern": "^Ee(n)?\\s",
-      "status": "vacuous",
-      "reason": "pattern matches nothing in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "Ee ",
+      "n_states": 6
     },
     {
       "card_id": "LB_363a21684c8f",
@@ -3078,10 +4942,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(ech|mech|mir|mer|du|de|dech|dir|der|mir|mer|eis|dir|der|iech)$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "de",
+      "n_states": 25
     },
     {
       "card_id": "LB_27c64c1f7e4b",
@@ -3089,10 +4953,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(dir|der|iech)$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "der",
+      "n_states": 10
     },
     {
       "card_id": "LB_0a25767e516e",
@@ -3100,10 +4964,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(dat|hatt|et|seng)$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "et",
+      "n_states": 14
     },
     {
       "card_id": "LB_eba5f250d9ce",
@@ -3111,10 +4975,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(déi|si|hir)$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "si",
+      "n_states": 9
     },
     {
       "card_id": "LB_5fbe2620aac1",
@@ -3133,10 +4997,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^(hien|hatt|him|hir|hinnen)$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "him",
+      "n_states": 14
     },
     {
       "card_id": "LB_946a24dd25d6",
@@ -3320,10 +5184,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": ".*en$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "en",
+      "n_states": 4
     },
     {
       "card_id": "LB_c2fe39013bb2",
@@ -3342,10 +5206,10 @@
       "kind": "must_exclude_regex",
       "level": "sentence",
       "pattern": ".*(tt|dd|ss|zz)$",
-      "status": "vacuous",
-      "reason": "pattern matches nothing in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "dd",
+      "n_states": 10
     },
     {
       "card_id": "LB_3432e8148f68",
@@ -3353,10 +5217,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": ".*[ptkfs]$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "f",
+      "n_states": 3
     },
     {
       "card_id": "LB_d43476c38b5b",
@@ -3364,10 +5228,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^[a-z]+$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
+      "status": "universal",
+      "reason": "matches every string in SIGMA*; carries no signal",
       "witness": null,
-      "n_states": 1
+      "n_states": 2
     },
     {
       "card_id": "LB_12f8711db9e4",
@@ -3375,10 +5239,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": ".*t$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "t",
+      "n_states": 3
     },
     {
       "card_id": "LB_f73c08e1e60c",
@@ -3441,10 +5305,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": ".*éieren$",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "éieren",
+      "n_states": 8
     },
     {
       "card_id": "LB_f1609124fa06",
@@ -3474,10 +5338,10 @@
       "kind": "must_include_regex",
       "level": "sentence",
       "pattern": "^[A-Z].*",
-      "status": "dead",
-      "reason": "obligation unsatisfiable in SIGMA*",
-      "witness": null,
-      "n_states": 1
+      "status": "ok",
+      "reason": "",
+      "witness": "A",
+      "n_states": 3
     },
     {
       "card_id": "LB_55471d5dc4b4",

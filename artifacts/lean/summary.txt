@@ -1,8 +1,10 @@
 cards=87 constraints=97 alphabet=94
-by_status={'out_of_fragment': 29, 'ok': 36, 'vacuous': 5, 'dead': 27}
+by_status={'out_of_fragment': 29, 'ok': 63, 'dead': 4, 'universal': 1}
 out_of_fragment_reasons={'not a regex constraint': 27, 'construct (?!': 2}
-dead_patterns=23 vacuous_exclusions=5 universal=0 out_of_fragment=28
+dead_patterns=4 vacuous_exclusions=0 universal=1 out_of_fragment=28
 cards_with_formalizable_obligation=59
-unsatisfiable_cards=24 [{'card_id': 'LB_d121073f582e', 'why': 'positives /\\ not(exclusions) = empty in SIGMA*'}, {'card_id': 'LB_3ed3f92988a1', 'why': 'positives /\\ not(exclusions) = empty in SIGMA*'}, {'card_id': 'LB_6b1343e99ac4', 'why': 'positives /\\ not(exclusions) = empty in SIGMA*'}, {'card_id': 'LB_55952182c95e', 'why': 'positives /\\ not(exclusions) = empty in SIGMA*'}, {'card_id': 'LB_7bd0259578eb', 'why': 'positives /\\ not(exclusions) = empty in SIGMA*'}, {'card_id': 'LB_8925c39346bf', 'why': 'positives /\\ not(exclusions) = empty in SIGMA*'}]
-pair_conflicts=320 (budget 1711 pairs) [['LB_0004', 'LB_ce9b853ce4ee'], ['LB_0004', 'LB_d843e59857e4'], ['LB_0007', 'LB_ce9b853ce4ee'], ['LB_0007', 'LB_d843e59857e4'], ['LB_094bd032b36c', 'LB_15af0fc3dca0'], ['LB_094bd032b36c', 'LB_26d36eb1e29b']]
-lean_automata_emitted=25 claims=[["witness='null'", 'minimal_at_depth=3'], ["witness='null'", 'minimal_at_depth=3'], ['no_match_up_to_depth=4 over |sub|=7'], ['no_match_up_to_depth=6 over |sub|=2'], ["witness='en'", 'minimal_at_depth=1']]
+unsatisfiable_cards=9 [{'card_id': 'LB_55952182c95e', 'why': 'positives /\\ not(exclusions) = empty in SIGMA*'}, {'card_id': 'LB_7bd0259578eb', 'why': 'positives /\\ not(exclusions) = empty in SIGMA*'}, {'card_id': 'LB_8925c39346bf', 'why': 'positives /\\ not(exclusions) = empty in SIGMA*'}, {'card_id': 'LB_28068bea6d91', 'why': 'positives /\\ not(exclusions) = empty in SIGMA*'}, {'card_id': 'LB_473d56626cdb', 'why': 'positives /\\ not(exclusions) = empty in SIGMA*'}, {'card_id': 'LB_9d86392ccf45', 'why': 'positives /\\ not(exclusions) = empty in SIGMA*'}]
+pair_conflicts=596 (budget 1711 pairs) [['LB_0004', 'LB_ce9b853ce4ee'], ['LB_0004', 'LB_d843e59857e4'], ['LB_0007', 'LB_ce9b853ce4ee'], ['LB_0007', 'LB_d843e59857e4'], ['LB_043df73a4d65', 'LB_0a25767e516e'], ['LB_043df73a4d65', 'LB_0c9c0e28da81']]
+lean_automata_emitted=12 claims=[["witness='null'", 'minimal_at_depth=3'], ["witness='null'", 'minimal_at_depth=3'], ["witness='lf'", 'minimal_at_depth=1'], ["witness='s'", 'minimal_at_depth=0'], ["witness='en'", 'minimal_at_depth=1']]
+lean_cases=12 kernel_pass=12 kernel_fail=0
+kernel_failures=[]

@@ -62,7 +62,7 @@ def main() -> None:
     wit = {cid: w for cid, w in res["satisfiable_witnesses"].items() if w}
     chars = sorted({c for w in wit.values() for c in w if c not in ("\x00", "\x01")})
     alpha_map = {c: i + 1 for i, c in enumerate(chars)}
-    src, emitted = emit_lean(cards, facts_by_card, alpha, max_claims=args.max_claims)
+    src, emitted, case_blocks = emit_lean(cards, facts_by_card, alpha, max_claims=args.max_claims)
     (out / "certificates.lean").write_text(src, encoding="utf-8")
 
     lines = [
@@ -78,10 +78,32 @@ def main() -> None:
         f"lean_automata_emitted={len(emitted)} claims={[e.claims for e in emitted][:5]}",
     ]
     if args.lean:
-        proc = subprocess.run([args.lean, str(out / "certificates.lean")],
-                              capture_output=True, text=True, timeout=1200)
-        lines.append(f"lean_exit={proc.returncode}")
-        lines.append("lean_stderr_head=" + (proc.stderr or "")[:900].replace("\n", " | "))
+        # Per-automaton kernel check: one file per card-constraint so a rejection names the case
+        # instead of just stopping the first file. The exit code is read from lean itself, never
+        # from a pipe (an earlier version measured `head`, which always returns 0).
+        prelude = src.split('-- card ')[0]
+        blocks = case_blocks
+        cases = out / "cases"
+        cases.mkdir(exist_ok=True)
+        npass = nfail = 0
+        failures = []
+        for i, blk in enumerate(blocks):
+            f = cases / f"case_{i:03d}.lean"
+            f.write_text(prelude + "\n" + blk + "\nend GramMetaRL\n", encoding="utf-8")
+            try:
+                proc = subprocess.run([args.lean, str(f)], capture_output=True, text=True, timeout=300)
+            except subprocess.TimeoutExpired:
+                nfail += 1
+                failures.append({"case": i, "why": "kernel timeout"})
+                continue
+            if proc.returncode == 0:
+                npass += 1
+            else:
+                nfail += 1
+                head = (proc.stderr or "").strip().split("\n")[:2]
+                failures.append({"case": i, "why": " | ".join(head)[:260]})
+        lines.append(f"lean_cases={npass + nfail} kernel_pass={npass} kernel_fail={nfail}")
+        lines.append("kernel_failures=" + json.dumps(failures[:8], ensure_ascii=False))
     (out / "summary.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print("\n".join(lines))
 

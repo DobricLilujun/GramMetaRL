@@ -71,6 +71,7 @@ def emit_lean(cards, facts_by_card: dict[str, list[dict]], alpha, max_claims: in
         "",
     ]
     emitted: list[Emitted] = []
+    case_blocks: list[str] = []
     made = 0
     for card in cards:
         for idx, fact in enumerate(facts_by_card.get(card.id, [])):
@@ -94,10 +95,12 @@ def emit_lean(cards, facts_by_card: dict[str, list[dict]], alpha, max_claims: in
             if len(dfa.states) > MAX_STATES or dfa.overflow:
                 continue
             key = _safe(card.id, idx)
+            case_start = len(lines)
             states = list(dfa.states)
             sid = {s: (0 if s == dfa.start else i + 1) for i, s in enumerate(states) if s != dfa.start}
             sid[dfa.start] = 0
-            dead_id = len(sid)
+            # dead_id must not alias a real state id: ids are 0..max(sid.values()), so take max+1
+            dead_id = max(sid.values()) + 1
             lines.append(f"-- card {card.id} constraint #{idx} kind={fact['kind']} "
                          f"status={fact['status']} pattern={pat!r}")
             lines.append(f"def step_{key} : Nat -> Nat -> Nat")
@@ -134,7 +137,21 @@ def emit_lean(cards, facts_by_card: dict[str, list[dict]], alpha, max_claims: in
                 claims.append(f"witness={''.join(c for c in wit if c in char_id)!r}")
                 # minimality: nothing shorter than the DFA's shortest word is accepted
                 k = len(enc) - 1
-                if k >= 0 and (len(sub) + 1) ** k <= ENUM_BUDGET * 4:
+                # Only emit a claim our own model already supports: Lean is then an independent
+                # second opinion, and a Lean failure means an encoding bug rather than a claim the
+                # Python model never made. (Under re.search semantics an epsilon-matching pattern
+                # is accepted by every string, so naive minimality claims are simply false.)
+                import itertools as _it
+                shorter_ok = True
+                for depth in range(0, k + 1):
+                    for tup in _it.product(sub, repeat=depth):
+                        if dfa.accepts("".join(tup)):
+                            shorter_ok = False
+                            break
+                    if not shorter_ok:
+                        break
+                # enumeration cost guard: the kernel must stay inside budget
+                if k >= 0 and shorter_ok and (max(2, len(sub)) ** k) <= ENUM_BUDGET:
                     lines.append(f"theorem minimal_{key} :")
                     lines.append(f"  (strs_{key} {k}).all (fun w => run_{key} w = false) := by decide")
                     claims.append(f"minimal_at_depth={k}")
@@ -147,8 +164,11 @@ def emit_lean(cards, facts_by_card: dict[str, list[dict]], alpha, max_claims: in
             depth_used = (len(enc) - 1) if enc else _depth_for(max(2, len(sub)))
             emitted.append(Emitted(card.id, idx, fact["kind"], fact["status"], len(sid),
                                    "".join(sub), depth_used, claims))
+            # each case is returned as a self-contained block: splitting a single generated file
+            # by marker used to cut definitions in half ("invalid 'end', insufficient scopes")
+            case_blocks.append("\n".join(lines[case_start:]))
             made += 1
         if made >= max_claims:
             break
     lines.append("end GramMetaRL")
-    return "\n".join(lines) + "\n", emitted
+    return "\n".join(lines) + "\n", emitted, case_blocks
