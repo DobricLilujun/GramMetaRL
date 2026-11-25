@@ -170,3 +170,35 @@ Residual problem, quantified: the single most productive card (`LB_0c9c0e28da81`
 full vs contracted forms) is applicable 154 times and still wrong 43.5% of the time on professional
 translations. Yield is capped by constraint precision, not by data volume: 162 verified labels out of
 1,200 pairs (13.5%), concentrated in 11 rules.
+
+## 2e. Precision vs coverage, measured (the P1 reward-design problem in one table)
+
+`scripts/triage_constraints.py` demotes, by evidence only, any machine constraint that violated on
+>= 30% of its judge-applicable professional pairs with >= 10 applicable pairs. The measured numbers
+are written into the constraint description, so each demotion is auditable and reversible.
+
+| card set | applicable | satisfied | violated | violation rate | verified labels | distinct rules |
+|---|---|---|---|---|---|---|
+| as extracted | 493 | 137 | 356 | 72.2% | 133 | 11 |
+| repaired | 325 | 144 | 181 | 55.7% | 140 | 11 |
+| recompiled | 371 | 167 | 204 | 55.0% | 162 | 11 |
+| **triaged** | 61 | 40 | 21 | **34.4%** | **39** | **7** |
+
+Diagnosis from the dossiers (`artifacts/audit/violations_recompiled.json`): the compiled constraints
+were derived from the card's EXAMPLE MORPHEME, not from the rule -
+`^(deen|déin|d'|den|dem|der)$` for "the article has a full and a reduced form",
+`^dënn-en$` for "there is no strong/weak adjective distinction",
+`(mäin|däin|säin|hir|eis|är)` for "possessive articles agree with the possessor",
+`(datt|wéini)\s*s\b` for "the complementizer takes {-s} with a 2sg subject".
+The rule can genuinely govern a sentence while that token is absent, so the check fails on
+professional translations at a measured rate.
+
+The tension is explicit: the 8 demoted cards supplied 123 of the 162 verified labels. The surviving
+58 machine constraints certify only 39 pairs (3.3% of 1,200) but at ~66% agreement with human
+translations. Consequences for P1:
+1. a rule-compiled grammar reward is either high-coverage/noisy or low-coverage/precise;
+2. the demoted majority needs phrase-level applicability (does this sentence contain an attributive
+   adjective / a possessive NP / a subordinate clause with a 2sg subject), i.e. POS + morphology -
+   the concrete P3 unlock, not a rhetorical one;
+3. the alternative is per-rule reliability weighting instead of binary keep/drop: the audit already
+   measures per-rule precision, so the reward can weight each verdict by it (next implementation step).

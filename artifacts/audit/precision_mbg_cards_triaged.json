@@ -1,0 +1,126 @@
+{
+  "stats": {
+    "pairs": 1201,
+    "cached_checks": 1678,
+    "satisfied": 40,
+    "violated": 21,
+    "unknown": 33,
+    "labeled_pairs": 39,
+    "labeled_rules": 7
+  },
+  "violation_rate_on_human_translations": 0.3442622950819672,
+  "per_card": {
+    "LB_73a7f3d6dede": {
+      "not_applicable": 79,
+      "applicable": 5,
+      "violated": 5
+    },
+    "LB_e934783fef93": {
+      "not_applicable": 153,
+      "applicable": 3,
+      "violated": 3
+    },
+    "LB_8925c39346bf": {
+      "not_applicable": 111,
+      "applicable": 2,
+      "violated": 2
+    },
+    "LB_57f18e8973cc": {
+      "not_applicable": 64,
+      "applicable": 1,
+      "violated": 1
+    },
+    "LB_363a21684c8f": {
+      "not_applicable": 44,
+      "applicable": 1,
+      "violated": 1
+    },
+    "LB_26d36eb1e29b": {
+      "applicable": 3,
+      "violated": 3,
+      "not_applicable": 4
+    },
+    "LB_ab00cf7fe49b": {
+      "applicable": 6,
+      "satisfied": 3,
+      "not_applicable": 23,
+      "violated": 3
+    },
+    "LB_430c8fe9970a": {
+      "applicable": 6,
+      "satisfied": 5,
+      "not_applicable": 26,
+      "violated": 1
+    },
+    "LB_d121073f582e": {
+      "not_applicable": 55,
+      "applicable": 15,
+      "satisfied": 13,
+      "violated": 2
+    },
+    "LB_3432e8148f68": {
+      "not_applicable": 321,
+      "applicable": 7,
+      "satisfied": 7
+    },
+    "LB_094bd032b36c": {
+      "not_applicable": 129,
+      "applicable": 2,
+      "unknown": 2
+    },
+    "LB_374581869ba8": {
+      "applicable": 6,
+      "satisfied": 6,
+      "not_applicable": 122
+    },
+    "LB_20ad587cbb47": {
+      "not_applicable": 65,
+      "applicable": 31,
+      "unknown": 31
+    },
+    "LB_baf7cca40aa2": {
+      "not_applicable": 86
+    },
+    "LB_8e8c0ac9bf52": {
+      "not_applicable": 136,
+      "applicable": 3,
+      "satisfied": 3
+    },
+    "LB_3c542bb77f7d": {
+      "not_applicable": 37,
+      "applicable": 3,
+      "satisfied": 3
+    },
+    "LB_44a8fa6bbb3a": {
+      "not_applicable": 70
+    },
+    "LB_0004": {
+      "not_applicable": 34
+    },
+    "LB_28068bea6d91": {
+      "not_applicable": 1
+    },
+    "LB_7541967ff8cf": {
+      "not_applicable": 9
+    },
+    "LB_6b1343e99ac4": {
+      "not_applicable": 1
+    },
+    "LB_478dad078661": {
+      "not_applicable": 7
+    },
+    "LB_e24e4b54cb59": {
+      "not_applicable": 3
+    },
+    "LB_12f8711db9e4": {
+      "not_applicable": 2
+    },
+    "LB_3ed3f92988a1": {
+      "not_applicable": 1
+    },
+    "LB_c6523b2803ed": {
+      "not_applicable": 1
+    }
+  },
+  "counter_examples": []
+}
