@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import statistics
 import sys
 import time
@@ -479,6 +480,56 @@ def main() -> int:
          f"predicates={preds_total} accepted={preds_ok} "
          f"cards_with_applicability={cards_with_app}/{len(audit_cards)} "
          f"(verifier abstains on the rest)")
+
+    # G26 formal-layer defects: constraints that are provably dead (never matchable) or
+    # universal (match everything) are constant reward terms and must not sit in the reward path.
+    try:
+        from grammetarl.formal.card_analysis import analyze_cards, build_alphabet
+        from grammetarl.formal.regex_dfa import infer_level
+
+        pair_pool = ws.root / "data" / "external" / "pairs_en_lb.jsonl"
+        alpha = build_alphabet([p for p in (pair_pool,) if p.exists()], max_chars=90)
+        fr = analyze_cards(audit_cards, alpha)
+        hard = len(fr["unsatisfiable_cards"])
+        formalizable = fr["cards_with_obligation"]
+        gate("G26 formal analysis: no provably unsatisfiable card in the reward path",
+             formalizable > 0 and hard == 0,
+             f"cards={len(audit_cards)} formalizable_obligations={formalizable} "
+             f"unsatisfiable={hard} dead_patterns={len(fr['cards_dead'])} "
+             f"universal={len(fr['cards_universal'])} "
+             f"conflicts={len(fr['pair_conflicts'])} alphabet={fr['alphabet_size']}. "
+             "An unsatisfiable card is an unavoidable penalty for every rollout that retrieves it.")
+    except Exception as exc:  # the formal layer must never break the rest of the audit
+        warn("G26 formal analysis ran", f"{type(exc).__name__}: {exc}")
+
+    # G27 kernel certificates: a certificate is only worth what its checker run is worth. The
+    # harness asserts lean's own exit code (never a pipe's) and reports pass/fail per case.
+    lean_candidates = [
+        __import__("os").environ.get("LEAN_BIN", ""),
+        str(ws.root / "tools" / "lean-4.15.0-linux" / "bin" / "lean"),
+        str(Path.home() / "tools" / "lean-4.15.0-linux" / "bin" / "lean"),
+    ]
+    lean_bin = next((c for c in lean_candidates if c and Path(c).exists()), None)
+    if lean_bin is None:
+        warn("G27 kernel certificates checked",
+             "no lean binary (set LEAN_BIN or install under tools/lean-*/bin/lean); "
+             "T2 verdicts are unverified Python claims until then")
+    else:
+        import subprocess
+
+        pilot = ws.root / "scripts" / "lean_pilot.py"
+        proc = subprocess.run(
+            [sys.executable, str(pilot), "--cards", str(args.cards),
+             "--pairs", str(ws.root / "data" / "external" / "pairs_en_lb.jsonl"),
+             "--max-chars", "90", "--max-claims", "8",
+             "--out", str(ws.root / "artifacts" / "lean_gate"), "--lean", lean_bin],
+            capture_output=True, text=True, timeout=1500,
+        )
+        out = proc.stdout or ""
+        cases = next((l for l in out.splitlines() if l.startswith("lean_cases=")), "")
+        gate("G27 kernel certificates checked",
+             proc.returncode == 0 and "kernel_fail=0" in cases,
+             f"lean={lean_bin} {cases or 'no cases emitted'}")
 
     # G20 split leakage: a rule id or an exact pair in both splits makes
     # "did the policy learn this rule?" unanswerable.

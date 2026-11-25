@@ -36,8 +36,23 @@ def main() -> None:
     ap.add_argument("--max-chars", type=int, default=70)
     ap.add_argument("--depth", type=int, default=4)
     ap.add_argument("--max-claims", type=int, default=30)
-    ap.add_argument("--lean", default=None, help="path to the lean binary; omit to skip kernel check")
+    ap.add_argument(
+        "--lean",
+        default=None,
+        help="lean binary; default $LEAN_BIN, else the pinned install under "
+             "tools/ or ~/tools (see README 'Formal layer' section); pass '' to skip the kernel check",
+    )
     args = ap.parse_args()
+    if args.lean is None:
+        import os
+        cand = [os.environ.get("LEAN_BIN", "")]
+        for root in (Path(__file__).resolve().parents[1] / "tools",
+                     Path.home() / "tools", Path("/raid/yewei/tools")):
+            if root.exists():
+                cand += [str(x) for x in sorted(root.glob("lean-*/bin/lean"))]
+        args.lean = next((c for c in cand if c and Path(c).exists()), None)
+        if not args.lean:
+            print("[WARN] no lean binary found: emitting certificates but skipping the kernel check")
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)

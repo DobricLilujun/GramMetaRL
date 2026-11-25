@@ -498,6 +498,54 @@ class RegexCompiler:
         return chars
 
 
+    # ------------------------------------------------------------------ level wrappers
+    def level_nfa(self, pattern: str, level: str) -> NFA:
+        """Build the automaton for a pattern *at its declared linguistic level*.
+
+        The same pattern means different things at different levels, and evaluating a token-level
+        obligation as a sentence-level one is what made two token cards look mutually exclusive
+        (596 pairwise conflicts before this function existed):
+
+          token    the pattern must match a whole token, possibly surrounded by word characters
+          phrase   substring of the target (re.search semantics)
+          sentence full string (anchors honoured via normalize_anchor)
+          any      substring
+        """
+        core, infix = normalize_anchor(pattern)
+        if level == "token":
+            # A token-level obligation constrains a WHOLE token: SIGMAWORD* core SIGMAWORD*,
+            # where core keeps the anchor semantics the card author wrote. Keeping those anchors
+            # is the point: `^der$` at token level must reject "zuder", and an unanchored core such
+            # as `der` still matches inside a longer word ("derx") because the surrounding word
+            # characters supply the context. Stripping them (as an earlier version did) quietly
+            # changed `^(dat|hatt)$` from a form inventory into a substring test.
+            inner = self.compile(core, search=infix)
+            nfa = NFA()
+            order = [0] + [x for x in range(1, len(inner.states))]
+            idx = {x: k for k, x in enumerate(order)}
+            nfa.states = [NFAState(final=inner.states[x].final) for x in order]
+            for k, x in enumerate(order):
+                nfa.states[k].eps = {idx[t] for t in inner.states[x].eps}
+                for c, ts in inner.states[x].edges.items():
+                    nfa.states[k].edges[c] = {idx[t] for t in ts}
+            s0, e0 = nfa.new(), nfa.new()
+            s_in, e_in = idx[0], None
+            for x, k in idx.items():
+                if inner.states[x].final:
+                    e_in = k if e_in is None else e_in
+            nfa.states[s0].eps.add(s_in)
+            nfa.states[e_in].eps.add(e0)
+            word = [c for c in self.alphabet if c not in (" ", "\\t", "\\n")]
+            for c in word:
+                nfa.states[s0].edges.setdefault(c, set()).add(s0)
+                nfa.states[e0].edges.setdefault(c, set()).add(e0)
+            nfa.states[e0].eps.add(e_in)  # the occurrence may start later inside the token
+            return self._reroot(nfa, s0, e0)
+        if level in ("phrase", "any"):
+            return self.compile(core, search=True)
+        return self.compile(core, search=infix)
+
+
 def compile_pattern(pattern: str, alphabet: tuple[str, ...], search: bool = True) -> NFA:
     return RegexCompiler(alphabet).compile(pattern, search=search)
 
@@ -521,3 +569,21 @@ def normalize_anchor(pattern: str) -> tuple[str, bool]:
     if start:
         return core + ".*", False   # prefix
     return core, True               # re.search-style infix
+
+
+
+
+PHRASAL_MARKERS = (" ", r"\s", ".*", ".+", "{2", r"\W", "[^")
+
+
+def infer_level(pattern: str) -> str:
+    """Single shared rule for reading an unlabelled pattern (validator and formal layer agree).
+
+    `^(dat|hatt|et|seng)$` is a word-form inventory -> token.
+    `\b(well|datt)\b.*\b(ass|gaangen)$` spans words -> sentence, even though it is anchored.
+    Cards that declare `level` explicitly never go through here.
+    """
+    p = pattern.strip()
+    anchored = p.startswith("^") or p.endswith("$")
+    phrasal = any(m in p for m in PHRASAL_MARKERS)
+    return "token" if (anchored and not phrasal) else "sentence"

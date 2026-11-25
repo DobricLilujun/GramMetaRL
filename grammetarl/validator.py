@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 from .llm_http import DEFAULT_MAX_TOKENS, chat_text
 from .prompt_manager import render_prompt
+from .formal.regex_dfa import infer_level
 from .schema import MBGCard, RuleConstraint
 
 
@@ -194,17 +195,15 @@ class TranslationVerifier:
         return any(m in pattern for m in cls._PHRASAL_MARKERS)
 
     @classmethod
+    @classmethod
     def _resolve_level(cls, c: RuleConstraint, pattern: str) -> str:
-        """Explicit `level` wins; otherwise infer.
+        """Explicit `level` wins; otherwise the shared `infer_level` rule applies.
 
-        \b(well|datt)\b.*\b(ass|gaangen)$ is sentence-level even though it is anchored,
-        while ^(dat|hatt|et|seng)$ is a word-level form inventory.
+        One definition on purpose: the runtime verifier and the offline formal analysis must
+        read an unlabelled pattern identically, otherwise the certificate numbers describe a
+        different verifier than the one actually running.
         """
-        if c.level:
-            return c.level
-        if cls._is_anchored(pattern) and not cls._is_phrasal(pattern):
-            return "token"
-        return "sentence"
+        return c.level or infer_level(pattern)
 
     @staticmethod
     def _tokens(text: str) -> list[str]:

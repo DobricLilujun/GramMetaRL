@@ -1,0 +1,1405 @@
+{
+  "alphabet_size": 24,
+  "alphabet": "<^> !\"'(),-.0123456789:;?<$>",
+  "constraints": 97,
+  "by_status": {
+    "out_of_fragment": 29,
+    "vacuous": 9,
+    "dead": 58,
+    "universal": 1
+  },
+  "out_of_fragment_reasons": {
+    "not a regex constraint": 27,
+    "construct (?!": 2
+  },
+  "cards_dead": [
+    "LB_043df73a4d65",
+    "LB_0a25767e516e",
+    "LB_0c9c0e28da81",
+    "LB_12f8711db9e4",
+    "LB_15af0fc3dca0",
+    "LB_26d36eb1e29b",
+    "LB_27c64c1f7e4b",
+    "LB_28068bea6d91",
+    "LB_2e47463db059",
+    "LB_3432e8148f68",
+    "LB_34e781490e7b",
+    "LB_353e50a17df4",
+    "LB_363a21684c8f",
+    "LB_374581869ba8",
+    "LB_37643acfef1c",
+    "LB_3c542bb77f7d",
+    "LB_3ed3f92988a1",
+    "LB_430c8fe9970a",
+    "LB_44a8fa6bbb3a",
+    "LB_473d56626cdb",
+    "LB_478dad078661",
+    "LB_55952182c95e",
+    "LB_57f18e8973cc",
+    "LB_6b1343e99ac4",
+    "LB_73a7f3d6dede",
+    "LB_7541967ff8cf",
+    "LB_7ba71aa6e282",
+    "LB_7bd0259578eb",
+    "LB_8925c39346bf",
+    "LB_89efbbfdabf2",
+    "LB_8e8c0ac9bf52",
+    "LB_946a24dd25d6",
+    "LB_9789dfb15623",
+    "LB_9a1ce174385f",
+    "LB_9d86392ccf45",
+    "LB_ab00cf7fe49b",
+    "LB_ae5008a66d74",
+    "LB_b6ca111c6511",
+    "LB_b8a95b630126",
+    "LB_baf7cca40aa2",
+    "LB_c6523b2803ed",
+    "LB_ce9b853ce4ee",
+    "LB_d121073f582e",
+    "LB_d24d2597cb78",
+    "LB_d843e59857e4",
+    "LB_dbe36dff4e9f",
+    "LB_e201de9bd278",
+    "LB_e24e4b54cb59",
+    "LB_e51077fe7961",
+    "LB_e934783fef93",
+    "LB_eba5f250d9ce",
+    "LB_f73c08e1e60c"
+  ],
+  "cards_vacuous": [
+    "LB_0004",
+    "LB_0007",
+    "LB_094bd032b36c",
+    "LB_20ad587cbb47",
+    "LB_34e781490e7b",
+    "LB_363a21684c8f",
+    "LB_7af453fdf249",
+    "LB_baf7cca40aa2",
+    "LB_fb5d91622d69"
+  ],
+  "cards_universal": [
+    "LB_d43476c38b5b"
+  ],
+  "cards_out_of_fragment": [
+    "LB_0001",
+    "LB_0002",
+    "LB_0003",
+    "LB_0005",
+    "LB_0006",
+    "LB_0008",
+    "LB_0009",
+    "LB_06bee872a4b3",
+    "LB_220fd2c27201",
+    "LB_2ebda66afe75",
+    "LB_4748b3f93481",
+    "LB_542b90c61528",
+    "LB_55471d5dc4b4",
+    "LB_5fbe2620aac1",
+    "LB_60a8ad9a179d",
+    "LB_6939ba4e39e5",
+    "LB_6aaecaa94cb6",
+    "LB_78659ea08757",
+    "LB_7eec267b5068",
+    "LB_a70c1bba0046",
+    "LB_af4c109319bd",
+    "LB_be2322834efb",
+    "LB_bf1449011785",
+    "LB_c04479eff1f1",
+    "LB_c2fe39013bb2",
+    "LB_c8bc55f974a6",
+    "LB_f1609124fa06",
+    "LB_f23b55b3415f"
+  ],
+  "cards_with_obligation": 59,
+  "unsatisfiable_cards": [
+    {
+      "card_id": "LB_430c8fe9970a",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_d121073f582e",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_3ed3f92988a1",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_6b1343e99ac4",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_ce9b853ce4ee",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_d843e59857e4",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_7bd0259578eb",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_8925c39346bf",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_28068bea6d91",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_9789dfb15623",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_2e47463db059",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_473d56626cdb",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_9d86392ccf45",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_37643acfef1c",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_b6ca111c6511",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_34e781490e7b",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_ab00cf7fe49b",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_e934783fef93",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_b8a95b630126",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_ae5008a66d74",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_d24d2597cb78",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_363a21684c8f",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_dbe36dff4e9f",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_e51077fe7961",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_27c64c1f7e4b",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_0a25767e516e",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_eba5f250d9ce",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_e201de9bd278",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_baf7cca40aa2",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_44a8fa6bbb3a",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_8e8c0ac9bf52",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_57f18e8973cc",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_478dad078661",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_c6523b2803ed",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_e24e4b54cb59",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_7541967ff8cf",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_26d36eb1e29b",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_7ba71aa6e282",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_89efbbfdabf2",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_15af0fc3dca0",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_374581869ba8",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_3432e8148f68",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_12f8711db9e4",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_9a1ce174385f",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_73a7f3d6dede",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_3c542bb77f7d",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    },
+    {
+      "card_id": "LB_043df73a4d65",
+      "why": "positives /\\ not(exclusions) = empty in SIGMA*"
+    }
+  ],
+  "satisfiable_witnesses": {
+    "LB_0004": "",
+    "LB_0007": "",
+    "LB_094bd032b36c": "",
+    "LB_fb5d91622d69": "",
+    "LB_20ad587cbb47": "",
+    "LB_7af453fdf249": "",
+    "LB_d43476c38b5b": ""
+  },
+  "pair_conflicts": [],
+  "pair_budget_used": 1711,
+  "notes": [],
+  "facts": [
+    {
+      "card_id": "LB_0001",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": "ɛːʀ",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_0002",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": "ˈ.*ə",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_0003",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": "null",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_0004",
+      "index": 0,
+      "kind": "must_exclude_regex",
+      "level": "sentence",
+      "pattern": "null",
+      "status": "vacuous",
+      "reason": "pattern matches nothing in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_0005",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": "(ɑ|ɔ)ŋ",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_0006",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": "(p|t|k)ʰ",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_0007",
+      "index": 0,
+      "kind": "must_exclude_regex",
+      "level": "sentence",
+      "pattern": "null",
+      "status": "vacuous",
+      "reason": "pattern matches nothing in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_0008",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": "(ɑ|ɔ|u|o)ɣ",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_06bee872a4b3",
+      "index": 0,
+      "kind": "token_count_range",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_06bee872a4b3",
+      "index": 1,
+      "kind": "token_count_range",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_094bd032b36c",
+      "index": 0,
+      "kind": "must_exclude_regex",
+      "level": "sentence",
+      "pattern": "(lf|ʀm|ʀn)$",
+      "status": "vacuous",
+      "reason": "pattern matches nothing in SIGMA*",
+      "witness": null,
+      "n_states": 2
+    },
+    {
+      "card_id": "LB_f23b55b3415f",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_a70c1bba0046",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_fb5d91622d69",
+      "index": 0,
+      "kind": "must_exclude_regex",
+      "level": "sentence",
+      "pattern": "^s",
+      "status": "vacuous",
+      "reason": "pattern matches nothing in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_6aaecaa94cb6",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_7eec267b5068",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_af4c109319bd",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_0009",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": "n\\s+[a-z]*",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_430c8fe9970a",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "den|en",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_c8bc55f974a6",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": "(den|en|d'|d')",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_be2322834efb",
+      "index": 0,
+      "kind": "must_exclude_regex",
+      "level": "sentence",
+      "pattern": "^(?!joer).*",
+      "status": "out_of_fragment",
+      "reason": "construct (?!",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_d121073f582e",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": ".*en$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 2
+    },
+    {
+      "card_id": "LB_3ed3f92988a1",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": ".*er$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 2
+    },
+    {
+      "card_id": "LB_6b1343e99ac4",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": ".*er$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 2
+    },
+    {
+      "card_id": "LB_ce9b853ce4ee",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "null",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_d843e59857e4",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "null",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_60a8ad9a179d",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": "(s|en)$",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_220fd2c27201",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "same_suffix_for_definite_and_indefinite",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_7bd0259578eb",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "nom_form == acc_form",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_8925c39346bf",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "adjective_suffix == '-em'",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_28068bea6d91",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "adjective_suffix == '-t'",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_c04479eff1f1",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": "stem(-en)?suffix",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_9789dfb15623",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "méi\\s+adjective",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_2e47463db059",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "besser|manner|léiwer",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(den|d'|dem|der)$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_20ad587cbb47",
+      "index": 0,
+      "kind": "must_exclude_regex",
+      "level": "sentence",
+      "pattern": "^(den|d'|dem|der)\\s+[a-z]+\\s+[a-z]+$",
+      "status": "vacuous",
+      "reason": "pattern matches nothing in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_473d56626cdb",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(deen|den)$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_473d56626cdb",
+      "index": 1,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(deem|dem)$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_9d86392ccf45",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(déi|d')$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_9d86392ccf45",
+      "index": 1,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(där|der)$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_37643acfef1c",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(dat|d')$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_37643acfef1c",
+      "index": 1,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(deem|dem)$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_b6ca111c6511",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(déi|d')$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_b6ca111c6511",
+      "index": 1,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(deenen|den)$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_34e781490e7b",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "(dat|déi|dësen|deen)\\s+\\w+\\s+\\w+",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_34e781490e7b",
+      "index": 1,
+      "kind": "must_exclude_regex",
+      "level": "sentence",
+      "pattern": "d'\\w+\\s+\\w+",
+      "status": "vacuous",
+      "reason": "pattern matches nothing in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_ab00cf7fe49b",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "(den|d'|de|d')\\s+[A-Z]\\w+",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_e934783fef93",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "d'\\s+[A-Z]\\w+|dat\\s+\\w+\\s+[A-Z]\\w+",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_b8a95b630126",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "(dee|déi|dësen|dës|dëst)",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_ae5008a66d74",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "eng(em|er)?",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_ae5008a66d74",
+      "index": 1,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "een|en",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_d24d2597cb78",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "eng\\s+\\d+\\s+\\w+",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_363a21684c8f",
+      "index": 0,
+      "kind": "must_exclude_regex",
+      "level": "sentence",
+      "pattern": "^Ee(n)?\\s",
+      "status": "vacuous",
+      "reason": "pattern matches nothing in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_363a21684c8f",
+      "index": 1,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "\\w+\\s+een",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_dbe36dff4e9f",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "keen",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_e51077fe7961",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(ech|mech|mir|mer|du|de|dech|dir|der|mir|mer|eis|dir|der|iech)$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_27c64c1f7e4b",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(dir|der|iech)$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_0a25767e516e",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(dat|hatt|et|seng)$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_eba5f250d9ce",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(déi|si|hir)$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_5fbe2620aac1",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": "^(si|hir|hatt|seng)$",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_e201de9bd278",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^(hien|hatt|him|hir|hinnen)$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "(mäin|däin|säin|hir|eis|är)",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_baf7cca40aa2",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "säin",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_baf7cca40aa2",
+      "index": 1,
+      "kind": "must_exclude_regex",
+      "level": "sentence",
+      "pattern": "hir",
+      "status": "vacuous",
+      "reason": "pattern matches nothing in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_44a8fa6bbb3a",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "(mäint|däint|säint|hiert|eist|äert)",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_8e8c0ac9bf52",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": ".*dat.*poss.*noun.*",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_8e8c0ac9bf52",
+      "index": 1,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "dem|der|de",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_57f18e8973cc",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "däers",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_478dad078661",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "där",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_c6523b2803ed",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "(där|der)",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_e24e4b54cb59",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "(däers|es)",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_7541967ff8cf",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "accusative",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_26d36eb1e29b",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "dative",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_7ba71aa6e282",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "(mam|beim|um|ënnerem|zum)",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_4748b3f93481",
+      "index": 0,
+      "kind": "must_exclude_regex",
+      "level": "sentence",
+      "pattern": "^(?!zur).*der$",
+      "status": "out_of_fragment",
+      "reason": "construct (?!",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_89efbbfdabf2",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "(ënner|iwwer|hanner|tësch)ent?\\s+[bcdfghjklmnpqrstvwxyz]",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_15af0fc3dca0",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "(ënner|iwwer|hanner|tëschen)\\s+[aeiouäéëiïoöuü]",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_374581869ba8",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": ".*en$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 2
+    },
+    {
+      "card_id": "LB_c2fe39013bb2",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": ".*[ə]n$",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "index": 0,
+      "kind": "must_exclude_regex",
+      "level": "sentence",
+      "pattern": ".*(tt|dd|ss|zz)$",
+      "status": "vacuous",
+      "reason": "pattern matches nothing in SIGMA*",
+      "witness": null,
+      "n_states": 2
+    },
+    {
+      "card_id": "LB_3432e8148f68",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": ".*[ptkfs]$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 2
+    },
+    {
+      "card_id": "LB_d43476c38b5b",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^[a-z]+$",
+      "status": "universal",
+      "reason": "matches every string in SIGMA*; carries no signal",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_12f8711db9e4",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": ".*t$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 2
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": ".*hunn.*ge.*|.*sinn.*ge.*",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_9a1ce174385f",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": ".*haten.*|.*waren.*",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_73a7f3d6dede",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": ".*géif.*|.*géifen.*",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "datts|wéinis",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_78659ea08757",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": "(ka|kann|géift) .* (vergleichen|verstoen) | (vergleichen|verstoen) .* (ka|kann|géift)",
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_3c542bb77f7d",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": ".*éieren$",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 2
+    },
+    {
+      "card_id": "LB_f1609124fa06",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_542b90c61528",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_043df73a4d65",
+      "index": 0,
+      "kind": "must_include_regex",
+      "level": "sentence",
+      "pattern": "^[A-Z].*",
+      "status": "dead",
+      "reason": "obligation unsatisfiable in SIGMA*",
+      "witness": null,
+      "n_states": 1
+    },
+    {
+      "card_id": "LB_55471d5dc4b4",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_2ebda66afe75",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_bf1449011785",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    },
+    {
+      "card_id": "LB_6939ba4e39e5",
+      "index": 0,
+      "kind": "llm_check",
+      "level": "sentence",
+      "pattern": null,
+      "status": "out_of_fragment",
+      "reason": "not a regex constraint",
+      "witness": null,
+      "n_states": 0
+    }
+  ]
+}

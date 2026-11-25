@@ -17,7 +17,7 @@ from dataclasses import asdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .regex_dfa import (DFA, END, START, UnsupportedRegex, compile_pattern,
+from .regex_dfa import (DFA, END, START, RegexCompiler, UnsupportedRegex, compile_pattern,
                      normalize_anchor)
 
 
@@ -84,9 +84,16 @@ def analyze_constraint(card_id: str, index: int, cons, alpha: Alphabet,
     if not pattern:
         return ConstraintFact(card_id, index, kind, level, pattern, "missing_value")
     try:
-        core, infix = normalize_anchor(pattern)
-        nfa = compile_pattern(core, alpha.with_sentinels, search=infix)
-        dfa = DFA(nfa, alpha.with_sentinels)
+        # ONE alphabet for every level: mixing alpha.chars and alpha.with_sentinels makes the
+        # conflict query (which intersects DFAs from different cards) ill-defined.
+        compiler = RegexCompiler(alpha.with_sentinels)
+        if level == "token":
+            nfa = compiler.level_nfa(pattern, "token")
+            dfa = DFA(nfa, alpha.with_sentinels)
+        else:
+            core, infix = normalize_anchor(pattern)
+            nfa = compile_pattern(core, alpha.with_sentinels, search=infix)
+            dfa = DFA(nfa, alpha.with_sentinels)
     except UnsupportedRegex as exc:
         return ConstraintFact(card_id, index, kind, level, pattern, "out_of_fragment", exc.reason)
     dfa_cache[f"{card_id}#{index}"] = dfa
@@ -137,6 +144,19 @@ def analyze_cards(cards, alpha: Alphabet) -> dict:
     for card in cards:
         for i, cons in enumerate(card.output_constraints):
             facts.append(analyze_constraint(card.id, i, cons, alpha, cache))
+        # Applicability predicates get the same treatment: a DEAD predicate means the rule can
+        # never be in play (silently inert card); a UNIVERSAL one means applicability was never
+        # actually restricted, i.e. abstention is a no-op and the old noise returns.
+        for i, pred in enumerate(getattr(card, "applicability", []) or []):
+            if getattr(pred, "kind", "") != "regex" or not getattr(pred, "pattern", None):
+                continue
+            pseudo = type("C", (), {})()
+            pseudo.kind = "must_include_regex"
+            pseudo.value = pred.pattern
+            pseudo.level = getattr(pred, "level", "sentence")
+            f = analyze_constraint(card.id, 1000 + i, pseudo, alpha, cache)
+            f.kind = "applicability_regex"
+            facts.append(f)
         ob = obligation_dfa(card, alpha, cache, notes)
         if ob is not None:
             obligations[card.id] = ob

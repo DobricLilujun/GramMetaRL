@@ -387,3 +387,48 @@ pytest -q
 3. Compare outputs from two page ranges: intro pages vs grammar-dense pages.
 4. Inspect card JSONL and verify retrieval behavior.
 5. Move to RL scaffold understanding in [grammetarl/agent_env](grammetarl/agent_env) and [grammetarl/rewards](grammetarl/rewards).
+
+## Formal layer (P6): certificates and the Lean toolchain
+
+`grammetarl/formal/` gives the compiled card constraints a finite-alphabet automata semantics:
+emptiness, universality, per-card satisfiability (`positives ∧ ¬exclusions`), and pairwise
+obligation conflicts, plus a Lean 4 emitter that re-executes each automaton in the kernel
+(`scripts/lean_pilot.py`). One shared `infer_level()` is used by both `TranslationVerifier` and
+the offline analysis, so certificate numbers describe the verifier that actually runs.
+
+Toolchain (pinned, kept out of /tmp which is cleaned):
+
+```
+/raid/yewei/tools/lean-4.15.0-linux/bin/lean     # Lean (version 4.15.0, x86_64-linux)
+export LEAN_BIN=/raid/yewei/tools/lean-4.15.0-linux/bin/lean
+```
+
+`scripts/lean_pilot.py` finds it via `$LEAN_BIN`, else `tools/lean-*/bin/lean` under the repo,
+`~/tools`, or `/raid/yewei/tools`. It is also wired into the P0 gate harness as **G26** (no
+provably unsatisfiable card may sit in the reward path) and **G27** (the kernel check is run and
+its *own* exit code asserted, case by case).
+
+```
+python scripts/lean_pilot.py --cards data/rules/mbg_cards.jsonl \
+  --pairs data/external/pairs_en_lb.jsonl --max-chars 90 --max-claims 12
+```
+
+Measured on the four card sets the pipeline produced (same code, same Σ=94 alphabet):
+
+| card set | formalizable obligations | provably unsatisfiable | pairwise conflicts |
+|---|---|---|---|
+| `mbg_cards` (canonical) | 59 | 9 | 596 |
+| `mbg_cards_recompiled` | 26 | 4 | 35 |
+| `mbg_cards_triaged` | 24 | 4 | 26 |
+| `mbg_cards_precise` | 24 | 4 | 26 |
+
+The card-repair pipeline and the formal layer agree without being told about each other: each
+repair step removes provably unsatisfiable cards and provably conflicting pairs.
+
+## Applicability compilation on gpu7 (strata)
+
+`bridge/gpu7_strata_triggers.sh` — run it **on gpu7** (trux has no route to that host; gpu7 can
+ssh into trux, so the script pulls code from trux and pushes only a new card file back).
+Reason it is needed: compiling prose triggers needs a strong model, and no trux-local option works
+today (qwen3:32b exceeded an 800 s timeout because both GPUs are ~80 % occupied; smaller models
+returned 0/4 accepted predicates).
