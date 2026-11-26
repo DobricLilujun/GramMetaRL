@@ -35,6 +35,10 @@ def main() -> None:
     ap.add_argument("--cards", default="data/rules/mbg_cards_recompiled_manual.jsonl")
     ap.add_argument("--pairs", default="data/external/pairs_en_lb.jsonl")
     ap.add_argument("--rows", type=int, default=0, help="0 = every pair in the pool")
+    ap.add_argument("--source-filter", default=None,
+                    help="Restrict to one source id. Weights feeding an RL reward should be measured "
+                    "on professional human translations (techgov_lu_en), not on semantically-similar "
+                    "news alignments, or the agreement estimate is biased by reference noise.")
     ap.add_argument("--sample", type=int, default=10, help="counter-examples to keep per run")
     ap.add_argument("--out", default="artifacts/audit/predicate_gated_precision.json")
     args = ap.parse_args()
@@ -46,7 +50,10 @@ def main() -> None:
     pairs = []
     with Path(args.pairs).open("r", encoding="utf-8") as f:
         for line in f:
-            pairs.append(json.loads(line))
+            rec = json.loads(line)
+            if args.source_filter and rec.get("source") != args.source_filter:
+                continue
+            pairs.append(rec)
             if args.rows and len(pairs) >= args.rows:
                 break
 

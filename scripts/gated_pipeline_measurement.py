@@ -43,7 +43,12 @@ def main() -> None:
     ap.add_argument("--trigger-quality", default="artifacts/audit/trigger_quality_manual.json")
     ap.add_argument("--pairs", default="data/external/pairs_en_lb.jsonl")
     ap.add_argument("--cache", default="data/external/judge_cache.jsonl")
-    ap.add_argument("--rows", type=int, default=1200)
+    ap.add_argument("--rows", type=int, default=1200, help="0 = every pair in the pool")
+    ap.add_argument("--source-filter", default=None,
+                    help="Only score pairs from this source id. FP rates are only meaningful for "
+                    "sources whose reference is a professional human translation (techgov_lu_en); "
+                    "LuxAlign pairs are semantically similar by its own dataset card.")
+    ap.add_argument("--labeled-out", default="data/processed/labeled_gated.jsonl")
     ap.add_argument("--min-precision", type=float, default=0.5,
                     help="Predicate precision vs the judge (held-out number when available)")
     ap.add_argument("--min-agreement", type=float, default=0.0,
@@ -74,7 +79,15 @@ def main() -> None:
     for line in Path(args.cache).open("r", encoding="utf-8"):
         r = json.loads(line)
         cache.setdefault(r["key"], bool(r["applicable"]))
-    pairs = [json.loads(l) for l in Path(args.pairs).open("r", encoding="utf-8")][: args.rows]
+    pairs = []
+    with Path(args.pairs).open("r", encoding="utf-8") as f:
+        for line in f:
+            rec = json.loads(line)
+            if args.source_filter and rec.get("source") != args.source_filter:
+                continue
+            pairs.append(rec)
+            if args.rows and len(pairs) >= args.rows:
+                break
 
     v = TranslationVerifier(require_applicability=True)
     stats = Counter()
@@ -142,7 +155,7 @@ def main() -> None:
         "false_penalty_rate_weighted": stats["false_penalty_weighted"] / n,
     }
     out_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), "utf-8")
-    lbl_path = Path("data/processed/labeled_gated.jsonl")
+    lbl_path = Path(args.labeled_out)
     with lbl_path.open("w", encoding="utf-8") as f:
         for row in by_pair.values():
             f.write(json.dumps(row, ensure_ascii=False) + "\n")

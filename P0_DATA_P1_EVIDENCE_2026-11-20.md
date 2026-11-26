@@ -306,3 +306,34 @@ The high-agreement cards waiting on predicate validation (from `reliability_pred
 LB_9789dfb15623 comparative particle 0.94 agreement on 146 checks, LB_e51077fe7961 pronoun forms
 0.80 on 249 checks - both had ZERO judge coverage, which is why they could not pass the predicate
 gate. The `--judge-all` run in progress targets exactly them.
+
+## 6. Scale check: subset estimates were biased; the full professional pool is the honest base
+
+Section 5's numbers came from the first 1,200 pairs of the pool. Measuring on ALL 8,972 CC0
+professional pairs (`--source-filter techgov_lu_en --rows 0`) moves them materially:
+
+| gate | allowed cards | labeled pairs | decided checks | FP rate |
+|---|---|---|---|---|
+| min-agreement 0.6 | 2 | 2,810 | 3,639 | 13.2% |
+| min-agreement 0.65 | 1 | **2,041** | 2,041 | **0.0%** |
+| (subset 1,200, same gate 0.6) | 2 | 440 | 558 | 8.9% <- optimistic |
+
+Per-rule agreement, full pool vs the 1,200 subset, is the reason:
+`LB_946a24dd25d6` (possessive determiners) 0.66 on the subset -> **0.51 on 1,826 observations**.
+A coin flip once measured properly. Support matters: every rule now carries its n in the table.
+
+The actual bottleneck is now isolated. These rules already have constraints that agree with
+professional translations at full scale, and reliability weight > 0:
+
+| card | n (predicate-gated) | agreement | weight | predicate validated? |
+|---|---|---|---|---|
+| LB_d121073f582e default -en plural | 2,041 | 1.00 | 1.00 | yes (0.50 held-out) |
+| LB_27c64c1f7e4b 2nd person plural address forms | 1,993 | 1.00 | 1.00 | **never judged** |
+| LB_374581869ba8 1sg present = infinitive | 676 | 1.00 | 0.99 | yes but P=0.30 (rejected) |
+| LB_9789dfb15623 comparative particle | 680 | 0.92 | 0.84 | **never judged** |
+| LB_e51077fe7961 1st/2nd person pronoun case | 1,940 | 0.80 | 0.59 | **never judged** |
+
+So the P1 dataset size is bounded by predicate validation, not by constraint quality or data volume:
+if those three unjudged rules validate at precision >= 0.5, the allowed set goes 1 -> 4 rules and the
+certified CC0 pairs go from 2,041 to several thousand (their predicate-gated check counts total ~4.6k)
+at essentially the same 0% false-penalty rate. That targeted judge pass is running on gpu7.
