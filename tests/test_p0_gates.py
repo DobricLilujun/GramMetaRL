@@ -5,6 +5,9 @@ Run: /raid/yewei/.venvs/gm-lite/bin/python -m pytest tests -q
 
 from __future__ import annotations
 
+import re
+from pathlib import Path
+
 import pytest
 
 from grammetarl import MBGCard, TranslationVerifier
@@ -442,3 +445,58 @@ def test_source_conditional_is_not_a_target_only_check():
         "expensive", "méi deier", [card]  # target has the form, source has no comparative
     )
     assert rep.results[0].verdict == "unknown"
+
+
+def test_negated_source_conditional_prohibits_a_position():
+    card = MBGCard(
+        id="LB_neg", namespace="default", language="lb", scope="sentence",
+        operation_type="reorder",
+        statement="een may not open the sentence.",
+        phenomenon_tags=["word order"], trigger_conditions=["Sentence begins with One"],
+        source={"source_id": "test", "page_start": 1, "page_end": 1},
+        output_constraints=[RuleConstraint(
+            kind="source_conditional", negate=True,
+            description="English-initial One => target must not start with een",
+            source_pattern=r"^\s*(one|someone)\b", values=[r"^\s*een\b"], level="phrase",
+        )],
+        examples=[],
+    )
+    v = TranslationVerifier(require_applicability=False)
+    bad = v.verify("One cannot park here.", "Een kann hei net parken", [card])
+    ok = v.verify("One cannot park here.", "Dat ee kann hei net parken", [card])
+    assert bad.results[0].verdict == "violated", bad.results[0].messages
+    assert ok.results[0].verdict == "satisfied", ok.results[0].messages
+    # pipeline mode (applicability required): source condition absent => the rule does not govern
+    vp = TranslationVerifier(require_applicability=True)
+    off = vp.verify("Many people cannot park here.", "Vill Leit kënnen hei net parken", [card])
+    assert off.decided == 0 and off.results[0].verdict == "not_applicable", off.results[0].messages
+    # even when the caller skips applicability, an ungoverned constraint contributes no decision
+    assert v.verify("Many people cannot park here.", "Vill Leit kënnen hei net parken",
+                    [card]).decided == 0
+
+
+def test_multi_instance_rule_needs_every_instance_broken():
+    """405 of 1,968 possessive pairs carry 2+ possessors: breaking one legitimately leaves the check
+    satisfied, so single-token corruption under-measures discrimination for per-occurrence rules."""
+    from scripts.verifier_discrimination import corrupt_all, corrupt_token, inject_forbidden
+
+    v = TranslationVerifier()
+    pats = [r"\bmäi\w*\b", r"\bhir\w*\b"]
+    one = "mäi Buch"
+    two = "mäi Buch an hir Schoul"
+    assert corrupt_all(v, one, pats, 1)[0] is None          # 1 instance: not this function's job
+    bad_two, how = corrupt_all(v, two, pats, 1)
+    assert bad_two is not None, how
+    for pat in pats:
+        assert not re.search(pat, bad_two, re.I), bad_two
+    assert corrupt_token(v, two, pats, 1)[0] is not None    # single-token still available for 1-off rules
+
+
+def test_positional_prohibition_is_discriminated_by_injection():
+    from scripts.verifier_discrimination import inject_forbidden
+
+    v = TranslationVerifier()
+    out, how = inject_forbidden(v, "Dat ass hei net erlaabt", [r"^\s*een\b"], 0)
+    assert out is not None and out.lower().startswith("een"), (out, how)
+    mid, _ = inject_forbidden(v, "Dat ass hei net erlaabt", [r"\been\b"], 3)
+    assert mid is not None and "een" in mid.split()

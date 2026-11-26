@@ -39,6 +39,7 @@ def main() -> None:
     v = TranslationVerifier()
 
     accepted = rejected = 0
+    replaced: set[str] = set()
     for t in spec["constraints"]:
         card = by_id.get(t["card_id"])
         if card is None:
@@ -58,13 +59,17 @@ def main() -> None:
             why = "prose/identifier pattern"
         if why is None and not alts:
             why = "no target pattern"
+        inst = []
         if why is None:
             # the card's own illustration must instantiate the condition, and obey the rule on it
             pairs = [(v.normalize_text(e.source_sentence), v.normalize_text(e.target_sentence))
                      for e in card.examples
                      if e.source_sentence and e.target_sentence and len(e.target_sentence.split()) >= 2]
             if not pairs:
-                why = "no sentence-grade example pair to test on"
+                why = None if t.get("allow_untested") else "no sentence-grade example pair to test on"
+                if why is None:
+                    print(f"[COND][FLAG] {t['card_id']}: authored beyond the card's illustration "
+                          f"(no example pair to test); flagged untested")
             else:
                 inst = []
                 for s, tg in pairs:
@@ -72,26 +77,33 @@ def main() -> None:
                     if n > 0:
                         inst.append((s, tg))
                 if not inst:
-                    why = f"source pattern never fires on the card's own examples {sp!r}"
+                    if t.get("allow_untested"):
+                        print(f"[COND][FLAG] {t['card_id']}: source pattern never fires on the card's "
+                              f"own examples; authored beyond its illustration, flagged untested")
+                    else:
+                        why = f"source pattern never fires on the card's own examples {sp!r}"
                 else:
+                    negated = bool(t.get("negate"))
                     holds = 0
                     for s, tg in inst:
                         hits = 0
                         for a in alts:
                             m, _ = v._pattern_hits(a, tg, t.get("level", "phrase"))
                             hits += m
-                        if hits:
+                        if (hits == 0) if negated else (hits > 0):
                             holds += 1
                     if holds == 0:
-                        why = "target pattern fails on every example that satisfies the source condition"
+                        why = ("every illustrated example shows the forbidden shape" if negated
+                               else "target pattern fails on every example that satisfies the source condition")
                     elif holds < len(inst):
-                        print(f"[COND][WARN] {card['id'] if isinstance(card, dict) else card.id}: "
-                              f"rule holds on {holds}/{len(inst)} of its own examples")
+                        print(f"[COND][WARN] {t['card_id']}: rule consistent with "
+                              f"{holds}/{len(inst)} of its own examples")
         if why:
             rejected += 1
             print(f"[COND][REJECT] {t['card_id']}: {why}")
             continue
         con = RuleConstraint(
+            negate=bool(t.get("negate", False)),
             kind="source_conditional",
             description=f"{t.get('description', '')} [hand-authored conditional: {t.get('why', '')}]",
             source_pattern=sp,
@@ -100,7 +112,14 @@ def main() -> None:
             level=t.get("level", "phrase"),
         )
         if args.replace:
-            card.output_constraints = [con]
+            # Clear the card's inherited constraints ONCE, then accumulate every conditional for it:
+            # two specs may target the same card (singular vs plural possessor), and a naive
+            # "replace per spec" silently drops the earlier one (found: n collapsed 1,433 -> 469).
+            if card.id not in replaced:
+                card.output_constraints = [con]
+                replaced.add(card.id)
+            else:
+                card.output_constraints = list(card.output_constraints) + [con]
         else:
             card.output_constraints = list(card.output_constraints) + [con]
         accepted += 1

@@ -71,6 +71,91 @@ def corrupt_token(v: TranslationVerifier, text: str, patterns: list[str], seed: 
     return "".join(out).strip(), how
 
 
+def pattern_literal(pat: str) -> str:
+    """First literal surface chunk of a pattern, anchors/quantifiers/escapes stripped."""
+    cleaned = re.sub(r"\\[bBwWsSdD]|\\d\\+|\\w\\*|\(\?|\)|\(|\^|\$|[|*+?{}\[\]]", " ", pat)
+    for tok in re.split(r"[^0-9A-Za-zÀ-ÿ'’]+", cleaned):
+        if len(tok) >= 2:
+            return tok
+    return ""
+
+
+def inject_forbidden(v: TranslationVerifier, text: str, patterns: list[str],
+                     seed: int) -> tuple[str | None, str]:
+    """PROHIBITIONS (negate=True) have nothing to break in a satisfied check, so discrimination is the
+    opposite move: INSERT the forbidden shape and require the verdict to flip to violated. Positional
+    bans (a form may not be sentence-initial) are injected at the front."""
+    import random
+
+    cand = [p for p in patterns if p]
+    if not cand:
+        return None, "no forbidden pattern"
+    pat = cand[seed % len(cand)]
+    lit = pattern_literal(pat)
+    if not lit:
+        return None, f"no literal in {pat!r}"
+    toks = text.split()
+    if pat.lstrip().startswith("^"):
+        return " ".join([lit] + toks), f"prepended {lit!r}"
+    if not toks:
+        return None, "empty target"
+    i = random.Random(seed).randrange(len(toks) + 1)
+    return " ".join(toks[:i] + [lit] + toks[i:]), f"injected {lit!r} at token {i}"
+
+
+def corrupt_all(v: TranslationVerifier, text: str, patterns: list[str], seed: int,
+                min_instances: int = 2) -> tuple[str | None, str]:
+    """Corrupt EVERY occurrence of the required shape.
+
+    A rule that must hold for each instance (every possessor, every comparative) cannot be
+    discriminated by breaking one of several: with 2+ matching tokens, a single-token corruption
+    legitimately leaves the check satisfied, and the naive metric then calls the rule vacuous.
+    """
+    # Count INSTANCES, not per-pattern hits: a rule with several alternatives (mäi | hir | eise)
+    # matches once per alternative, and overlapping alternatives can describe the same token - so
+    # count the union of match spans.
+    spans: set[tuple[int, int]] = set()
+    for pat in patterns:
+        try:
+            spans |= {(m.start(), m.end()) for m in re.finditer(pat, text, re.I)}
+        except re.error:
+            continue
+    merged: list[tuple[int, int]] = []
+    for st, en in sorted(spans):
+        if merged and st <= merged[-1][1]:      # overlapping alternatives = one instance
+            merged[-1] = (merged[-1][0], max(merged[-1][1], en))
+        else:
+            merged.append((st, en))
+    n_hits = len(merged)
+    if n_hits < min_instances:
+        return None, f"only {n_hits} instance(s), single-token corruption is enough"
+    out = text
+    how = []
+    for i, pat in enumerate(patterns):
+        try:
+            rx = re.compile(pat, re.I)
+        except re.error:
+            continue
+        if not rx.search(out):
+            continue
+        rep, _cnt = rx.subn(lambda m: _break_word(m.group(0), seed + i), out)
+        out = rep
+        how.append(pat)
+    if out == text:
+        return None, "nothing corrupted"
+    return out, f"corrupted all instances of {len(how)} pattern(s)"
+
+
+def _break_word(word: str, seed: int) -> str:
+    """Replace the WHOLE matched span with a token no required-shape pattern can match.
+
+    Keeping a prefix does not work: the constraint patterns end in \w* by design (they must match
+    an inflected paradigm), so `hiren` -> `hirxx5` still satisfies `\bhir\w*\b` and the perturbation
+    is a no-op (measured: 126/126 single-token perturbations failed to flip for exactly this reason).
+    """
+    return f"fzz{seed % 9}"
+
+
 def corrupt(v: TranslationVerifier, text: str, patterns: list[str], seed: int) -> tuple[str | None, str]:
     """Minimal edit: delete / replace / mangle the first span matched by a constraint pattern."""
     norm = v.normalize_text(text)

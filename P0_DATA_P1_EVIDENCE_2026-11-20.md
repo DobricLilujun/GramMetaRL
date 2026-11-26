@@ -476,3 +476,85 @@ End-to-end with the source-conditional rules allowed by the gate (no predicate n
 8,972 CC0 professional pairs: **3,580 pairs scored, 3,566 labeled pairs (39.7%), 3,981 decided
 checks, false-penalty rate 0.39%** across 3 rules. Gate G27 now passes with a real rule behind it
 (PASS=26 FAIL=2).
+
+> **Superseded by section 11**: the 0.39% false-penalty rate came from a card set in which 2,041 of
+> the 3,981 checks belonged to a rule with 5.3% discrimination - a rule that cannot bite, so it could
+> not penalise anything. With discrimination measured, the honest number is 14.9%.
+
+## 11. Held-out certification, two measurement artifacts that flattered us, and one that we flattered ourselves
+
+**Source-derived applicability.** The validator now derives applicability from a
+`source_conditional` constraint's own condition, and the audit/matrix accept such cards without a
+target-side predicate. This is what made two rules measurable at all (they had n=0 before).
+
+**The condition is measured with the same ruler as predicates** (`scripts/validate_triggers.py` now
+scores source conditions against the judge cache):
+
+| applicability signal | micro precision |
+|---|---|
+| bulk LLM-compiled predicates | 0.041 |
+| hand-authored predicates | 0.347 |
+| comparative source condition (tightened) | 0.50 (recall 0.71) |
+| present-perfect source condition | 0.57 (recall 0.36) |
+
+Two failed attempts recorded as evidence: `\b\w+er\b` matched *after/under/number*, and
+`more [a-z]+` matched *more than / more or less* — idioms, not comparatives. The second failure
+collapsed agreement 0.96 → 0.71, i.e. **a loose condition is as damaging as a loose predicate**.
+
+**Two bugs in my own discrimination probe, found by the probe itself.**
+
+(a) *Prefix-preserving corruption was a no-op.* `_break_word` used to keep the word stem and append
+garbage, but the constraint patterns end in `\w*` on purpose (they must match an inflected paradigm),
+so `hiren` -> `hirxx5` still satisfied `\bhir\w*\b`: **126/126** single-token perturbations failed to
+flip for that reason alone. Corruption now replaces the whole matched span.
+
+(b) *Per-occurrence rules need every instance broken.* A rule that must hold for each possessor
+cannot be discriminated by breaking one of several (405 of 1,968 possessive pairs carry 2+ possessors).
+`corrupt_all` breaks the span-union of all matches (overlapping alternatives count once).
+
+With both fixed, full-pool discrimination: possessive **92.6%**, polite address 70.2%, comparative
+75.3%, `een`-initial prohibition 100%, pronoun case 17.6%, 1sg present 8.4%, `-en` plural 5.3%.
+The possessive and pronoun verdicts flipped: the possessive is not vacuous at all - it bites on 93% of
+its targeted perturbations; it simply disagrees with professional translations often (0.61).
+
+**Form lists over-matched.** `\bdäi\w*\b` matched `däischtere` ("those darker") and `\bsen\w*\b`
+matched `sent` ("sand"), so the possessive check fired on non-possessives. Replaced with explicit
+paradigms (`\bmäi(n|en|em|er)?\b` etc.); agreement moved 0.54 -> 0.61 and support stayed at 1,968.
+
+**Held-out certification** (weights fit on pairs 0-3999; agreement measured on pairs 4000+, and
+discrimination on those same pairs - the matrix now measures agreement in-run instead of re-printing
+the reliability table, which previously made a `--skip` run look held-out while quoting fit numbers):
+
+| rule | agreement (checks) | discrimination | verdict |
+|---|---|---|---|
+| LB_9789dfb15623 comparative | 0.66 (118) | 71.4% | **usable** |
+| LB_363a21684c8f `een` may not open the sentence | 1.00 (13) | 100% | provisional (support 13 < 30) |
+| LB_e51077fe7961 pronoun case | 0.79 (1,181) | 42.1% | weak discrimination |
+| LB_374581869ba8 1sg present | 1.00 (392) | 34.5% | weak discrimination |
+| LB_27c64c1f7e4b polite address | 1.00 (947) | 86.1% | tautological |
+
+Same rules, full 8,972-pool run (so both halves, weights from the whole pool): comparative
+**0.76 / n=310 / 75.3% usable**; possessive 0.61 / n=1,968 / 92.6% (weak agreement); `een`
+prohibition 1.00 / n=29 / 100% provisional; `-en` plural 5.3% and 1sg present 8.4% stay vacuous.
+
+**Discrimination is sample-sensitive and I do not hide it.** The `-en` plural rule measured 5.3%
+(full-pool samples) but 31.5% (held-out samples) with the same code and card. Roughly 100 satisfied
+samples x 3 perturbations gives a standard error of a few percent, and the satisfied-pair composition
+changes between halves; a single number per rule over-claims. Reported as measured, no interval yet.
+
+**Support floors.** `LB_55471d5dc4b4` passed all three axes on **n=1 check**. `usable` now requires
+n>=30 decided checks and >=20 attempted perturbations; quality-passing-but-thin rules are reported as
+`provisional`. Without the floor, gate G27 could be satisfied by a single lucky pair.
+
+**The 0.39% false-penalty claim was Goodhart.** That run allowed only rules with agreement >= 0.65,
+and the rule carrying 2,041 of its 3,981 checks was `LB_d121073f582e` (`^.*en$`, discrimination 5.3%)
+- a rule that never bites, so of course it never penalised a professional translation. With
+discrimination measured and the vacuous rules still admitted, the honest end-to-end number over all
+8,972 CC0 pairs is: **3,836 pairs scored, 3,269 labeled pairs, 4,319 decided checks, 14.9% of
+professional translations receive a negative grammar reward.** That 14.9% is the real disagreement
+rate of rules that bite (comparative violates 29%, possessive 30%); part of it is my un-encoded
+exception set (Luxembourgish uses the definite article for inalienable possession: `their schools` ->
+`an d'Schoul`; `under her leadership` -> `an der Verantwortung`), part is genuine over-breadth.
+
+Consequence for P1: `violated` must be treated as a **noisy** negative whose weight is the measured
+agreement, never as ground truth. Labels on the `satisfied` side carry precision = agreement.

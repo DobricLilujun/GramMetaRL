@@ -100,6 +100,25 @@ class TranslationVerifier:
         preds = [p for p in rule.applicability if p.accepted and p.kind == "regex" and p.pattern]
         if not self.require_applicability:
             return "applicable", ["applicability not required by caller"]
+
+        # A source-conditional constraint carries its own applicability: the condition on the SOURCE
+        # side. It takes precedence over a target-side predicate, because that is the axis that failed
+        # measurement (compiled target-side predicates: micro precision 0.25), and because the rule
+        # only claims anything when the source exhibits the phenomenon.
+        conds = [c for c in rule.output_constraints
+                 if c.kind == "source_conditional" and c.source_pattern]
+        if conds:
+            cmsgs: list[str] = []
+            for c in conds:
+                n, how = self._pattern_hits(c.source_pattern, src_norm, "sentence")
+                if n < 0:
+                    cmsgs.append(f"source condition {c.source_pattern!r} => invalid regex")
+                    continue
+                cmsgs.append(f"source-derived applicability: {c.source_pattern!r} => {n} hit(s) [{how}]")
+                if n > 0:
+                    return "applicable", cmsgs
+            return "not_applicable", cmsgs
+
         if not preds:
             return "unknown", ["no accepted applicability predicate"]
         msgs: list[str] = []
@@ -278,6 +297,13 @@ class TranslationVerifier:
                 if m < 0:
                     return False, f"source_conditional target pattern {alt!r} invalid", False
                 hits += m
+            if c.negate:
+                if hits > 0:
+                    return False, (
+                        f"source exhibits X ({how}) and target shows the forbidden shape "
+                        f"({alts}) => violated"
+                    ), False
+                return True, f"source exhibits X ({how}) and the forbidden shape is absent", False
             if hits == 0:
                 return False, (
                     f"source exhibits X ({how}) but target lacks Y ({alts}) => violated"

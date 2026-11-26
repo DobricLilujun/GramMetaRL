@@ -74,6 +74,11 @@ class RuleConstraint(BaseModel):
     value: str | None = None
     min_tokens: int | None = None
     max_tokens: int | None = None
+    negate: bool = Field(
+        default=False,
+        description="For source_conditional: when True the target must NOT realize values once the "
+        "source condition holds (a positional prohibition), instead of being required to realize it",
+    )
     source_pattern: str | None = Field(
         default=None,
         description="Regex over the SOURCE sentence for source_conditional constraints; when it does "

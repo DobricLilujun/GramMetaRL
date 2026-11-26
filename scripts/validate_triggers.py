@@ -61,8 +61,6 @@ def main() -> None:
     def fires(card: MBGCard, src: str, tgt: str) -> bool | None:
         """True/False when the card has executable predicates; None when it cannot decide."""
         preds = [p for p in card.applicability if p.accepted and p.kind == "regex" and p.pattern]
-        if not preds:
-            return None
         for p in preds:
             text = tgt if p.side == "target" else src
             n, _ = v._pattern_hits(p.pattern, v.normalize_text(text), p.level or "phrase")
@@ -70,6 +68,20 @@ def main() -> None:
             if p.negated:
                 hit = not hit
             if hit:
+                return True
+        if preds:
+            return False
+        # No predicate: score the SOURCE CONDITION of a source_conditional constraint with the same
+        # ruler. The judge labels the card's stated trigger, so this measures whether the condition
+        # the pipeline now gates on is any good - the comparative rule showed a broad condition
+        # (\b\w+er\b) governing 40% non-comparative sentences, i.e. the same failure as a bad predicate.
+        conds = [c.source_pattern for c in card.output_constraints
+                 if c.kind == "source_conditional" and c.source_pattern]
+        if not conds:
+            return None
+        for cp in conds:
+            n, _ = v._pattern_hits(cp, v.normalize_text(src), "sentence")
+            if n > 0:
                 return True
         return False
 
@@ -104,7 +116,9 @@ def main() -> None:
     micro = Counter()
     micro_ho = Counter()
     for c in cards:
-        decidable = any(p.accepted and p.kind == "regex" and p.pattern for p in c.applicability)
+        decidable = (any(p.accepted and p.kind == "regex" and p.pattern for p in c.applicability)
+                     or any(x.kind == "source_conditional" and x.source_pattern
+                            for x in c.output_constraints))
         if not decidable:
             continue
         st = score(c, pairs)

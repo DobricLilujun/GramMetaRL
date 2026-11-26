@@ -34,6 +34,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Constraint agreement under predicate-gated applicability")
     ap.add_argument("--cards", default="data/rules/mbg_cards_recompiled_manual.jsonl")
     ap.add_argument("--pairs", default="data/external/pairs_en_lb.jsonl")
+    ap.add_argument("--skip", type=int, default=0, help="Skip the first N candidate pairs (held-out measurement: author on the fit half, measure on the rest)")
     ap.add_argument("--rows", type=int, default=0, help="0 = every pair in the pool")
     ap.add_argument("--source-filter", default=None,
                     help="Restrict to one source id. Weights feeding an RL reward should be measured "
@@ -44,14 +45,22 @@ def main() -> None:
     args = ap.parse_args()
 
     cards = [MBGCard.model_validate_json(l) for l in Path(args.cards).open("r", encoding="utf-8") if l.strip()]
-    gated = [c for c in cards if any(p.accepted and p.kind == "regex" and p.pattern for p in c.applicability)]
+    # Cards are measurable when applicability is decidable at all: either an accepted predicate, or the
+    # source condition of a source_conditional constraint (the validator derives it from the source).
+    gated = [c for c in cards
+             if any(p.accepted and p.kind == "regex" and p.pattern for p in c.applicability)
+             or any(x.kind == "source_conditional" and x.source_pattern for x in c.output_constraints)]
     v = TranslationVerifier(require_applicability=True)
 
+    skipped = 0
     pairs = []
     with Path(args.pairs).open("r", encoding="utf-8") as f:
         for line in f:
             rec = json.loads(line)
             if args.source_filter and rec.get("source") != args.source_filter:
+                continue
+            if skipped < args.skip:  # held-out measurement: the fit half stays out of this run
+                skipped += 1
                 continue
             pairs.append(rec)
             if args.rows and len(pairs) >= args.rows:
