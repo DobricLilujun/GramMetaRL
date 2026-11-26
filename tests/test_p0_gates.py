@@ -5,7 +5,10 @@ Run: /raid/yewei/.venvs/gm-lite/bin/python -m pytest tests -q
 
 from __future__ import annotations
 
+import pytest
+
 from grammetarl import MBGCard, TranslationVerifier
+from grammetarl.schema import RuleConstraint, RuleExample
 from grammetarl.rewards.grammar_reward import grammar_reward_verdicts
 from grammetarl.llm_extract import MBGExtractor, looks_like_prose
 from grammetarl.training.run_eval import _chr_f
@@ -329,3 +332,113 @@ def test_disjunction_constraint_is_decidable():
     assert bad.results[0].verdict == "violated", bad.results[0].message
     assert grammar_reward_verdicts(ok.verdicts()) > 0.0
     assert grammar_reward_verdicts(bad.verdicts()) < 0.0
+
+
+def test_uniform_weights_reproduce_the_unweighted_reward():
+    """The weighted form must be a strict generalization, not a different metric."""
+    from grammetarl.rewards.grammar_reward import grammar_reward_verdicts, grammar_reward_weighted
+
+    vs = ["satisfied", "violated", "unknown", "satisfied", "not_applicable"]
+    assert grammar_reward_weighted(vs, [1.0] * len(vs)) == grammar_reward_verdicts(vs)
+    assert grammar_reward_weighted(vs, [0.3] * len(vs)) == pytest.approx(grammar_reward_verdicts(vs))
+    try:
+        grammar_reward_weighted(vs, [1.0])
+        raise AssertionError("misaligned weights must raise")
+    except ValueError:
+        pass
+
+
+def test_unreliable_rules_cannot_move_the_reward():
+    """An unmeasured or coin-flip rule has weight 0: it can neither help nor hurt.
+
+    This is the soft version of the triage decision: instead of deleting a rule that contradicts
+    professional human translations half the time, the reward stops believing it.
+    """
+    from grammetarl.rewards.grammar_reward import grammar_reward_weighted
+    from grammetarl.rewards.reliability import ReliabilityTable
+
+    table = ReliabilityTable(
+        {
+            "GOOD": {"applicable": 29, "satisfied": 29, "violated": 0},     # measured, reliable
+            "COINFLIP": {"applicable": 40, "satisfied": 20, "violated": 20},  # no signal
+            # UNMEASURED absent on purpose
+        }
+    )
+    assert table.weight("GOOD") > 0.5
+    assert table.weight("COINFLIP") == 0.0
+    assert table.weight("UNMEASURED") == 0.0
+
+    clean = grammar_reward_weighted(["satisfied", "satisfied"], table.weights(["GOOD", "COINFLIP"]))
+    with_noise = grammar_reward_weighted(
+        ["satisfied", "satisfied", "violated", "violated"],
+        table.weights(["GOOD", "COINFLIP", "COINFLIP", "UNMEASURED"]),
+    )
+    assert clean == with_noise == 1.0
+
+
+def test_reliability_shrinks_with_little_evidence():
+    """2/2 observations must not certify a rule; the weight has to be earned."""
+    from grammetarl.rewards.reliability import ReliabilityTable
+
+    table = ReliabilityTable(
+        {"SMALL": {"applicable": 2, "satisfied": 2}, "BIG": {"applicable": 60, "satisfied": 60}}
+    )
+    assert table.weight("SMALL") < 0.5
+    assert table.weight("BIG") > 0.85
+
+
+def _conditional_card() -> MBGCard:
+    return MBGCard(
+        id="LB_cond",
+        namespace="default",
+        language="lb",
+        scope="adjective phrase",
+        operation_type="inflect",
+        statement="English comparatives require the analytic comparative with mees.",
+        phenomenon_tags=["comparison"],
+        trigger_conditions=["Forming the comparative degree"],
+        source={"source_id": "test", "page_start": 1, "page_end": 1},
+        output_constraints=[RuleConstraint(
+            kind="source_conditional",
+            description="en comparative => mees + adjective",
+            source_pattern=r"\bmore [a-z]+\b",
+            values=[r"\bméi\s+[a-z]+\b"],
+            level="phrase",
+        )],
+        examples=[RuleExample(source_language="en", source_sentence="more expensive",
+                              target_language="lb", target_sentence="méi deier")],
+    )
+
+
+def test_source_conditional_abstains_when_the_source_lacks_the_condition():
+    """No source trigger => the rule does not govern the pair => no verdict, no reward term."""
+    card = _conditional_card()
+    rep = TranslationVerifier(require_applicability=False).verify(
+        "the price is high", "d'Präis ass héich", [card]
+    )
+    assert rep.results[0].verdict == "unknown", rep.results[0].messages
+    assert rep.decided == 0
+    assert grammar_reward_verdicts(rep.verdicts()) == 0.0
+
+
+def test_source_conditional_decides_both_ways_when_the_source_has_the_condition():
+    card = _conditional_card()
+    v = TranslationVerifier(require_applicability=False)
+    ok = v.verify("more expensive", "méi deier", [card])
+    bad = v.verify("more expensive", "deier", [card])
+    assert ok.results[0].verdict == "satisfied", ok.results[0].messages
+    assert bad.results[0].verdict == "violated", bad.results[0].messages
+    assert grammar_reward_verdicts(ok.verdicts()) > 0.0
+    assert grammar_reward_verdicts(bad.verdicts()) < 0.0
+
+
+def test_source_conditional_is_not_a_target_only_check():
+    """The condition lives on the source, so the check cannot equal its own applicability test."""
+    card = _conditional_card()
+    src_pat = card.output_constraints[0].source_pattern
+    tgt_pats = card.output_constraints[0].values
+    assert src_pat not in tgt_pats
+    rep = TranslationVerifier(require_applicability=False).verify(
+        "expensive", "méi deier", [card]  # target has the form, source has no comparative
+    )
+    assert rep.results[0].verdict == "unknown"
