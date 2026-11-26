@@ -558,3 +558,109 @@ exception set (Luxembourgish uses the definite article for inalienable possessio
 
 Consequence for P1: `violated` must be treated as a **noisy** negative whose weight is the measured
 agreement, never as ground truth. Labels on the `satisfied` side carry precision = agreement.
+
+---
+
+## 12. Support expansion, the possessive decomposition, and the first reward-side RL smoke (2026-11-26)
+
+### 12.1 Support expansion on the second corpus (license split kept)
+
+The `een`-prohibition rule (LB_363a21684c8f, "the indefinite pronoun `een` may not open the sentence")
+had passed all three quality axes on n=1 check. Sourcing more support: 391 sentence-initial
+`one/someone/somebody` pairs exist, but only 29 are CC0 (techgov); 362 come from luxalign (CC BY-NC
+4.0). The measurement was therefore run as a **separate pool**, `artifacts/audit/condonly_luxalign.json`
+and `artifacts/audit/rule_quality_condonly_luxalign.json`, not merged into the CC0 numbers. Result: the
+prohibition moved from provisional to **USABLE (agreement 0.95, n=361, discrimination 100%)**, and
+kinship borrowing (LB_2ebda66afe75) also certified. Two further rules were VACUOUS, one TAUTOLOGICAL —
+adding data did not rescue them.
+
+### 12.2 My first violation decomposition was wrong, and why the buckets are nameless
+
+To fix the possessive rule's 30% disagreement I first bucketed its violations by "article + capitalized
+token = proper-name recast". That bucket was **invalid**: Luxembourgish capitalizes every noun, so the
+pattern also matched `den Attentater` ("the attackers") and `d'Nathalie Jacoby`. `scripts/
+violation_decomposition.py` now takes buckets as `NAME=REGEX` arguments and adds no interpretation,
+because interpretation is exactly what produced the false finding.
+
+The real decomposition (rule LB_946a24dd25d6, 8,972 CC0 pairs, 1,209 satisfied / 759 violated):
+
+| bucket (surface pattern, no claim attached) | n | share of violations |
+|---|---|---|
+| possessive article present, other possessor number | 396 | **52.2%** |
+| residual | 363 | 47.8% |
+
+Over half of the "violations" contained a possessive article at all — with the *other* number. The
+cause is linguistic, not translator error: Luxembourgish "their" admits both `är-` and `hir-` variants
+(`hirer Zäit` = their time), so **possessor number is undecidable for that person**, while "our" ->
+`eis-` is decidable. Encoding the undecidable half manufactured false violations.
+
+Fix: the rule is now two constraints with explicit claims —
+- `our/ours` -> `\beis(e|en|em|er)?\b` (decidable: no homophonous singular),
+- `their/theirs` -> *some* possessive (`är-|hir-|eis-`), description stating that possessor number is
+  **not** claimed for this person.
+
+Held-out agreement went 0.64 -> **0.74 at n=1,180**, discrimination **95.2%** -> certified **USABLE**
+(full pool 0.70 / n=1,973). This is a data-driven correction of the form list, not a loosening of the
+gate: the same thresholds (agree>=0.65, disc>=0.5, not self-restating, n>=30, >=20 perturbations) were
+applied before and after.
+
+### 12.3 The label gate now depends on the quality matrix
+
+`gated_pipeline_measurement.py --quality` admits only rules the three-axis matrix certifies `usable`
+(`--allow-provisional` opts into thin support). This dropped `LB_d121073f582e` (discrimination 5.3%: a
+rule that cannot bite) and the then-provisional `een` rule. Honest yield on 8,972 CC0 pairs:
+
+```
+allowed rules           2 (comparative, possessive)
+pairs_scored            2,228      labeled_pairs      1,585
+decided_checks          2,283      false_penalty_rate   28.9% (weighted 29.2%)
+```
+
+Previously the same pipeline reported 3,367 labels and 12.8% false penalties; ~2,000 of those checks
+belonged to a rule with 5.3% discrimination. A constant reward cannot generate a false penalty, so the
+low rate was an artifact — recorded in §11 and now structurally impossible.
+
+### 12.4 First P1 reward-side smoke (no training, verl deliberately absent)
+
+`scripts/p1_reward_smoke.py` samples k rollouts per source from an OpenAI-compatible policy, scores each
+with the reliability-weighted grammar reward over **only the certified rules**, and reports what decides
+whether an RL launch is worth its cost. `gemma3:12b`, 24 groups x 3 rollouts,
+`artifacts/p1/reward_smoke_gemma3_12b.json`:
+
+| metric | value | reading |
+|---|---|---|
+| `nonzero_spread_rate` | **29.2%** | 71% of GRPO groups have zero advantage -> zero gradient, wasted compute |
+| `mean_spread` / median | 0.583 / 0.0 | bimodal: groups are either saturated or informative |
+| `reference_penalized_rate` | **12.5%** | measured noise floor: professionals losing reward on these 2 rules |
+| `policy_minus_reference` | **-0.056** | a 12B generalist is nearly indistinguishable from professionals on this rule set |
+| `abstain_rollout_rate` | 0.0 | both certified rules decide on every pair (source conditions fire) |
+
+Capability is the first-order effect, found by running it: `qwen2.5-coder:7b`, `qwen2.5:14b` and
+`gemma3:4b-it-fp16` do not produce Luxembourgish (e.g. `Ou sinn wëssen dëmmët dëmmen dëmmen?`), score
+-1.0 on **every** rollout, and yield **zero** advantage spread. RL cannot learn from a policy with no
+target-language competence; this is the empirical argument for the SFT warmup in P1, not a stylistic
+preference. `qwen3:32b` and `gpt-oss:20b` did not answer within 400 s on this host.
+
+### 12.5 A failure mode agreement and discrimination both miss: false-satisfy
+
+One `qwen2.5-coder:7b` rollout earned **+1.0** while being gibberish, because `\bmeng(en)?\b` matched
+the verb **mengen** ("to mean/think"), not a possessive article:
+
+```
+EN  How much does AI already meddle with our everyday life?
+LB  Wéi vill mengt Dir, mengen AI schonn eis alleschdeemschttes Liewen?   -> r_grammar = +1.0
+```
+
+Agreement-vs-professionals and discrimination-vs-perturbations are both blind to this: the check never
+penalized anything, it silently *rewarded* nothing-of-interest. `scripts/match_context_audit.py`
+quantifies it by classifying the token after each match. In professional references (1,603 possessive
+matches): **79.9% followed by an uppercase token, 19.2% lowercase, 0.9% digit/end**. The lowercase
+minority is legitimate — an adjective sits between possessive and noun (`eis elektronesch ...`,
+`sengem éischte`, `hire privaten`) — so the tempting fix (require a following capitalized noun) would
+manufacture **19.2% false violations** on professional text. Verdict: **not fixable at surface level**;
+it needs POS/morphology, i.e. the P3 argument.
+
+Consequence for reward design, stated as a requirement: the grammar term must never be the whole reward.
+`R = w_mt*R_mt + w_g*R_grammar` with `w_mt > 0` — the MT term is what stops a policy from farming
+grammar checks with content-free output. An earlier draft of the P1 plan set `w_mt = 0`; that is now
+ruled out by measurement.
