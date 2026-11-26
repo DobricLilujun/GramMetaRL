@@ -502,6 +502,24 @@ def main() -> int:
         ),
     )
 
+    # G27 two-sided verifier quality: agreement with correct translations AND discrimination on
+    # broken ones. A constraint that cannot fail scores perfect agreement while contributing a
+    # constant reward term, so agreement alone must never certify a rule.
+    qm_path = ws.root / "artifacts" / "audit" / "rule_quality_matrix.json"
+    if qm_path.exists():
+        qm = json.loads(qm_path.read_text("utf-8"))
+        usable = [k for k, v in qm.items() if v.get("usable")]
+        vacuous = [k for k, v in qm.items() if v.get("discrimination", 0) < 0.2]
+        gate(
+            "G27 at least one rule passes agreement AND discrimination",
+            len(usable) >= 1,
+            f"usable={len(usable)} {usable} vacuous={len(vacuous)} "
+            f"(best discrimination={max((v.get('discrimination', 0) for v in qm.values()), default=0):.1%})",
+        )
+    else:
+        gate("G27 at least one rule passes agreement AND discrimination", False,
+             "run scripts/rule_quality_matrix.py first")
+
     # G20 split leakage: a rule id or an exact pair in both splits makes
     # "did the policy learn this rule?" unanswerable.
     valid = ws.root / "data" / "processed" / "valid.jsonl"

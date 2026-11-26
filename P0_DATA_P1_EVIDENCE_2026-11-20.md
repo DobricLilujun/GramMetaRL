@@ -337,3 +337,36 @@ So the P1 dataset size is bounded by predicate validation, not by constraint qua
 if those three unjudged rules validate at precision >= 0.5, the allowed set goes 1 -> 4 rules and the
 certified CC0 pairs go from 2,041 to several thousand (their predicate-gated check counts total ~4.6k)
 at essentially the same 0% false-penalty rate. That targeted judge pass is running on gpu7.
+
+## 7. The verifier quality matrix: agreement x discrimination (this changes the P1 pick)
+
+Agreement against correct translations is only half of verifier quality. A constraint that cannot
+fail scores agreement 1.00 and 0% false penalties while contributing a CONSTANT reward term. Measured
+directly (`scripts/verifier_discrimination.py`, `scripts/rule_quality_matrix.py`): take a check that
+passed on a professional translation, apply a minimal perturbation designed to break THAT rule
+(token-level: singularize, swap the plural marker, mangle the inflection), and require a `violated`
+verdict.
+
+| rule | agreement (n) | discrimination | verdict |
+|---|---|---|---|
+| LB_d121073f582e default -en plural | 1.00 (2,041) | **5.3%** (247 tests) | **vacuous** |
+| LB_374581869ba8 1sg present = infinitive | 1.00 (676) | 8.4% (249) | vacuous |
+| LB_e51077fe7961 1st/2nd person pronoun case | 0.80 (1,940) | 17.6% (125) | vacuous |
+| LB_27c64c1f7e4b 2nd person plural address forms | 1.00 (1,993) | **70.2%** (104) | **usable** |
+| LB_9789dfb15623 comparative particle | 0.92 (680) | **60.7%** (300) | **usable** |
+| LB_f73c08e1e60c present perfect | 0.64 (1,598) | 66.0% (294) | weak (agreement) |
+| LB_2ebda66afe75 French kinship borrowings | 0.59 (33) | 100% (60) | weak (agreement) |
+
+Consequences, stated plainly:
+1. The rule promoted in section 6 (2,041 CC0 labels, 0.0% false penalties) is **not usable dense
+   supervision**: its constraint is `^.*en$` at token level - "some token ends in -en" - which holds
+   for almost any sentence, so it catches 5% of targeted violations. Reward terms like this are
+   constants dressed as signals.
+2. Why it happened: the constraint was compiled from the rule's *surface vocabulary*, not from its
+   *structure*. "The default plural marker is -en" requires knowing WHICH noun is plural, i.e.
+   aligning the source plural to a target noun. Containment regexes cannot express that; this is the
+   P3 argument with a number attached.
+3. The two rules that are genuinely usable (comparative particle, 2nd-person-plural address) are
+   exactly the ones blocked only by missing predicate validation - which is what the targeted
+   `--judge-all` pass is producing. The right gate is therefore two-sided:
+   agreement >= 0.65 AND discrimination >= 0.5 AND predicate precision >= 0.5.
