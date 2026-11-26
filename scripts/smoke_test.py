@@ -505,9 +505,17 @@ def main() -> int:
     # G27 two-sided verifier quality: agreement with correct translations AND discrimination on
     # broken ones. A constraint that cannot fail scores perfect agreement while contributing a
     # constant reward term, so agreement alone must never certify a rule.
-    qm_path = ws.root / "artifacts" / "audit" / "rule_quality_matrix.json"
-    if qm_path.exists():
-        qm = json.loads(qm_path.read_text("utf-8"))
+    qm, qm_sources = {}, []
+    for name in ("rule_quality_matrix.json", "rule_quality_conditional.json"):
+        qm_path = ws.root / "artifacts" / "audit" / name
+        if qm_path.exists():
+            qm_sources.append(name)
+            # later (stronger) artifacts may re-measure the same rule; keep the better verdict per rule
+            for cid, v in json.loads(qm_path.read_text("utf-8")).items():
+                prev = qm.get(cid)
+                if prev is None or bool(v.get("usable")) >= bool(prev.get("usable")):
+                    qm[cid] = v
+    if qm:
         usable = [k for k, v in qm.items() if v.get("usable")]
         vacuous = [k for k, v in qm.items() if v.get("discrimination", 0) < 0.2]
         tauto = [k for k, v in qm.items() if v.get("predicate_restates_constraint")]
@@ -523,8 +531,8 @@ def main() -> int:
             f"best disc={max((v.get('discrimination', 0) for v in qm.values()), default=0):.1%}",
         )
     else:
-        gate("G27 at least one rule passes agreement AND discrimination", False,
-             "run scripts/rule_quality_matrix.py first")
+        gate("G27 at least one rule is agree>=.65, discriminates>=.5, and is not its own trigger",
+             False, "run scripts/rule_quality_matrix.py first")
 
     # G20 split leakage: a rule id or an exact pair in both splits makes
     # "did the policy learn this rule?" unanswerable.

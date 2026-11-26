@@ -63,6 +63,10 @@ class RuleConstraint(BaseModel):
         # They abstain (no reward term) until a morphology engine can decide them (P3).
         "equivalence",
         "optionality",
+        # The form a checkable translation rule must take: IF the source exhibits X the target must
+        # realize Y. Applicability comes from the source side, so it does not depend on a separately
+        # validated target-side predicate (measured precision of those: 0.25-0.43).
+        "source_conditional",
         "llm_check",
         "note",
     ]
@@ -70,6 +74,11 @@ class RuleConstraint(BaseModel):
     value: str | None = None
     min_tokens: int | None = None
     max_tokens: int | None = None
+    source_pattern: str | None = Field(
+        default=None,
+        description="Regex over the SOURCE sentence for source_conditional constraints; when it does "
+        "not match, the rule does not govern the pair and contributes no verdict",
+    )
     values: list[str] = Field(
         default_factory=list,
         description="Alternatives for must_include_any_regex / optionality; at least one must match",

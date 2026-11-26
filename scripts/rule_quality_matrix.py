@@ -106,10 +106,12 @@ def main() -> None:
     for card in cand:
         pats, token_level = [], False
         for c in card.output_constraints:
+            # source_conditional: perturb the CONSEQUENCE side (target pattern), which is the claim the
+            # rule makes; the condition side is what makes the rule govern the pair at all.
             if c.kind == "must_include_regex" and c.value:
                 pats.append(c.value)
                 token_level = token_level or c.level == "token"
-            elif c.kind == "must_include_any_regex":
+            elif c.kind in ("must_include_any_regex", "source_conditional"):
                 pats.extend([x for x in (c.values or []) if x])
                 token_level = token_level or c.level == "token"
         stats = collections.Counter()

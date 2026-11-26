@@ -437,3 +437,42 @@ agreement >= 0.65 AND discrimination >= 0.5 AND non-tautological, and the applic
 that would gate even those sit at precision 0.25-0.43. The card-to-verifier compiler is the
 bottleneck, and the required upgrade is structural: source-conditional constraints
 (source pattern => target pattern) plus explicit `undecidable_for_pair` handling.
+
+## 10. Source-conditional constraints: the first rule that passes all three axes
+
+Implemented `source_conditional` (schema + validator): IF the source matches `source_pattern` the
+target must realize one of `values`; if the source does not match, the constraint abstains (the rule
+does not govern the pair). Applicability now comes from the source, so it no longer depends on a
+target-side predicate - the axis where every compiled predicate scored 0.25-0.43 precision.
+
+Hand-authored conditionals pass the same admission tests, and two of my three first attempts were
+REJECTED for a real reason: the source pattern did not fire on the card's own illustration
+(the comparative card's sources are bare comparatives `nicer`/`older`, not `X-er than`; the perfect
+card's example is `they have built`, whose participle my `-ed`-based pattern missed). Fixing the
+patterns to fit the card's own examples is what made them admissible - evidence that the admission
+test is doing work, not just gating.
+
+Agreement of the SAME rules, target-only vs source-conditional (full 8,972 professional pairs):
+
+| rule | target-only | source-conditional |
+|---|---|---|
+| LB_946a24dd25d6 possessive articles | 0.51 (n=1,826) | **1.00 (n=1,433)** |
+| LB_9789dfb15623 comparative | 0.92 (n=680) | **0.96 (n=507)** |
+| LB_f73c08e1e60c present perfect | 0.64 (n=1,598) | 0.63 (n=162, condition rarely fires) |
+
+Full three-axis matrix on the conditional set:
+
+| rule | agreement (n) | discrimination | verdict |
+|---|---|---|---|
+| LB_9789dfb15623 comparative | 0.96 (507) | **59.3%** | **USABLE** |
+| LB_f73c08e1e60c present perfect | 0.63 (162) | 63.7% | weak on agreement |
+| LB_946a24dd25d6 possessive | 1.00 (1,433) | **1.7%** | vacuous: 11 alternatives cover nearly every possessive form, so breaking one token changes nothing |
+| LB_d121073f582e / LB_374581869ba8 / LB_e51077fe7961 | 0.80-1.00 | 5-18% | vacuous |
+
+So the possessive rule shows the failure mode from the other direction: perfect agreement, no biting.
+Raising the alternatives' specificity is the next fix.
+
+End-to-end with the source-conditional rules allowed by the gate (no predicate needed), over ALL
+8,972 CC0 professional pairs: **3,580 pairs scored, 3,566 labeled pairs (39.7%), 3,981 decided
+checks, false-penalty rate 0.39%** across 3 rules. Gate G27 now passes with a real rule behind it
+(PASS=26 FAIL=2).

@@ -144,7 +144,7 @@ class TranslationVerifier:
         decided = 0
         for cons in rule.output_constraints:
             haystack = self.normalize_text(translation) if self.normalize else translation
-            ok, msg, vacuous = self._check_constraint(cons, haystack)
+            ok, msg, vacuous = self._check_constraint(cons, haystack, sentence)
             messages.append(msg)
             if vacuous:
                 vacuums += 1
@@ -231,7 +231,9 @@ class TranslationVerifier:
         except re.error as exc:
             return -1, f"invalid regex: {exc}"
 
-    def _check_constraint(self, c: RuleConstraint, translation: str) -> tuple[bool, str, bool]:
+    def _check_constraint(
+        self, c: RuleConstraint, translation: str, source: str | None = None
+    ) -> tuple[bool, str, bool]:
         if c.kind == "must_include_regex":
             if not c.value:
                 return False, "must_include_regex missing value", False
@@ -257,6 +259,30 @@ class TranslationVerifier:
                 # Nothing matched: the exclusion is untested, which is not evidence of correctness.
                 return True, f"must_exclude_regex({c.value}) => 0 hits [{how}] VACUOUS", True
             return False, f"must_exclude_regex({c.value}) => {hits} violation(s)", False
+
+        if c.kind == "source_conditional":
+            if not c.source_pattern or not (c.value or c.values):
+                return True, "source_conditional is missing its source or target pattern", True
+            if source is None:
+                return True, "source_conditional needs the source sentence", True
+            n, how = self._pattern_hits(c.source_pattern, source, "sentence")
+            if n < 0:
+                return False, f"source_conditional source pattern {c.source_pattern!r} => {how}", False
+            if n == 0:
+                # The source does not exhibit the phenomenon: the rule does not govern this pair.
+                return True, f"source pattern absent ({how}) => rule does not govern", True
+            alts = [v for v in (c.values or []) if v] or ([c.value] if c.value else [])
+            hits = 0
+            for alt in alts:
+                m, _ = self._pattern_hits(alt, translation, c.level or "phrase")
+                if m < 0:
+                    return False, f"source_conditional target pattern {alt!r} invalid", False
+                hits += m
+            if hits == 0:
+                return False, (
+                    f"source exhibits X ({how}) but target lacks Y ({alts}) => violated"
+                ), False
+            return True, f"source exhibits X ({how}) and target realizes Y ({hits} hit(s))", False
 
         if c.kind == "must_include_any_regex":
             alts = [v for v in (c.values or []) if v]

@@ -72,7 +72,12 @@ def main() -> None:
             ok_pred.add(cid)
     ok_rel = {cid for cid in {c.id for c in cards}
               if table.weight(cid) > 0.0 and table.agreement(cid) >= args.min_agreement}
-    allowed = {c.id for c in cards if c.id in ok_pred and c.id in ok_rel}
+    def has_source_conditional(c: MBGCard) -> bool:
+        return any(x.kind == "source_conditional" for x in c.output_constraints)
+
+    # A source-conditional rule is gated by its own condition (the source pattern), so it does not
+    # need a separately validated target-side predicate - the axis every compiled predicate failed.
+    allowed = {c.id for c in cards if c.id in ok_rel and (c.id in ok_pred or has_source_conditional(c))}
     subset = [c for c in cards if c.id in allowed]
 
     cache: dict[str, bool] = {}
