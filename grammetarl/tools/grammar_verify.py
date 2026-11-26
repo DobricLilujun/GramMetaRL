@@ -30,6 +30,8 @@ def grammar_verify(
         "checked_rules": len(report.results),
         "decided_rules": report.decided,
         "verdicts": verdicts,
+        # aligned 1:1 with `verdicts`, so a reliability table can weight each check by its rule
+        "rule_ids": [r.rule_id for r in report.results],
         "applicable_rules": sum(1 for r in report.results if r.applicability == "applicable"),
         "not_applicable_rules": sum(1 for r in report.results if r.verdict == "not_applicable"),
         "unknown_applicability_rules": sum(1 for r in report.results if r.applicability == "unknown"),

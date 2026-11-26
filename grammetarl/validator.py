@@ -36,6 +36,10 @@ class VerificationReport:
     def verdicts(self) -> list[str]:
         return [r.verdict for r in self.results]
 
+    def rule_ids(self) -> list[str]:
+        """Aligned with verdicts(), so reliability weights can be attached to each check."""
+        return [r.rule_id for r in self.results]
+
 
 class TranslationVerifier:
     def __init__(

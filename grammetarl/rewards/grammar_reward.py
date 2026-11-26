@@ -28,6 +28,35 @@ def grammar_reward_verdicts(verdicts: Sequence[str]) -> float:
     return (pos - neg) / len(decided)
 
 
+def grammar_reward_weighted(verdicts: Sequence[str], weights: Sequence[float] | None = None) -> float:
+    """Reliability-weighted grammar reward.
+
+    `weights` aligns with `verdicts` (see grammetarl.rewards.reliability). Measured fact behind it:
+    the compiled constraint sets disagree with professional human translations on 34-72% of the
+    judge-applicable pairs depending on the card set, and the agreement varies hugely per rule
+    (one rule 0/15 wrong, another 44/44 wrong). Averaging verdicts as if every rule were a reliable
+    oracle therefore injects rule-level error straight into the policy gradient.
+
+    A weight of 0 (unmeasured or coin-flip rule) removes the check entirely, so the reward stays
+    exactly the unweighted mean over the checks that earned a weight. With all weights equal this
+    reduces to grammar_reward_verdicts, which is asserted in tests.
+    """
+    if weights is None:
+        return grammar_reward_verdicts(verdicts)
+    if len(weights) != len(verdicts):
+        raise ValueError("weights must align 1:1 with verdicts")
+    num = 0.0
+    den = 0.0
+    for v, w in zip(verdicts, weights):
+        if v not in (SATISFIED, VIOLATED) or w <= 0.0:
+            continue
+        num += w * (1.0 if v == SATISFIED else -1.0)
+        den += w
+    if den <= 0.0:
+        return 0.0
+    return num / den
+
+
 def decided_count(verdicts: Sequence[str]) -> int:
     return sum(1 for v in verdicts if v in (SATISFIED, VIOLATED))
 

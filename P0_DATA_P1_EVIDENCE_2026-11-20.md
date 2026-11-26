@@ -202,3 +202,37 @@ translations. Consequences for P1:
    the concrete P3 unlock, not a rhetorical one;
 3. the alternative is per-rule reliability weighting instead of binary keep/drop: the audit already
    measures per-rule precision, so the reward can weight each verdict by it (next implementation step).
+
+## 3. Reliability-weighted grammar reward: measured, not asserted
+
+A professional human translation must not be punished by the grammar term, so any pair whose grammar
+reward is negative is a *false penalty* - directly measurable with the judge cache replayed (no LLM).
+`scripts/reward_sanity_check.py` compares the naive unweighted mean over verdicts with the
+reliability-weighted mean, where each rule's weight = clamp(2p-1, 0, 1) and p is its agreement with
+human translations, shrunk toward the coin flip by support: p_hat = (satisfied + 2)/(applicable + 2)
+(`grammetarl/rewards/reliability.py`, built by `scripts/build_reliability_table.py`).
+
+| card set | pairs scored | false-penalty rate (unweighted) | false-penalty rate (weighted) | mean reward unweighted | mean reward weighted |
+|---|---|---|---|---|---|
+| recompiled | 359 | **52.9%** | **25.1%** | -0.134 | +0.187 |
+| triaged | 66 | 33.3% | 6.1% | 0.333 | 0.561 |
+
+Sign flips on the recompiled set: weighting removed 102 false penalties and introduced 2.
+
+This is the third option the triage section asked for, and it dominates the binary keep/drop choice:
+recompiled+weights keeps 5.4x the coverage of the triaged set (359 vs 66 scored pairs) at a lower
+false-penalty rate than triaged-unweighted (25.1% vs 33.3%). A hard triage was throwing away signal
+that soft weighting keeps.
+
+Table contents (`data/rules/reliability.json`): 35 rules measured, 11 with weight > 0, best 0.88
+(29/29 agreement), and the refuted cards land at 0.24 / 0.14 / 0.00 - they can no longer move the
+reward in either direction.
+
+Reward invariants now enforced by tests:
+- uniform weights reproduce `grammar_reward_verdicts` exactly (a generalization, not a new metric);
+- an unmeasured or coin-flip rule has weight 0 and cannot change the reward;
+- 2/2 observations do not certify a rule (shrinkage): weight(SMALL) < 0.5 < weight(BIG at 60/60).
+Gate G26 requires the table to exist, weights in [0,1], >=5 rules with weight > 0, and the
+reward-sanity artifact to show the weighted false-penalty rate strictly below the unweighted one.
+Wired into `run_eval` (`--reliability`, default `data/rules/reliability.json`); `grammar_verify`
+now returns `rule_ids` aligned 1:1 with `verdicts` so weights can be attached downstream.

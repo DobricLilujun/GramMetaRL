@@ -6,6 +6,7 @@ import os
 
 from grammetarl.agent_env import GrammarFirstEnv
 from grammetarl.rewards import aggregate_reward
+from grammetarl.rewards.reliability import ReliabilityTable
 from grammetarl.tools import (
     dictionary_lookup,
     grammar_rule_apply,
@@ -70,6 +71,7 @@ def replay_trajectory(
     policy_endpoint: str | None = None,
     policy_model: str | None = None,
     policy_api_key: str | None = None,
+    reliability=None,
 ) -> dict:
     """Run one deterministic grammar-first trajectory and score it."""
     env = GrammarFirstEnv()
@@ -112,6 +114,10 @@ def replay_trajectory(
     grammar_passed = bool(report.get("overall_passed", False))
     checked_rules = int(report.get("checked_rules", 0))
     verdicts = list(report.get("verdicts", []))
+    rule_ids = list(report.get("rule_ids", []))
+    # Weighted when a reliability table is available: each rule counts as much as its measured
+    # agreement with professional human translations, and unmeasured rules count zero.
+    use_rel = reliability is not None and rule_ids and len(rule_ids) == len(verdicts)
 
     reward = aggregate_reward(
         hypothesis=hypothesis,
@@ -119,6 +125,8 @@ def replay_trajectory(
         grammar_passed=grammar_passed,
         checked_rules=checked_rules,
         verdicts=verdicts,
+        rule_ids=rule_ids if use_rel else None,
+        reliability=reliability if use_rel else None,
         action_names=action_names,
     )
     return {
@@ -150,12 +158,27 @@ def main() -> None:
     parser.add_argument("--policy-model", default=None)
     parser.add_argument("--policy-api-key-env", default=None)
     parser.add_argument("--show", type=int, default=3, help="Print the first N hypotheses")
+    parser.add_argument(
+        "--reliability",
+        default="data/rules/reliability.json",
+        help="Per-rule reliability weights from scripts/build_reliability_table.py; the grammar "
+        "term is reliability-weighted when present and unweighted when not",
+    )
     args = parser.parse_args()
 
     from grammetarl.workspace import get_workspace_paths
 
     ws = get_workspace_paths(namespace=args.namespace)
     train_jsonl = args.train_jsonl or str(ws.train_dataset_file)
+
+    # Load the measured per-rule reliability once: the grammar term then weights each verdict by
+    # how well that rule actually agrees with professional human translations.
+    rel_table = ReliabilityTable.load(args.reliability) if args.reliability else None
+    if rel_table:
+        print(
+            f"[eval] reliability-weighted grammar term: {len(rel_table)} rules measured, "
+            f"{sum(1 for r in rel_table.table.values() if r.get('weight', 0) > 0)} with weight > 0"
+        )
 
     results: list[dict] = []
     count = 0
@@ -181,6 +204,7 @@ def main() -> None:
                 policy_endpoint=args.policy_endpoint,
                 policy_model=args.policy_model,
                 policy_api_key=os.environ.get(args.policy_api_key_env) if args.policy_api_key_env else None,
+                reliability=rel_table,
             )
             if len(results) < args.show:
                 print(f"[eval] en : {rec.get('src', '')[:90]}")

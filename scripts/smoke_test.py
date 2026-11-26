@@ -28,6 +28,7 @@ from grammetarl import MBGCard, RuleIndex, TranslationVerifier, load_cards  # no
 from grammetarl.agent_env import GrammarFirstEnv  # noqa: E402
 from grammetarl.rewards import aggregate_reward  # noqa: E402
 from grammetarl.rewards.grammar_reward import grammar_reward  # noqa: E402
+from grammetarl.rewards.reliability import ReliabilityTable  # noqa: E402
 from grammetarl.tools import dictionary_lookup, grammar_rule_apply, grammar_rule_search  # noqa: E402
 from grammetarl.workspace import get_workspace_paths  # noqa: E402
 
@@ -479,6 +480,27 @@ def main() -> int:
          f"predicates={preds_total} accepted={preds_ok} "
          f"cards_with_applicability={cards_with_app}/{len(audit_cards)} "
          f"(verifier abstains on the rest)")
+
+    # G26 reliability weighting: the grammar term must not treat every compiled constraint as an
+    # oracle. Weights come from the measured audit; unmeasured or coin-flip rules get weight 0.
+    rel_path = ws.root / "data" / "rules" / "reliability.json"
+    rel_table = ReliabilityTable.load(rel_path)
+    weights = [rel_table.weight(c.id) for c in audit_cards]
+    n_pos = sum(1 for w in weights if w > 0.0)
+    sanity_path = ws.root / "artifacts" / "audit" / "reward_sanity_recompiled.json"
+    sanity = json.loads(sanity_path.read_text("utf-8")) if sanity_path.exists() else None
+    improves = bool(sanity and sanity["false_penalty_rate_weighted"] < sanity["false_penalty_rate_unweighted"])
+    gate(
+        "G26 grammar reward is reliability-weighted, not oracle-assumed",
+        len(rel_table) > 0 and n_pos >= 5 and all(0.0 <= w <= 1.0 for w in weights) and improves,
+        f"rules_measured={len(rel_table)} weight>0={n_pos} max_w={max(weights):.2f} "
+        + (
+            f"false_penalty {sanity['false_penalty_rate_unweighted']:.1%} -> "
+            f"{sanity['false_penalty_rate_weighted']:.1%} on {sanity['pairs_scored']} human pairs"
+            if sanity
+            else "no reward_sanity artifact (run scripts/reward_sanity_check.py)"
+        ),
+    )
 
     # G20 split leakage: a rule id or an exact pair in both splits makes
     # "did the policy learn this rule?" unanswerable.
