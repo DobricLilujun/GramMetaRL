@@ -1,0 +1,208 @@
+{
+  "LB_d121073f582e": {
+    "statement": "The suffix -en is the default plural marker for most masculine and feminine noun",
+    "constraint_kinds": [
+      "must_include_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.999,
+    "n_agreement": 2041,
+    "weight": 0.998,
+    "perturbations_tested": 247,
+    "discrimination": 0.053,
+    "escaped_examples": [
+      {
+        "how": "singularize 'Liewen' -> 'Liew'",
+        "orig": "Sief et op der Aarbecht, an der Konscht oder am private Liewen. KI gëtt eis haut d’Méiglec",
+        "bad": "Sief et op der Aarbecht, an der Konscht oder am private Liew. KI gëtt eis haut d’Méiglechk",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "wrong plural 'Informatiounen' -> 'Informatiouneren'",
+        "orig": "Sief et op der Aarbecht, an der Konscht oder am private Liewen. KI gëtt eis haut d’Méiglec",
+        "bad": "Sief et op der Aarbecht, an der Konscht oder am private Liewen. KI gëtt eis haut d’Méiglec",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false
+  },
+  "LB_9789dfb15623": {
+    "statement": "For most adjectives, the comparative is formed by placing the particle méi befor",
+    "constraint_kinds": [
+      "must_include_regex"
+    ],
+    "token_level": false,
+    "agreement": 0.9225,
+    "n_agreement": 680,
+    "weight": 0.845,
+    "perturbations_tested": 300,
+    "discrimination": 0.607,
+    "escaped_examples": [
+      {
+        "how": "mangle 'méi tätegkeete'",
+        "orig": "Och an der Beruffswelt ginn ëmmer méi Tätegkeete vu kënschtlech intelligente Maschinnen iw",
+        "bad": "Och an der Beruffswelt ginn ëmmer méi tätegkeetx vu kënschtlech intelligente Maschinnen iw",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "mangle 'méi dacks'",
+        "orig": "Ma och kreativ Beruffer, wéi dee vum Museksproduzent, vum Filmrealisateur oder vum Moler g",
+        "bad": "Ma och kreativ Beruffer, wéi dee vum Museksproduzent, vum Filmrealisateur oder vum Moler g",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": true,
+    "redundancy_note": "identical literals ['méi']",
+    "usable": false
+  },
+  "LB_e51077fe7961": {
+    "statement": "First and second person personal pronouns have distinct forms for the nominative",
+    "constraint_kinds": [
+      "must_include_any_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.7973,
+    "n_agreement": 1940,
+    "weight": 0.5947,
+    "perturbations_tested": 125,
+    "discrimination": 0.176,
+    "escaped_examples": [
+      {
+        "how": "wrong plural 'Aarbecht' -> 'Aarbechteren'",
+        "orig": "Sief et op der Aarbecht, an der Konscht oder am private Liewen. KI gëtt eis haut d’Méiglec",
+        "bad": "Sief et op der Aarbechteren, an der Konscht oder am private Liewen. KI gëtt eis haut d’Méi",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "wrong plural '„Ech' -> '„Echeren'",
+        "orig": "„Ech denken, datt KI d’Leit aus der Filmbranche eng Kéier komplett wäert ersetzen“, sou de",
+        "bad": "„Echeren denken, datt KI d’Leit aus der Filmbranche eng Kéier komplett wäert ersetzen“, so",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false
+  },
+  "LB_27c64c1f7e4b": {
+    "statement": "Luxembourgish uses the 2nd person plural forms (Dir/Der, Iech) to address a sing",
+    "constraint_kinds": [
+      "must_include_any_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.999,
+    "n_agreement": 1993,
+    "weight": 0.998,
+    "perturbations_tested": 104,
+    "discrimination": 0.702,
+    "escaped_examples": [
+      {
+        "how": "wrong plural 'der' -> 'dereren'",
+        "orig": "Sief et op der Aarbecht, an der Konscht oder am private Liewen. KI gëtt eis haut d’Méiglec",
+        "bad": "Sief et op der Aarbecht, an dereren Konscht oder am private Liewen. KI gëtt eis haut d’Méi",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "wrong plural 'weider' -> 'weidereren'",
+        "orig": "Zënter 2020 ass d’Nathalie Jacoby zu Miersch an der Verantwortung an den Autorelexikon wii",
+        "bad": "Zënter 2020 ass d’Nathalie Jacoby zu Miersch an der Verantwortung an den Autorelexikon wii",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": true,
+    "redundancy_note": "identical literals ['der', 'dir', 'iech']",
+    "usable": false
+  },
+  "LB_374581869ba8": {
+    "statement": "In Luxembourgish, the 1st person singular present indicative form of regular ver",
+    "constraint_kinds": [
+      "must_include_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.9971,
+    "n_agreement": 676,
+    "weight": 0.9941,
+    "perturbations_tested": 249,
+    "discrimination": 0.084,
+    "escaped_examples": [
+      {
+        "how": "singularize 'denken' -> 'denk'",
+        "orig": "„Ech denken, datt KI d’Leit aus der Filmbranche eng Kéier komplett wäert ersetzen“, sou de",
+        "bad": "„Ech denk, datt KI d’Leit aus der Filmbranche eng Kéier komplett wäert ersetzen“, sou de C",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "wrong plural 'eng' -> 'engeren'",
+        "orig": "„Ech denken, datt KI d’Leit aus der Filmbranche eng Kéier komplett wäert ersetzen“, sou de",
+        "bad": "„Ech denken, datt KI d’Leit aus der Filmbranche engeren Kéier komplett wäert ersetzen“, so",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false
+  },
+  "LB_f73c08e1e60c": {
+    "statement": "The most common past tense is the present perfect, formed analytically with an a",
+    "constraint_kinds": [
+      "must_include_regex"
+    ],
+    "token_level": false,
+    "agreement": 0.6367,
+    "n_agreement": 1598,
+    "weight": 0.2734,
+    "perturbations_tested": 294,
+    "discrimination": 0.66,
+    "escaped_examples": [
+      {
+        "how": "mangle 'meta, den amerikaneschen internetkonzern fir sozial netzwierker, gräift net nëmme bei hire privaten notzer all dag op hir daten zou, mee huet sech fir hir sougenannte „large-language-modelen“ och illegal zougrëff op millioune vu bicher geholl'",
+        "orig": "Meta, den amerikaneschen Internetkonzern fir sozial Netzwierker, gräift net nëmme bei hire",
+        "bad": "meta, den amerikaneschen internetkonzern fir sozial netzwierker, gräift net nëmme bei hire",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "mangle 'well nach keng toxikologesch referenzwäerter do sinn, ass et net méiglech ze soen, ob a wéi wäit dës kontaminatioune geféierlech fir d’gesondheet sinn'",
+        "orig": "Well nach keng toxikologesch Referenzwäerter do sinn, ass et net méiglech ze soen, ob a wé",
+        "bad": "well nach keng toxikologesch referenzwäerter do sinn, ass et net méiglech ze soen, ob a wé",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false
+  },
+  "LB_55471d5dc4b4": {
+    "statement": "French discourse particles, interjections, and greetings are frequently used in ",
+    "constraint_kinds": [
+      "must_include_any_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.6,
+    "n_agreement": 1,
+    "weight": 0.2,
+    "perturbations_tested": 1,
+    "discrimination": 1.0,
+    "escaped_examples": [],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false
+  },
+  "LB_2ebda66afe75": {
+    "statement": "Several Luxembourgish kinship terms are borrowed from French, including 'Tatta',",
+    "constraint_kinds": [
+      "must_include_any_regex"
+    ],
+    "token_level": false,
+    "agreement": 0.5946,
+    "n_agreement": 33,
+    "weight": 0.1892,
+    "perturbations_tested": 60,
+    "discrimination": 1.0,
+    "escaped_examples": [],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false
+  }
+}

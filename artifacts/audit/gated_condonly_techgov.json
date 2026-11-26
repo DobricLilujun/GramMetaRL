@@ -1,0 +1,18 @@
+{
+  "cards_total": 87,
+  "cards_predicate_validated": 3,
+  "cards_reliability_positive": 7,
+  "cards_allowed": 2,
+  "allowed_card_ids": [
+    "LB_946a24dd25d6",
+    "LB_9789dfb15623"
+  ],
+  "pairs_scanned": 8972,
+  "pairs_no_decision": 6744,
+  "pairs_scored": 2228,
+  "labeled_pairs": 1585,
+  "distinct_rules_in_labels": 2,
+  "decided_checks": 2283,
+  "false_penalty_rate_unweighted": 0.2885996409335727,
+  "false_penalty_rate_weighted": 0.2921903052064632
+}

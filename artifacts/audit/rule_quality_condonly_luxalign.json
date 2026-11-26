@@ -1,0 +1,200 @@
+{
+  "LB_d121073f582e": {
+    "statement": "The suffix -en is the default plural marker for most masculine and feminine noun",
+    "constraint_kinds": [
+      "must_include_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.9984,
+    "n_agreement": 11983,
+    "agreement_measured": 0.9986,
+    "n_measured": 11983,
+    "weight": 0.9968,
+    "perturbations_tested": 245,
+    "discrimination": 0.114,
+    "escaped_examples": [
+      {
+        "how": "single-token: singularize 'den' -> 'd'",
+        "orig": "Vun den 3 Milliounen EU-Bierger, déi a Groussbritannien liewen, wunnt eleng een Drëttel zu",
+        "bad": "Vun d 3 Milliounen EU-Bierger, déi a Groussbritannien liewen, wunnt eleng een Drëttel zu L",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "single-token: wrong plural 'Milliounen' -> 'Milliouneren'",
+        "orig": "Vun den 3 Milliounen EU-Bierger, déi a Groussbritannien liewen, wunnt eleng een Drëttel zu",
+        "bad": "Vun den 3 Milliouneren EU-Bierger, déi a Groussbritannien liewen, wunnt eleng een Drëttel ",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false,
+    "provisional": false
+  },
+  "LB_9789dfb15623": {
+    "statement": "For most adjectives, the comparative is formed by placing the particle méi befor",
+    "constraint_kinds": [
+      "source_conditional"
+    ],
+    "token_level": false,
+    "agreement": 0.6262,
+    "n_agreement": 1323,
+    "agreement_measured": 0.6266,
+    "n_measured": 1323,
+    "weight": 0.2524,
+    "perturbations_tested": 300,
+    "discrimination": 0.73,
+    "escaped_examples": [
+      {
+        "how": "single-token: mangle 'méi wéi'",
+        "orig": "Op den Intensivstatioune ginn den Ament 30 Persoune behandelt, dat ass ee Patient méi wéi ",
+        "bad": "Op den Intensivstatioune ginn den Ament 30 Persoune behandelt, dat ass ee Patient méi wéx ",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "single-token: mangle 'méi opwand'",
+        "orig": "D'ADR ass der Meenung, dass scho vill kleng Veräiner déi Grenz depasséieren an deemno méi ",
+        "bad": "D'ADR ass der Meenung, dass scho vill kleng Veräiner déi Grenz depasséieren an deemno méi ",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false,
+    "provisional": false
+  },
+  "LB_363a21684c8f": {
+    "statement": "The indefinite personal pronoun 'een' cannot appear in the sentence-initial posi",
+    "constraint_kinds": [
+      "source_conditional"
+    ],
+    "token_level": false,
+    "agreement": 0.9452,
+    "n_agreement": 361,
+    "agreement_measured": 0.9501,
+    "n_measured": 361,
+    "weight": 0.8904,
+    "perturbations_tested": 300,
+    "discrimination": 1.0,
+    "escaped_examples": [],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": true,
+    "provisional": false
+  },
+  "LB_e51077fe7961": {
+    "statement": "First and second person personal pronouns have distinct forms for the nominative",
+    "constraint_kinds": [
+      "must_include_any_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.7704,
+    "n_agreement": 2248,
+    "agreement_measured": 0.7709,
+    "n_measured": 2248,
+    "weight": 0.5409,
+    "perturbations_tested": 124,
+    "discrimination": 0.25,
+    "escaped_examples": [
+      {
+        "how": "single-token: wrong plural 'Iech' -> 'Iecheren'",
+        "orig": "Net wéi aner Gewerkschaften, déi just zwou Woche virun de Wale mat Mëtschen a Kaffi bei Ie",
+        "bad": "Net wéi aner Gewerkschaften, déi just zwou Woche virun de Wale mat Mëtschen a Kaffi bei Ie",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "single-token: wrong plural 'Dënschdeg' -> 'Dënschdegeren'",
+        "orig": "D'Annonce vum Satellittebedreiwer SES en Dënschdeg, de Konkurrent Intelsat z'iwwerhuelen, ",
+        "bad": "D'Annonce vum Satellittebedreiwer SES en Dënschdegeren, de Konkurrent Intelsat z'iwwerhuel",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false,
+    "provisional": false
+  },
+  "LB_27c64c1f7e4b": {
+    "statement": "Luxembourgish uses the 2nd person plural forms (Dir/Der, Iech) to address a sing",
+    "constraint_kinds": [
+      "must_include_any_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.9999,
+    "n_agreement": 13602,
+    "agreement_measured": 1.0,
+    "n_measured": 13602,
+    "weight": 0.9997,
+    "perturbations_tested": 102,
+    "discrimination": 0.657,
+    "escaped_examples": [
+      {
+        "how": "single-token: wrong plural 'der' -> 'dereren'",
+        "orig": "\"Verschidde Conclusiounen kéint een awer zéien, seet de Sven Clement an nennt ënnert anere",
+        "bad": "\"Verschidde Conclusiounen kéint een awer zéien, seet de Sven Clement an nennt ënnert anere",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "single-token: wrong plural 'der' -> 'dereren'",
+        "orig": "7 Persoune hunn op der Plaz missten eng Strof bezuelen, 4 Fuerer hunn hire Führerschäin na",
+        "bad": "7 Persoune hunn op der Plaz missten eng Strof bezuelen, 4 Fuerer hunn hire Führerschäin na",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": true,
+    "redundancy_note": "identical literals ['der', 'dir', 'iech']",
+    "usable": false,
+    "provisional": false
+  },
+  "LB_374581869ba8": {
+    "statement": "In Luxembourgish, the 1st person singular present indicative form of regular ver",
+    "constraint_kinds": [
+      "must_include_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.9947,
+    "n_agreement": 371,
+    "agreement_measured": 1.0,
+    "n_measured": 371,
+    "weight": 0.9893,
+    "perturbations_tested": 259,
+    "discrimination": 0.185,
+    "escaped_examples": [
+      {
+        "how": "single-token: singularize 'goen' -> 'go'",
+        "orig": "Vun Neiwale géing absolut net rieds goen, sou den Etienne Schneider: „Ech gesinn net, firw",
+        "bad": "Vun Neiwale géing absolut net rieds go, sou den Etienne Schneider: „Ech gesinn net, firwat",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "single-token: wrong plural 'den' -> 'deren'",
+        "orig": "Vun Neiwale géing absolut net rieds goen, sou den Etienne Schneider: „Ech gesinn net, firw",
+        "bad": "Vun Neiwale géing absolut net rieds goen, sou deren Etienne Schneider: „Ech gesinn net, fi",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false,
+    "provisional": false
+  },
+  "LB_2ebda66afe75": {
+    "statement": "Several Luxembourgish kinship terms are borrowed from French, including 'Tatta',",
+    "constraint_kinds": [
+      "must_include_any_regex"
+    ],
+    "token_level": false,
+    "agreement": 0.7619,
+    "n_agreement": 38,
+    "agreement_measured": 0.7895,
+    "n_measured": 38,
+    "weight": 0.5238,
+    "perturbations_tested": 90,
+    "discrimination": 1.0,
+    "escaped_examples": [],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": true,
+    "provisional": false
+  }
+}

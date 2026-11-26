@@ -617,6 +617,36 @@ def main() -> int:
          f"chrF(correct_lb,ref)={chr_f_correct:.3f} "
          "-> _chr_f uses type counts and averages both sides, inflating cross-language scores")
 
+    # G28 P1 reward-side smoke: is the grammar reward a usable GRPO signal at all?
+    # Not a training run (verl is deliberately absent here). It samples policy rollouts, scores them
+    # with the reliability-weighted reward over rules certified usable by the quality matrix, and
+    # reports what decides whether an RL launch is worth its cost: how many groups have any advantage
+    # (GRPO is group-relative, so a zero-spread group is wasted compute), and how much reward the
+    # professional reference loses (measured rule error = the noise floor the policy gets rewarded for).
+    p1_runs = sorted((ROOT / "artifacts" / "p1").glob("reward_smoke*.json"),
+                     key=lambda p: p.stat().st_mtime)
+    p1_art = p1_runs[-1] if p1_runs else None
+    if p1_art is not None:
+        sm = json.loads(p1_art.read_text("utf-8"))
+        ok_g = int(sm.get("prompts", 0)) >= 12
+        ok_n = int(sm.get("rollouts_per_prompt", 0)) >= 2
+        ok_ref = float(sm.get("reference_penalized_rate", 1.0)) <= 0.30
+        ok_ab = float(sm.get("abstain_rollout_rate", 1.0)) < 1.0
+        gate("G28 P1 reward signal measurable on policy rollouts (groups, noise floor, abstention)",
+             ok_g and ok_n and ok_ref and ok_ab,
+             f"groups={sm.get('prompts')} rollouts/group={sm.get('rollouts_per_prompt')} "
+             f"reference_penalized_rate={sm.get('reference_penalized_rate')} "
+             f"abstain_rollout_rate={sm.get('abstain_rollout_rate')} "
+             f"policy_minus_reference={sm.get('policy_minus_reference')}")
+        if float(sm.get("nonzero_spread_rate", 0.0)) < 0.5:
+            warn("G28b most GRPO groups carry zero advantage for this reward",
+                 f"only {sm.get('nonzero_spread_rate'):.1%} of groups have a nonzero reward spread; the "
+                 f"rest give zero gradient. Raise certified-rule coverage or policy competence (SFT) "
+                 f"before spending RL compute")
+    else:
+        warn("G28 P1 reward signal measurable on policy rollouts",
+             "no artifacts/p1/reward_smoke*.json yet (run scripts/p1_reward_smoke.py)")
+
     # report ----------------------------------------------------------------------
     print("\n" + "=" * 78)
     print("P0 SMOKE TEST GATE TABLE")

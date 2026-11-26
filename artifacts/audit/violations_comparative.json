@@ -1,0 +1,12 @@
+{
+  "rule": "LB_9789dfb15623",
+  "counts": {
+    "undecided:not_applicable": 8662,
+    "satisfied": 235,
+    "synthetic_comparative_ér": 56,
+    "residual": 12,
+    "méi_present_but_not_adj+méi": 7
+  },
+  "violations": 75,
+  "pairs_scanned": 8972
+}

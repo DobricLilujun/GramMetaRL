@@ -1,0 +1,11 @@
+{
+  "rule": "LB_946a24dd25d6",
+  "counts": {
+    "satisfied": 1209,
+    "undecided:not_applicable": 7004,
+    "residual": 363,
+    "possessive_present_wrong_number": 396
+  },
+  "violations": 759,
+  "pairs_scanned": 8972
+}

@@ -48,3 +48,13 @@ artifacts/recompile/*
 
 !artifacts/audit/trigger_quality*.json
 !data/processed/tagged_judged_direct.jsonl
+
+# three-axis rule quality, source-conditional audits, violation decomposition, P1 reward smoke:
+# these are the evidence files the paper's numbers are read from, so they are version-controlled.
+!artifacts/audit/rule_quality_*.json
+!artifacts/audit/condonly*.json
+!artifacts/audit/gated_condonly*.json
+!artifacts/audit/violations_*.json
+!artifacts/p1/
+artifacts/p1/*
+!artifacts/p1/*.json

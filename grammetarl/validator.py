@@ -41,6 +41,16 @@ class VerificationReport:
         return [r.rule_id for r in self.results]
 
 
+def has_source_conditional(card: MBGCard) -> bool:
+    """True if any constraint derives applicability from the SOURCE side.
+
+    Such a card needs no target-side applicability predicate: the source pattern already decides when
+    the rule applies, and applicability precision there is measured rather than guessed.
+    """
+    return any(k.kind == "source_conditional" and k.source_pattern
+               for k in card.output_constraints)
+
+
 class TranslationVerifier:
     def __init__(
         self,

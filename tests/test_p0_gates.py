@@ -500,3 +500,23 @@ def test_positional_prohibition_is_discriminated_by_injection():
     assert out is not None and out.lower().startswith("een"), (out, how)
     mid, _ = inject_forbidden(v, "Dat ass hei net erlaabt", [r"\been\b"], 3)
     assert mid is not None and "een" in mid.split()
+
+
+def test_source_conditional_cards_need_no_target_predicate():
+    """A source-derived condition decides applicability, so no target-side predicate is required."""
+    from grammetarl.validator import has_source_conditional
+
+    assert not has_source_conditional(_conditional_card_plain())
+    assert has_source_conditional(_conditional_card())
+    # a source_conditional with no condition cannot decide anything -> not source-derived
+    bare = _conditional_card()
+    bare.output_constraints[0].source_pattern = None
+    assert not has_source_conditional(bare)
+
+
+def _conditional_card_plain() -> MBGCard:
+    c = _conditional_card()
+    c.output_constraints = [RuleConstraint(
+        kind="must_include_any_regex", description="comparative suffix",
+        values=[r"\b\w+er\b"], level="token")]
+    return c

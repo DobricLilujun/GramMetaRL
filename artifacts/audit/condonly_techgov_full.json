@@ -1,0 +1,173 @@
+{
+  "mode": "predicate_gated",
+  "stats": {
+    "satisfied": 11735,
+    "violated": 21435,
+    "pairs_scanned": 8972,
+    "cards_with_predicates": 28,
+    "decided_checks": 33170
+  },
+  "violation_rate_on_human_translations": 0.6462164606572204,
+  "violation_rate_by_source": {
+    "techgov_lu_en": {
+      "applicable": 33170,
+      "satisfied": 11735,
+      "violated": 21435,
+      "violation_rate": 0.6462164606572204
+    }
+  },
+  "per_card": {
+    "LB_fb5d91622d69": {
+      "not_applicable": 4167
+    },
+    "LB_d121073f582e": {
+      "not_applicable": 6931,
+      "applicable": 2041,
+      "satisfied": 2041
+    },
+    "LB_ce9b853ce4ee": {
+      "not_applicable": 2981
+    },
+    "LB_9789dfb15623": {
+      "not_applicable": 8662,
+      "applicable": 310,
+      "satisfied": 235,
+      "violated": 75
+    },
+    "LB_2e47463db059": {
+      "not_applicable": 8632,
+      "applicable": 340,
+      "satisfied": 110,
+      "violated": 230
+    },
+    "LB_473d56626cdb": {
+      "not_applicable": 6992,
+      "applicable": 1980,
+      "violated": 1833,
+      "satisfied": 147
+    },
+    "LB_9d86392ccf45": {
+      "not_applicable": 5722,
+      "applicable": 3250,
+      "violated": 2817,
+      "satisfied": 433
+    },
+    "LB_37643acfef1c": {
+      "not_applicable": 7720,
+      "applicable": 1252,
+      "violated": 1202,
+      "satisfied": 50
+    },
+    "LB_b6ca111c6511": {
+      "not_applicable": 6232,
+      "applicable": 2740,
+      "violated": 2468,
+      "satisfied": 272
+    },
+    "LB_34e781490e7b": {
+      "not_applicable": 4162,
+      "applicable": 4810,
+      "satisfied": 1823,
+      "violated": 2987
+    },
+    "LB_d24d2597cb78": {
+      "not_applicable": 7241,
+      "applicable": 1731,
+      "violated": 1726,
+      "satisfied": 5
+    },
+    "LB_363a21684c8f": {
+      "not_applicable": 8943,
+      "applicable": 29,
+      "satisfied": 29
+    },
+    "LB_e51077fe7961": {
+      "not_applicable": 7032,
+      "applicable": 1940,
+      "satisfied": 1548,
+      "violated": 392
+    },
+    "LB_27c64c1f7e4b": {
+      "not_applicable": 6979,
+      "applicable": 1993,
+      "satisfied": 1993
+    },
+    "LB_946a24dd25d6": {
+      "applicable": 1973,
+      "satisfied": 1375,
+      "not_applicable": 6999,
+      "violated": 598
+    },
+    "LB_7ba71aa6e282": {
+      "not_applicable": 6732,
+      "applicable": 2240,
+      "violated": 1638,
+      "satisfied": 602
+    },
+    "LB_89efbbfdabf2": {
+      "not_applicable": 8544,
+      "applicable": 428,
+      "violated": 308,
+      "satisfied": 120
+    },
+    "LB_15af0fc3dca0": {
+      "not_applicable": 8881,
+      "applicable": 91,
+      "satisfied": 46,
+      "violated": 45
+    },
+    "LB_374581869ba8": {
+      "not_applicable": 8296,
+      "applicable": 676,
+      "satisfied": 676
+    },
+    "LB_f73c08e1e60c": {
+      "not_applicable": 8479,
+      "applicable": 493,
+      "violated": 388,
+      "satisfied": 105
+    },
+    "LB_73a7f3d6dede": {
+      "not_applicable": 8687,
+      "applicable": 285,
+      "violated": 197,
+      "satisfied": 88
+    },
+    "LB_353e50a17df4": {
+      "not_applicable": 7330,
+      "applicable": 1642,
+      "violated": 1626,
+      "satisfied": 16
+    },
+    "LB_55471d5dc4b4": {
+      "not_applicable": 8971,
+      "applicable": 1,
+      "satisfied": 1
+    },
+    "LB_2ebda66afe75": {
+      "not_applicable": 8939,
+      "applicable": 33,
+      "satisfied": 20,
+      "violated": 13
+    },
+    "LB_bf1449011785": {
+      "not_applicable": 8967,
+      "applicable": 5,
+      "violated": 5
+    },
+    "LB_0007": {
+      "applicable": 950,
+      "violated": 950,
+      "not_applicable": 2695
+    },
+    "LB_0009": {
+      "applicable": 1937,
+      "violated": 1937,
+      "not_applicable": 944
+    },
+    "LB_7eec267b5068": {
+      "not_applicable": 3588
+    }
+  },
+  "counter_examples": []
+}

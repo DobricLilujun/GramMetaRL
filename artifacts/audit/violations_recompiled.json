@@ -1,0 +1,3696 @@
+{
+  "stats": {
+    "pairs": 1201,
+    "cached_checks": 3061,
+    "satisfied": 157,
+    "violated": 207,
+    "unknown": 44
+  },
+  "violation_rate_on_human_translations": 0.5686813186813187,
+  "per_card": {
+    "LB_353e50a17df4": {
+      "not_applicable": 337,
+      "applicable": 31,
+      "violated": 31
+    },
+    "LB_73a7f3d6dede": {
+      "not_applicable": 79,
+      "applicable": 5,
+      "violated": 5
+    },
+    "LB_55952182c95e": {
+      "applicable": 44,
+      "violated": 44,
+      "not_applicable": 53
+    },
+    "LB_8925c39346bf": {
+      "not_applicable": 115,
+      "applicable": 2,
+      "violated": 2
+    },
+    "LB_e934783fef93": {
+      "not_applicable": 163,
+      "applicable": 3,
+      "violated": 3
+    },
+    "LB_57f18e8973cc": {
+      "not_applicable": 66,
+      "applicable": 1,
+      "violated": 1
+    },
+    "LB_363a21684c8f": {
+      "not_applicable": 43,
+      "applicable": 1,
+      "violated": 1
+    },
+    "LB_26d36eb1e29b": {
+      "applicable": 1,
+      "violated": 1,
+      "not_applicable": 3
+    },
+    "LB_7af453fdf249": {
+      "not_applicable": 199,
+      "applicable": 20,
+      "unknown": 6,
+      "violated": 14
+    },
+    "LB_f73c08e1e60c": {
+      "not_applicable": 32,
+      "applicable": 22,
+      "satisfied": 8,
+      "violated": 14
+    },
+    "LB_4748b3f93481": {
+      "not_applicable": 92,
+      "applicable": 17,
+      "unknown": 7,
+      "violated": 10
+    },
+    "LB_0c9c0e28da81": {
+      "applicable": 132,
+      "violated": 57,
+      "satisfied": 75,
+      "not_applicable": 131
+    },
+    "LB_b8a95b630126": {
+      "not_applicable": 155,
+      "applicable": 10,
+      "violated": 4,
+      "satisfied": 6
+    },
+    "LB_ab00cf7fe49b": {
+      "applicable": 5,
+      "satisfied": 3,
+      "not_applicable": 22,
+      "violated": 2
+    },
+    "LB_946a24dd25d6": {
+      "applicable": 41,
+      "satisfied": 26,
+      "not_applicable": 60,
+      "violated": 15
+    },
+    "LB_430c8fe9970a": {
+      "applicable": 6,
+      "satisfied": 5,
+      "not_applicable": 26,
+      "violated": 1
+    },
+    "LB_d121073f582e": {
+      "not_applicable": 59,
+      "applicable": 16,
+      "satisfied": 14,
+      "violated": 2
+    },
+    "LB_3432e8148f68": {
+      "not_applicable": 321,
+      "applicable": 7,
+      "satisfied": 7
+    },
+    "LB_094bd032b36c": {
+      "not_applicable": 129,
+      "applicable": 2,
+      "unknown": 2
+    },
+    "LB_374581869ba8": {
+      "applicable": 8,
+      "satisfied": 8,
+      "not_applicable": 128
+    },
+    "LB_20ad587cbb47": {
+      "not_applicable": 65,
+      "applicable": 29,
+      "unknown": 29
+    },
+    "LB_baf7cca40aa2": {
+      "not_applicable": 77
+    },
+    "LB_8e8c0ac9bf52": {
+      "not_applicable": 136,
+      "applicable": 3,
+      "satisfied": 3
+    },
+    "LB_3c542bb77f7d": {
+      "not_applicable": 35,
+      "applicable": 2,
+      "satisfied": 2
+    },
+    "LB_44a8fa6bbb3a": {
+      "not_applicable": 65
+    },
+    "LB_0004": {
+      "not_applicable": 33
+    },
+    "LB_28068bea6d91": {
+      "not_applicable": 1
+    },
+    "LB_7541967ff8cf": {
+      "not_applicable": 12
+    },
+    "LB_6b1343e99ac4": {
+      "not_applicable": 2
+    },
+    "LB_478dad078661": {
+      "not_applicable": 7
+    },
+    "LB_e24e4b54cb59": {
+      "not_applicable": 3
+    },
+    "LB_12f8711db9e4": {
+      "not_applicable": 2
+    },
+    "LB_3ed3f92988a1": {
+      "not_applicable": 1
+    },
+    "LB_c6523b2803ed": {
+      "not_applicable": 1
+    }
+  },
+  "counter_examples": [
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Artificial intelligence – a medium that has become an integral component of many people’s everyday lives. But how much can AI actually do already?",
+      "lb": "Kënschtlech Intelligenz: e Medium, dat bei ville Leit scho feste Bestanddeel vum Alldag ass, ma wéi wäit kann d’KI tatsächlech schonn agräifen?",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Artificial intelligence – a medium that has become an integral component of many people’s everyday lives. But how much can AI actually do already?",
+      "lb": "Kënschtlech Intelligenz: e Medium, dat bei ville Leit scho feste Bestanddeel vum Alldag ass, ma wéi wäit kann d’KI tatsächlech schonn agräifen?",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "As no toxicological reference values are available, it is not possible to determine whether, and to what extent, this contamination poses a health risk.",
+      "lb": "Well nach keng toxikologesch Referenzwäerter do sinn, ass et net méiglech ze soen, ob a wéi wäit dës Kontaminatioune geféierlech fir d’Gesondheet sinn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_57f18e8973cc",
+      "statement": "The partitive article 'däers' is used for singular mass nouns that are masculine or neuter.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "token",
+          "value": "^däers$"
+        }
+      ],
+      "en": "The results differed for mineral water.",
+      "lb": "Beim Mineralwaasser verhält et sech aneschters.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(^däers$) => False [token-wise; anchored]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Only very low amounts of microplastic were detected in the bottles, regardless of whether they were made of glass or plastic.",
+      "lb": "Do wieren nëmme ganz schwaach Wäerter vu Mikroplastik an de Fläsche konstatéiert ginn, egal op d’Fläsch aus Glas oder aus Plastik war.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "However, the team around director Nathalie Jacoby does far more than simply collect and archive manuscripts.",
+      "lb": "Mä d’Equipe ronderëm d’Directrice Nathalie Jacoby mécht vill méi, wéi just Manuskripter ze sammelen an ze archivéieren.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "These refusals of entry are the result of an isolated and symbolic German policy, a direction that had already been announced ahead of the elections.",
+      "lb": "Dass déi Zréckweisungen an den däitschen Alleingang symbolpolitesch Mesurë sinn, war scho virun de Wale kloer a gouf och esou annoncéiert.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Legal debates are ongoing as to whether Germany is violating EU law and the Dublin Regulation, which determines the responsibility of individual states.",
+      "lb": "Aktuell gëtt awer diskutéiert, ob Däitschland domat géint EU-Recht verstéisst, géint d’Dublin-Prozedur. Déi soll d’Zoustännegkeet vun de Staate reegelen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Legal debates are ongoing as to whether Germany is violating EU law and the Dublin Regulation, which determines the responsibility of individual states.",
+      "lb": "Aktuell gëtt awer diskutéiert, ob Däitschland domat géint EU-Recht verstéisst, géint d’Dublin-Prozedur. Déi soll d’Zoustännegkeet vun de Staate reegelen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "While dialogue is ongoing and a complaint has been lodged in Brussels, Berlin appears determined to continue on its chosen path.",
+      "lb": "Zwar ass een am Dialog an och zu Bréissel huet ee sech ewell beschwéiert, ma Berlin wëllt et wéi et ausgesäit drop ukomme loossen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "The ‘Bommeleeër’ were ahead of their time in terms of safety and security",
+      "lb": "D’Bommeleeër waren a Saache Sécherheet hirer Zäit viraus",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Forty years ago, in 1985, Luxembourg fell victim to a series of bomb attacks that continued well into March 1986.",
+      "lb": "1985, also viru genee 40 Joer, gouf Lëtzebuerg vun enger Serie vu Bommenattentater getraff, déi sech nach bis Enn Mäerz 1986 gezunn hunn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Although these attacks did not claim any lives, they did cause injuries and material damage exceeding 5 million euros.",
+      "lb": "Et gouf zwar keng Doudeger, mee awer Blesséierter an ee Materialschued an Héicht vun ëmgerechent méi wéi 5 Milliounen Euro.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "There are two main leads: one domestic, the other international.",
+      "lb": "Et ginn zwou Haaptpisten, engersäits déi international an anerersäits déi national.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_b8a95b630126",
+      "statement": "Full forms of the definite article can function as demonstratives, receiving word stress to indicate proximity or emphasis.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(dee|déi|dësen|dës|dëst)"
+        }
+      ],
+      "en": "That amounts to nearly 1.5 billion euros.",
+      "lb": "Dat wieren ëmmerhi bal 1,5 Milliarden Euro.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((dee|déi|dësen|dës|dëst)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "While security is meaningless without freedom, a minimal degree of internal and external safety is necessary to protect that freedom.",
+      "lb": "Well och wann ouni Fräiheet all Sécherheet näischt wäert ass, braucht et awer ee Minimum u Sécherheet, souwuel no bausse wéi no bannen, fir d’Fräiheet ze garant",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "These are the first talks on the Iranian nuclear programme since the US withdrew from the nuclear agreement with Iran in 2018.",
+      "lb": "Et sinn déi éischt Gespréicher iwwer den iraneschen Atomprogramm op deem Niveau, zanter datt d’USA sech 2018 aus dem nuklearen Accord mam Iran zréckgezunn haten",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "In the end, the authorities gave up and paid.",
+      "lb": "Zum Schluss hunn d’Autoritéiten opginn a bezuelt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "The hackers demanded a ransom of 65 bitcoins, equivalent to approximately EUR 558,000.",
+      "lb": "Et goufe 65 Bitcoins, ëmgerechent 558.000 Euro, als Léisegeld, wat vun de Pirate verlaangt war, iwwerwisen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The incident began on 29 May, when a municipal employee opened an email containing malware.",
+      "lb": "Alles huet den 29. Mee ugefaangen, wéi een Employé vun der Gemeng eng E-Mail opgemaach huet, wou eng sougenannt Malware verstoppt war.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The city stated that the authorities were aware of an ‘IT security issue’ and confirmed that both in-house staff and external consultants were working on a solu",
+      "lb": "D’Stad huet gesot, d’Autoritéite wieren um Courant vum „Sécherheetsproblem an der Informatik“ an huet verséchert, dass intern Ekippen an extern Consultanten am ",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_4748b3f93481",
+      "statement": "The feminine definite article 'der' generally does not cliticize to dative prepositions.",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": null,
+          "value": "^(?!zur).*der$"
+        }
+      ],
+      "en": "Collaboration with municipalities was particularly close for primary schools, as school buildings fall under municipal authority.",
+      "lb": "Am Fondamental, wou d’Gebaier ënnert der Gemengenautoritéit stinn, ass enk zesummegeschafft ginn, fir déi néideg Mesuren en place ze setzen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?!zur).*der$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The entire community of formal and non-formal education collaborated in an exemplary manner, in the best interests of the children.",
+      "lb": "Déi ganz Communautéit vun der formaler an der non-formaler Bildung huet hei exemplaresch zesummegeschafft am Interessi vun de Kanner.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_26d36eb1e29b",
+      "statement": "Prepositions expressing static position or location govern the dative case.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "phrase",
+          "value": null
+        }
+      ],
+      "en": "Two pools were created within two weeks – one for supervised study sessions and one for after-school care.",
+      "lb": "Zwee Poole goufe bannent zwou Wochen opgestallt, engersäits fir d’Études surveillées moies an anerersäits fir d’Betreiung no der Schoul.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^zu\\\\s', '^an\\\\s']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "The current public health crisis has made us acutely aware of how essential nursing care is to our healthcare system.",
+      "lb": "Déi aktuell sanitaire Kris léist eis fillen, wéi wichteg d’Fleeg fir onse Gesondheetssysteem ass.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "In the same context, it published the report State of the World’s Nursing, which calls on governments and all relevant stakeholders to invest in the education, ",
+      "lb": "An deem selwechten Kader gouf e Rapport „State of the world‘s nursing“ verëffentlecht, mat deem d’Regierungen an all concernéiert Acteuren dozou opgeruff ginn, ",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "Nurses therefore have our full support in further developing the quality of their training and their important roles in the field of care.’",
+      "lb": "D’Infirmieren hunn dowéinst eis voll Ënnerstëtzung, fir d’Qualitéit vun hirer Ausbildung a fir hir wichteg Rollen an dem Beräich vun den Soins weider auszebauen",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "From 1 June onwards, the position of Chief Nursing Officer within the Ministry of Health will be filled.",
+      "lb": "Vum 1. Juni u gëtt iwwerdeems d’Funktioun vum „Chief Nursing Officer“ am Gesondheetsministère besat.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "How much reach an influencer must have to be considered as such will be determined by ALIM itself, according to the Minister.",
+      "lb": "Wéi vill Reechwäit een Influencer muss hunn, fir als solchen ze gëllen, misst d’ALIM selwer festhalen, esou d’CSV-Ministesch.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The council will take on much more of the role, as is customary in a structure with two bodies of oversight and supervisory functions.’",
+      "lb": "An de Conseil kritt vill méi d’Roll, esou wéi dat u sech üblech ass an enger Struktur mat zwee Gremien, vill méi d’Kontrollfunktioun an d’Surveillancefunktioun.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_363a21684c8f",
+      "statement": "The indefinite personal pronoun 'een' cannot appear in the sentence-initial position; inversion is required to move it to the middle field.",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": null,
+          "value": "^Ee(n)?\\s"
+        },
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "\\w+\\s+een"
+        }
+      ],
+      "en": "As the media landscape is becoming more diverse, the new changes to the law, which were first drafted in 1991, intend to reflect current developments.",
+      "lb": "D’Ännerungen um Gesetz, dat nach vun 1991 ass, sollen den aktuellen Entwécklunge Rechnung droen, esou d’Ministesch, well d’Medielandschaft ëmmer méi divers géif",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^Ee(n)?\\s) => 0 hits [whole-string] VACUOUS",
+        "must_include_regex(\\w+\\s+een) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "These are just a few of the points from the new text of the Affordable Housing Act that passed the Government Council on Friday.",
+      "lb": "Dat also e puer Punkten aus dem neie Gesetzestext fir erschwéngleche Wunnraum, deen dëse Freideg am Regierungsrot ugeholl gouf.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The Minister for Housing has also announced a revised version of the Pacte logement 2.0, though he did not specify an exact date.",
+      "lb": "Weider huet de Logementsminister eng iwwerschaffte Versioun vum Pacte logement 2.0 ugekënnegt, ouni awer ee geneeën Datum ze nennen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "This folk remedy has been appearing in online posts repeatedly since 2018.",
+      "lb": "Dës Volleksmedezin daucht zënter 2018 ëmmer nees an Online-Bäitrag op.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "‘Limit your intake of potassium in your diet if your blood levels are too high.’",
+      "lb": "„Limitéiert Är Consommatioun vu Kalium an Ärer Ernierung, wann Äre Bluttspigel ze héich ass.“",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_ab00cf7fe49b",
+      "statement": "Definite articles are obligatory for noun phrases containing first names, surnames, and certain brand or shop names.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "phrase",
+          "value": null
+        }
+      ],
+      "en": "The agency has previously reviewed other articles promoting unproven remedies.",
+      "lb": "D’AFP huet schonn an der Vergaangenheet aner Bäiträg iwwerpréift, an deene fir onbewisen Heelmëttel Reklamm gemaach gëtt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['(^|\\\\s)den\\\\s+[a-zà-ÿ]+(\\\\s|$)', '(^|\\\\s)de\\\\s+[a-zà-ÿ]+(\\\\s|$)', '(^|\\\\s)d\\\\s+[a-zà-ÿ]+(\\\\s|$)']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The president of the OGBL, however, argued that more funds should be distributed.",
+      "lb": "D’OGBL-Presidentin par contre sot, et misst ee méi verdeelen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_4748b3f93481",
+      "statement": "The feminine definite article 'der' generally does not cliticize to dative prepositions.",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": null,
+          "value": "^(?!zur).*der$"
+        }
+      ],
+      "en": "She welcomed some of the government measures, such as social assistance and certain tax relief initiatives. However, she said this was not enough.",
+      "lb": "Si huet eng Rei Mesurë vun der Regierung, dorënner sozial Hëllef a gewëss Steiererliichterunge begréisst. Dës géingen awer net duergoen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?!zur).*der$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "One of the Green Party’s main concerns is that increased investment in defence could come at the expense of other investments.",
+      "lb": "Eng grouss Suerg fir déi Gréng wier elo, datt, wa méi Suen an d’Defense investéiert ginn, dat op d’Käschte vun Investissementer geet.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "When it comes to tax advantages for investments—which CSV, DP, ADR, and the Pirate Party recently extended until the end of June—the Green Party remains critica",
+      "lb": "D’steierlech Virdeeler fir den Invest dogéint, déi d’CSV, DP, ADR a Piraten eng leschte Kéier bis Enn Juni verlängert hunn, do bleiwen déi Gréng bei hirer Kriti",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_e934783fef93",
+      "statement": "Female first names are always treated as neuter nouns for the purpose of article and adjective agreement.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "d'\\s+[A-Z]\\w+|dat\\s+\\w+\\s+[A-Z]\\w+"
+        }
+      ],
+      "en": "Carole Hartmann will stand for election as party president.",
+      "lb": "D’Carole Hartmann wäert sech fir d’Wal als Parteipresidentin opstellen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(d'\\s+[A-Z]\\w+|dat\\s+\\w+\\s+[A-Z]\\w+) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "A compromise is not yet on the table.",
+      "lb": "E Kompromëss läit bis elo awer nach net um Dësch.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "A final proposal for a position paper was torn apart from all sides on the penultimate day of the negotiations.",
+      "lb": "Eng lescht Propos fir en Ofschlosstext gouf um zweetleschten Dag vun de Verhandlunge vun alle Säiten zerrappt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "But there is still hope.",
+      "lb": "Et gëtt awer nach Hoffnung",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "One group consists of countries with high ambitions in the fight against plastic waste.",
+      "lb": "Engersäits déi Länner, déi héich Ambitiounen hunn, fir géint de Plastikoffall virzegoen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "They want to limit and regulate plastic production, for example with regard to the use of chemicals.",
+      "lb": "Si wëllen d’Produktioun vu Plastik limitéieren an och reglementéieren, zum Beispill, wat den Asaz vu Chemikalien ubelaangt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The EU, Australia, Canada, the United Kingdom, large parts of Africa and South America, as well as numerous island states, are among these countries.",
+      "lb": "Zu deene Länner gehéieren d’EU, Australien, Kanada, Groussbritannien, Groussdeeler vun Afrika, Latäinamerika an eng ganz Partie Inselstaaten.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_8925c39346bf",
+      "statement": "Masculine and neuter singular noun phrases in the dative case retain the -em suffix on the adjective when there is no article present.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "adjective_suffix == '-em'"
+        }
+      ],
+      "en": "While pension contributions are set to increase, spending on defence will also rise.",
+      "lb": "Wärend d’Cotisatiounen eropgoe sollen, klëmmt gläichzäiteg och de Budget fir d’Defense.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(adjective_suffix == '-em') => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "That promise is now being renegotiated.",
+      "lb": "Dat Versprieche gëtt elo nei verhandelt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The coalition agreement therefore contained a provision on a large-scale public consultation – a conversation about the future of the pension system.",
+      "lb": "Dofir gouf am Koalitiounsaccord eng breet Consultatioun mat der Zivilgesellschaft – e Gespréich iwwer d’Zukunft vum Rentesystem – festgehal.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "But a conversation like that can’t be open and honest if the solution has been decided on already.",
+      "lb": "Mee esou e Gespréich ass just dann éierlech, wann d’Léisung net schonn am Virfeld feststeet.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "But what about the people who can’t afford private pensions?",
+      "lb": "Mee wat ass mat deene Leit, déi sech dat net leeschte kënnen?",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_d121073f582e",
+      "statement": "The suffix -en is the default plural marker for most masculine and feminine nouns and borrowings.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "token",
+          "value": "^.*en$"
+        }
+      ],
+      "en": "The Christian Social People’s Party (CSV) is calling for solidarity, while the Democratic Party (DP) advocates for individual responsibility.",
+      "lb": "D’CSV berifft sech op Solidaritéit, d’DP dogéint op Eegeverantwortung.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(^.*en$) => False [token-wise; anchored]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The war in Ukraine, the unpredictable global situation – these are the realities.",
+      "lb": "De Krich an der Ukrain, déi onberechenbar international Lag – dat ass eng Realitéit.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The philosopher Hans Jonas wrote in his work on the ethics of responsibility that we must only ever act in such a way that human life is still possible tomorrow",
+      "lb": "De Philosoph Hans Jonas huet a senger Verantwortungsethik deemools gesot: Mir däerfen nëmmen esou handelen, datt och muer nach mënschlecht Liewe méiglech ass – ",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "And a politics that explains why we need to spend billions on weapons – and what those weapons are really protecting.",
+      "lb": "An eng Politik, déi erkläert, firwat mir Milliarde fir d’Rüstung brauchen – a wat mir domat wierklech schützen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "They are a reflection of our society: How do we treat our young and our old?",
+      "lb": "Si sinn e Spigelbild vun eiser Gesellschaft: Wéi gi mir ëm mat Jonken an Alen?",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_4748b3f93481",
+      "statement": "The feminine definite article 'der' generally does not cliticize to dative prepositions.",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": null,
+          "value": "^(?!zur).*der$"
+        }
+      ],
+      "en": "According to the Director of the employers‘ organisation UEL, Marc Wagner, the aim was to keep the increase as low as possible.",
+      "lb": "Fir den Direkter vun der Patronatsorganisatioun UEL, de Marc Wagner, géif et drëms goen, fir déi Hausse esou niddreg ze halen ewéi méiglech.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?!zur).*der$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_4748b3f93481",
+      "statement": "The feminine definite article 'der' generally does not cliticize to dative prepositions.",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": null,
+          "value": "^(?!zur).*der$"
+        }
+      ],
+      "en": "During the AMMD general assembly, the Committee received the mandate to cancel the tarification convention with the CNS.",
+      "lb": "Op der Generalversammlung vun der AMMD krut de Comité d’Mandat, fir d’Konventioun iwwer d’Tarifikatioun mat der CNS ze kënnegen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?!zur).*der$) => 3 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "‘We were initially in negotiations where we were told that if we met certain measures, we would receive the full key letter of 2.68 per cent.",
+      "lb": "„Mir waren am Ufank an enger Negociatioun, wou mir signaliséiert kruten, wa mir verschidde Mesurë mat treffen, dass mir géifen déi voll Lettre-clé vun 2,68 Proz",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_ab00cf7fe49b",
+      "statement": "Definite articles are obligatory for noun phrases containing first names, surnames, and certain brand or shop names.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "phrase",
+          "value": null
+        }
+      ],
+      "en": "‘Femmes socialistes’ are calling for the individualisation of the pension system.",
+      "lb": "D’Femmes socialistes fuerderen eng Individualiséierung vum Pensiounssystem.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['(^|\\\\s)den\\\\s+[a-zà-ÿ]+(\\\\s|$)', '(^|\\\\s)de\\\\s+[a-zà-ÿ]+(\\\\s|$)', '(^|\\\\s)d\\\\s+[a-zà-ÿ]+(\\\\s|$)']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The current framework, according to them, is not representative of a modern society and continues to be based on a traditional family model.",
+      "lb": "Den aktuelle Pensiounssystem wier der moderner Gesellschaft net ugepasst a géif ëmmer nach op engem traditionelle Familljebild opbauen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "‘We know from Statec figures that, over the past 20 years, around 50 per cent of marriages end in divorce. Women are therefore no longer secured long-term throu",
+      "lb": "„Mir wësse vum Statec, datt zënter 20 Joer ronn 50 Prozent vun de Bestietnisser nees gescheet ginn, also si Fraen net méi laangfristeg duerch d’Pensioune vun en",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_4748b3f93481",
+      "statement": "The feminine definite article 'der' generally does not cliticize to dative prepositions.",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": null,
+          "value": "^(?!zur).*der$"
+        }
+      ],
+      "en": "As opposed to the national LSAP, the national CSV was staying out of municipal politics, says the resigned mayor.",
+      "lb": "Am Géigesaz zu der nationaler LSAP hätt déi national CSV sech aus der Gemengepolitik erausgehalen, seet déi demissionär Buergermeeschtesch.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?!zur).*der$) => 2 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "In an interview with 100,7 he denies that the national LSAP exercised any pressure on the Contern alderman.",
+      "lb": "Hien dementéiert am 100,7-Interview, datt déi national LSAP op d’Conterner-Schäffin soll Drock ausgeüübt hunn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "‘Especially since she tries to avoid any responsibility.",
+      "lb": "„Zemools wann si probéiert, elo all Responsabilitéit vu sech ze weisen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The LSAP leadership was also not involved in the discussions around a Gambia coalition, i.e. a coalition between DP, the Green Party and LSAP in the municipalit",
+      "lb": "Och bei de weidere Verhandlungen ëm eng Gambia-Koalitioun, also DP, dei gréng an LSAP, an der Gemeng Conter géif d’LSAP-Spëtzt net matschwätzen, esou nach den D",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "So the logical question is: which of these holds more value?",
+      "lb": "Lo ass déi logesch Fro: Wat huet hei méi Valeur?",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "Some experts believe the coin could reach €300,000 to half a million in a few years.",
+      "lb": "Verschidde Spezialiste gi jo dovunner aus, datt de Coin an e puer Joer bei 300.000 bis enger hallwer Millioun Euro kéint leien.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "In 10 years, Bitcoin will still be a rarity.",
+      "lb": "An 10 Joer wäert de Bitcoin weider eng Raritéit bleiwen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_8925c39346bf",
+      "statement": "Masculine and neuter singular noun phrases in the dative case retain the -em suffix on the adjective when there is no article present.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "adjective_suffix == '-em'"
+        }
+      ],
+      "en": "And there will be many more currencies—digital ones—circulating.",
+      "lb": "An et wäerten nach vill méi Wärungen, also och Krypto (digital Wärungen) am Ëmlaf sinn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(adjective_suffix == '-em') => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "People naturally ask: where can I place my money?",
+      "lb": "D’Leit froe sech dann natierlech: Wou kann ech mäi Geld placéieren?",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "But those days are long gone.",
+      "lb": "Déi Zäite sinn awer längst eriwwer.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "And their value can swing dramatically—up or down.",
+      "lb": "An et kënnen extreem Wäert-Schwankungen no uewen, mee och no ënne ginn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Currently, there are around 24,000 different cryptocurrencies traded on over 600 exchanges.",
+      "lb": "Aktuell ginn et ronn 24.000 verschidde Kryptowärungen, déi op iwwer 600 Boursse gehandelt ginn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Every year on 17 October is World Organ Donation Day.",
+      "lb": "All Joer de 17. Oktober ass weltwäit d’Journée mondiale du don d’organes.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "In the Grand Duchy, every deceased person is a potential organ donor.",
+      "lb": "Am Grand-Duché ass u sech all Persoun, déi stierft, e potentiellen Organspender.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "People subscribing for a ‘Passeport de vie’ (‘life passport’) make the procedure simpler for doctors to intervene, and for their families not to have to take su",
+      "lb": "Ma Leit, déi sech fir de „Passeport de vie“ aschreiwen, erméiglechen et den Dokteren, fir dëse Schratt méi einfach ze maachen an evitéieren am selwechten Ament ",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "On other points, Luc Frieden was less clear today. But an État de la Nation is, after all, meant to describe the current state of affairs and give citizens a co",
+      "lb": "Op anere Punkte war de Luc Frieden haut manner kloer, mee en Etat de la Nation zeechent jo och just den Ist-Zoustand a soll de Bierger e Kompass ginn, wou et hi",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "After Luxembourg was supposed to be ‘strengthened for the future’ in the government declaration of November 2023, then become ‘simple, better, modern’ in last y",
+      "lb": "Nodeems Lëtzebuerg huet missten an der Regierungsdeklaratioun am November 2023 „fir d’Zukunft gestäerkt ginn“, dunn am Etat zejoert sollt „einfach, besser, mode",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "High levels of chlorate were detected during routine checks at a European bottling plant in Belgium, prompting a large-scale recall.",
+      "lb": "Héich Chlorat-Wäerter goufe bei Kontrollen an der europäescher Offëll-Anlag an der Belsch fonnt, soudass elo eng grouss Réckruffaktioun lancéiert gouf.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "The routine controls were carried out at the Coca-Cola facility in Ghent.",
+      "lb": "Ganz konkret goufen dës Kontrollen, déi reegelméisseg bei Coca-Cola duerchgefouert ginn, zu Gent gemaach.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Chlorine is widely used in water treatment and food processing.",
+      "lb": "Dëst gëtt bei der Opbereedung vu Waasser an dem Verschaffe vu Liewensmëttel benotzt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "She explains that it appears too much disinfectant may have been used during water treatment in the Belgian Coca-Cola production process.",
+      "lb": "Wéi et schéngt, géif de Verdacht bestoen, dass ze vill Desinfektiounsmëttel am Waasser vun der Produktioun vu Coca-Cola an der Belsch war.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "While this remains speculative, one possible reason could be a higher-than-usual bacterial load in the water.",
+      "lb": "De Grond heifir ass natierlech Spekulatioun, ma eng Méiglechkeet wier, dass d’Konzentratioun am Waasser erhéicht gouf, well d’Unzuel u Bakterien ze héich war.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_73a7f3d6dede",
+      "statement": "The subjunctive (conditional) is predominantly formed using the subjunctive forms of the auxiliary ginn (géifen) plus the infinitive of the main verb.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "géif|geif"
+        }
+      ],
+      "en": "While this remains speculative, one possible reason could be a higher-than-usual bacterial load in the water.",
+      "lb": "De Grond heifir ass natierlech Spekulatioun, ma eng Méiglechkeet wier, dass d’Konzentratioun am Waasser erhéicht gouf, well d’Unzuel u Bakterien ze héich war.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(géif|geif) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_e934783fef93",
+      "statement": "Female first names are always treated as neuter nouns for the purpose of article and adjective agreement.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "d'\\s+[A-Z]\\w+|dat\\s+\\w+\\s+[A-Z]\\w+"
+        }
+      ],
+      "en": "According to Schymanski, chlorate only becomes dangerous if large quantities are ingested at once or if smaller amounts are consumed over a very long period of ",
+      "lb": "Geféierlech, sou d’Emma Schymanski, géif et awer just wierklech da ginn, wann ee wierklech vill Chlorat op eemol géif zou sech huelen oder iwwert en extrem laan",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(d'\\s+[A-Z]\\w+|dat\\s+\\w+\\s+[A-Z]\\w+) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "A similar assessment was issued by Luxembourg’s Veterinary and Food Administration (ALVA), which acknowledges a potential risk in cases of ‘acute exposure’ to c",
+      "lb": "Änlech argumentéiert och d’Administration luxembourgeoise vétérinaire et alimentaire, kuerz ALVA, déi eng Gefor bei enger „akuter Expositioun“ vu Chlorat duerch",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "‘Acute exposure to chlorate, even for a single day, can affect health by reducing the blood’s ability to absorb oxygen, which may lead to kidney problems.",
+      "lb": "„Eng akut Expositioun mat Chlorat, och nëmmen een Dag, kann d’Gesondheet beaflossen, andeems se d’Fäegkeet vum Blutt, fir Sauerstoff opzehuelen, reduzéiert, wat",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "He is presenting his new book, La Photo, a documentary account of a photograph showing François Mitterrand in the company of Philippe Pétain, which caused a sca",
+      "lb": "Hie stellt säin neit Buch vir, „La Photo“, eng Dokumentatioun iwwer eng Foto, déi de Mitterand a Gesellschaft vum Maréchal Pétain weist, an déi deemools fir e S",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "The programme had been prepared in advance, as is common in journalism when dealing with an elderly, world-renowned figure.",
+      "lb": "D’Emissioun war am Viraus preparéiert, wéi et am Journalismus üblech ass bei engem eelere weltbekannte Personnage.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Live links from Rome are brought in throughout.",
+      "lb": "Dertëscht kommen ëmmer erëm Live-Schaltungen aus Roum.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Their son, Gerard, had a motorcycle accident between Dudelange and Mondorf.",
+      "lb": "Hire Fils Gerard hat tëscht Diddeleng an Munneref en Accident mam Motorrad.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "On Brill Street, an ordinary day. No photo, no book, no special radio broadcast, no successor being sought—and yet, since the morning of 21 April 2025, nothing ",
+      "lb": "An der Brillstrooss e banalen Dag, keng Foto, kee Buch, keng Spezialemissioun um Radio, keen Nofollger, dee gesicht gëtt, an dach ass hei de Moie vum 21. Abrëll",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Baerbock questioned how a hospital could possibly be evacuated in under 20 minutes.",
+      "lb": "Wéi kéint e Spidol a manner wéi 20 Minutten evakuéiert ginn, freet déi däitsch Ausseministesch.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_73a7f3d6dede",
+      "statement": "The subjunctive (conditional) is predominantly formed using the subjunctive forms of the auxiliary ginn (géifen) plus the infinitive of the main verb.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "géif|geif"
+        }
+      ],
+      "en": "Baerbock questioned how a hospital could possibly be evacuated in under 20 minutes.",
+      "lb": "Wéi kéint e Spidol a manner wéi 20 Minutten evakuéiert ginn, freet déi däitsch Ausseministesch.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(géif|geif) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Germany's foreign minister has renewed calls for a firm ceasefire, insisting that Israeli hostages must be released and humanitarian aid allowed back into Gaza.",
+      "lb": "Déi däitsch Ausseministesch huet op en Neits e feste Waffestëllstand gefuerdert. Déi israeelesch Geisele misste fräigelooss ginn an et misst nees humanitär Hëll",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "EU foreign ministers meeting at the Council in Kirchberg this morning approved €1.6 billion in financial aid for the Palestinian Authority.",
+      "lb": "D’EU-Ausseministere sinn sech de Moien um Conseil hei um Kierchbierg iwwer eng finanziell Hëllef an der Héischt vun 1,6 Milliarden Euro fir déi palästinensesch ",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "Anyone who goes public with their opinion must be prepared for a breeze—or rather, a storm—of reactions.",
+      "lb": "Dee mat senger Meenung an d’Press geet, muss riskéieren, eng kleng Lëftchen oder awer e Stuerm vu Reaktiounen ze provozéieren.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Lex Roth, laureate for 2022, is one of the protagonists strengthening the visibility of Luxembourgish in public spaces.",
+      "lb": "De Lex Roth, Laureat vun 2022, ass ee vun de Protagonisten, déi d’Visibilitéit vum Lëtzebuergeschen am ëffentleche Raum gestäerkt hunn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Thanks to his commitment, among other things, street and village names are also displayed in Luxembourgish.",
+      "lb": "Esou ginn zum Beispill dank sengem Asaz d’Stroossen an Uertschaftsnimm och op Lëtzebuergesch affichéiert.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "As a language and literature scholar, he was, among other things, a driving force behind the Luxembourgish orthography reform in 1975. He is the author of numer",
+      "lb": "Als Sproochen- a Literaturwëssenschaftler war hien ënnert anerem déi dreiwend Kraaft bei der Orthografie vum Lëtzebuergeschen 1975 an ass Auteur vun enger breed",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "DP party president Carole Hartmann said in the 100.7 interview that differences of opinion on the issue of abortion should be discussed within the DP’s party co",
+      "lb": "D’DP-Parteipresidentin Carole Hartmann sot am 100,7 Interview, datt an de Parteigremie vun der DP an den nächste Wochen iwwer Meenungsverschiddenheeten zum Them",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "DP party president Carole Hartmann said in the 100.7 interview that differences of opinion on the issue of abortion should be discussed within the DP’s party co",
+      "lb": "D’DP-Parteipresidentin Carole Hartmann sot am 100,7 Interview, datt an de Parteigremie vun der DP an den nächste Wochen iwwer Meenungsverschiddenheeten zum Them",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "‘It is an opinion that is not the opinion of the Democratic Party.",
+      "lb": "„Et ass eng Meenung, déi net d’Meenung ass vun der Demokratescher Partei.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "And we are, as a party— I say this quite clearly—completely united when I think of our discussions in the Executive Committee regarding our position on includin",
+      "lb": "A mir sinn do als Partei, dat soen ech awer ganz kloer, ganz geschlossen, wann ech un eis Diskussiounen elo denken, am Comité Directeur, wou et iwwert eise Posi",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Although much has already been achieved in terms of human rights and equality, Hartmann said that rights and freedoms must continually be defended so that peopl",
+      "lb": "Obwuel scho vill erreecht gi wier a Saache Mënscherechter a Gläichberechtegung misst een ëmmer nees fir verschidde Rechter a Fräiheete kämpfen, fir datt een „ne",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "When contacted for comment, DP MP Gérard Schockmel said that he currently does not wish to comment on the recent discussions surrounding his guest contribution ",
+      "lb": "Den DP-Deputéierte Gerard Schockmel wëll fir den Ament näischt zu de rezenten Diskussiounen iwwert säi Gaaschtbäitrag am Wort an och net iwwer seng Zukunft an d",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "EU states adopt new sanctions against Russia",
+      "lb": "EU-Staaten hunn nei Sanktioune géint Russland decidéiert",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_73a7f3d6dede",
+      "statement": "The subjunctive (conditional) is predominantly formed using the subjunctive forms of the auxiliary ginn (géifen) plus the infinitive of the main verb.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "géif|geif"
+        }
+      ],
+      "en": "Luxembourg’s foreign minister Xavier Bettel also made clear statements directed at Moscow: before peace talks can begin, a ceasefire is essential.",
+      "lb": "Och den Ausseminister Xavier Bettel ass kloer a sengen Aussoen an Direktioun Moskau: Ier Friddensverhandlungen ufänken, misst et obligatoresch zu enger Wafferou",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(géif|geif) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "Luxembourg’s foreign minister Xavier Bettel also made clear statements directed at Moscow: before peace talks can begin, a ceasefire is essential.",
+      "lb": "Och den Ausseminister Xavier Bettel ass kloer a sengen Aussoen an Direktioun Moskau: Ier Friddensverhandlungen ufänken, misst et obligatoresch zu enger Wafferou",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "With the help of AI, the artist creates creatures she calls Critters.",
+      "lb": "Zesumme mat enger AI kreéiert d’Kënschtlerin Kreaturen, respektiv Critters, wéi d’Kënschtlerin se selwer nennt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "Through their intended realism, fantasy and reality merge.",
+      "lb": "Duerch de Realismus, deen bei dëse fiktive Kreature matschwéngt an och sou gewollt ass, vermëscht sech liicht Fantasie a Realismus.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "Over the past few years, whenever I had exhibitions, I imagined them as the next level.",
+      "lb": "An di läscht Joren ass et ëmmer erëm dozou komm datt ech Ausstellungen hat a mir virgestallt hunn dass dat en neie Level ass.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_4748b3f93481",
+      "statement": "The feminine definite article 'der' generally does not cliticize to dative prepositions.",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": null,
+          "value": "^(?!zur).*der$"
+        }
+      ],
+      "en": "Just as a painter works with oil—a medium that stays wet for a long time and therefore remains changeable—the same applies to video game development.",
+      "lb": "Genee sou wéi e Moler mat Ueleg molt, engem Medium dat jo extrem laang fiicht an dohier verännerbar ass an dohier ëmmer nees eppes verännere kann, ass dat och b",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?!zur).*der$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_e934783fef93",
+      "statement": "Female first names are always treated as neuter nouns for the purpose of article and adjective agreement.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "d'\\s+[A-Z]\\w+|dat\\s+\\w+\\s+[A-Z]\\w+"
+        }
+      ],
+      "en": "The 21 organisations forming the platform accuse the Minister for Agriculture, Martine Hansen, of being unwilling to engage in dialogue.",
+      "lb": "Déi 21 Organisatioune vun der Plattform geheien der Landwirtschaftsministerin Martine Hansen vir, net dialogbereet dofir ze sinn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(d'\\s+[A-Z]\\w+|dat\\s+\\w+\\s+[A-Z]\\w+) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_4748b3f93481",
+      "statement": "The feminine definite article 'der' generally does not cliticize to dative prepositions.",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": null,
+          "value": "^(?!zur).*der$"
+        }
+      ],
+      "en": "Let me reassure you: Young people won’t enjoy their frappuccinos more just because the black-blue government decided not to touch their study years.",
+      "lb": "A bei de Jonke léisst sech de Cappuccino och net och net domadder verséissen, andeems Schwaarz-Blo sech weider zu der Unerkennung vun de Studiejore bekennt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?!zur).*der$) => 3 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_4748b3f93481",
+      "statement": "The feminine definite article 'der' generally does not cliticize to dative prepositions.",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": null,
+          "value": "^(?!zur).*der$"
+        }
+      ],
+      "en": "This change led many users to move to competitors such as Telegram and Signal.",
+      "lb": "Dës Ännerungen haten als Suitte, datt vill Notzer vum System bei d’Konkurrenz vun Telegram oder Signal gewiesselt sinn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?!zur).*der$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "These regulations, however, currently do not apply to the EU and the UK, where only changes aimed at improving company accounts have been made, WhatsApp says.",
+      "lb": "Dës Bestëmmunge gëllen awer aktuell net fir d’EU a Groussbritannien, wou een Ännerunge just fir Verbesserunge vun de Konte vun Entreprise gemaach huet, heescht ",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "Telegram is the big winner in the current situation: it gained 25 million new users in the last 72 hours.",
+      "lb": "Telegram ass dann de grousse Gewënner vun der aktueller Situatioun, well si an de leschten 72 Stonnen 25 Milliounen nei User dozougewonnen hunn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_73a7f3d6dede",
+      "statement": "The subjunctive (conditional) is predominantly formed using the subjunctive forms of the auxiliary ginn (géifen) plus the infinitive of the main verb.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "géif|geif"
+        }
+      ],
+      "en": "At yesterday’s quadripartite meeting, the social partners also agreed that contributions should not be increased immediately, Martine Deprez told 100,7 this mor",
+      "lb": "Op der Quadripartite gëschter wieren d’Sozialpartner sech och eens gewiescht, datt d’Cotisatiounen net sollen direkt gehéicht ginn, sot d’Martine Deprez de Moie",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(géif|geif) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "That’s why we said, no, let’s wait and see what else we can achieve, and then we’ll have that discussion next year in November.’",
+      "lb": "An duerfir hu mer gesot, nee, komm mir waarden elo mol, kucke mer, wat mer anescht kënnen erreechen, an da féiere mer déi Diskussioun d’nächst Joer am November.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "This law was specifically adopted at the time to regulate the funding and operation of SuperDrecksKëscht.",
+      "lb": "Dëst Gesetz ass deemools speziell gestëmmt gi fir de Finanzement an de Fonctionement vun der Superdreckskëscht ze reegelen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "The opinion of the Chamber’s scientific unit, which was presented and discussed yesterday in the Budgetary Execution Committee without the presence of Minister ",
+      "lb": "Den Avis vun der Cellule scientifique vun der Chamber, dee gëschter, ouni d ́Presenz vun der Madamm Minister Carole Dieschbourg an der Commission d ́exécution b",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "Ladies and gentlemen, no government and no law should have the power to force a terminally ill person, who seeks assistance in dying, to continue a life that ha",
+      "lb": "Kee Staat a kee Gesetz, Dir Dammen an Dir Hären, kann e Mënsch zum Liewe forcéieren, wann e Patient Hëllef verlaangt fir ze stierwen, well e säi Liewen net méi ",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "That, ladies and gentlemen, is what we mean by euthanasia at the explicit request of the patient, and the patient alone, for whom life has become a matter of se",
+      "lb": "Dat ass, Dir Dammen an Dir Hären, Stierfhëllef op ausdréckleche Wonsch vum Patient a vun him eleng, deem säi Liewen nach just sënnloost Leide fir hie selwer ass",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "Euthanasia can in no way be equated to murder, since the person concerned explicitly asks to die.",
+      "lb": "Vu Mord ka bei Stierfhëllef net geschwat ginn, well par définition deen Doud nëmme passéiert op Ufro hin.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "This, ladies and gentlemen, is what we will be discussing and voting on today.",
+      "lb": "Dat ass, Dir Dammen an Dir Hären, dat Gesetz, iwwert dat mir haut diskutéieren an ofstëmme wäerten.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Having a law pertaining to an exceptional situation does not make it a special provision, because this legal framework still applies to any doctor and any perso",
+      "lb": "E Gesetz, wat d’Reegel ass fir Ausnamefäll ass dofir nach ëmmer keng Loi d’exception, well et bleift e Gesetz fir all Dokter a fir all Mënsch, deen um Enn vu se",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "What is happening here in Luxembourg is not worthy of a constitutional democracy.",
+      "lb": "Trotzdeem geschitt weider hei zu Lëtzebuerg dat, wat eigentlech enger Demokratie an engem Rechtsstaat onwierdeg ass.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_b8a95b630126",
+      "statement": "Full forms of the definite article can function as demonstratives, receiving word stress to indicate proximity or emphasis.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(dee|déi|dësen|dës|dëst)"
+        }
+      ],
+      "en": "On the contrary. This law will guarantee that, unlike today, no one will be forced to act against their own convictions.",
+      "lb": "Dat Gesetz hei contrairement zu der aktueller Situatioun wäert och muer kee forcéieren, eppes ze maachen, wat hie fir sech net richteg fënnt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((dee|déi|dësen|dës|dëst)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "This law not only guarantees greater freedom, but also creates equal opportunities or fairness in a process that is anything but fair. We all know that those wh",
+      "lb": "Net nëmme fir d’Fräiheet, mä och fir d’Gläichheet vun Ongläichen am Liewe brauche mer dëst Gesetz, well mer wëssen, dass déi Leit, déi déi richteg Leit kennen o",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Equality is a human right and a new law on euthanasia would help guarantee it.",
+      "lb": "Och d’Egalitéit ass e Mënscherecht, an och dëst Mënscherecht géif en neit Gesetz iwwert d’Stierfhëllef garantéiere kënnen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Equality is a human right and a new law on euthanasia would help guarantee it.",
+      "lb": "Och d’Egalitéit ass e Mënscherecht, an och dëst Mënscherecht géif en neit Gesetz iwwert d’Stierfhëllef garantéiere kënnen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Anyone who has been through such an experience knows that things will get better.",
+      "lb": "Déi Leit, déi dat schonn erlieft hunn, déi wëssen, dass ee vun esou Saachen erëm gutt gëtt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "No one but the patient can decide how much they can bear.",
+      "lb": "Well nëmmen de Patient eleng kann entscheeden, wat fir hie supportabel oder net ass.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Interestingly, Belgian lawmakers have looked into whether the law they passed a few years ago is compatible with the European Convention on Human Rights.",
+      "lb": "Et ass interessant ze wëssen, dass Juristen an der Belsch sech Gedanke gemaach hunn, ob dat Gesetz, wat si virun e puer Joer ugeholl hunn, konform wier zur Euro",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Under no circumstances should that man have been intubated a second time.",
+      "lb": "Dee Mann hätt a guer kengem Fall däerfen déi zweete Kéier intubéiert ginn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "Madam Err agreed with our concerns. At the time, she noted that consensus still needed to be reached on four or five questions, and that there was sufficient ti",
+      "lb": "An dat war ons och vun der Madamm Err bestätegt ginn, well si hat deemools gesot, dass ee sech misst nach op véier, fënnef Froen eens maachen an dass een Zäit d",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "But our efforts were dismissed.",
+      "lb": "Dës Bestriewunge vun onser Säit goufe verworf.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "But our efforts were dismissed.",
+      "lb": "Dës Bestriewunge vun onser Säit goufe verworf.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_4748b3f93481",
+      "statement": "The feminine definite article 'der' generally does not cliticize to dative prepositions.",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": null,
+          "value": "^(?!zur).*der$"
+        }
+      ],
+      "en": "So it should come as no surprise that our group is not prepared to vote in favour of this bill in its current form today.",
+      "lb": "Et däerf deemno keen iwwerraschen, dass meng Fraktioun och haut net bereet ass, den Text vun der Proposition de loi, wéi e virläit, ze stëmmen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?!zur).*der$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "From an ethical and legal perspective, this text leaves much to be desired.",
+      "lb": "Dësen Text ass medezinesch an ethesch héchst bedenklech.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_b8a95b630126",
+      "statement": "Full forms of the definite article can function as demonstratives, receiving word stress to indicate proximity or emphasis.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(dee|déi|dësen|dës|dëst)"
+        }
+      ],
+      "en": "There is a clear line that sets our position apart from that of the authors of this bill.",
+      "lb": "Et gëtt am Fong eng einfach Trennungslinn tëscht onser Positioun an där vun den Auteuren.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((dee|déi|dësen|dës|dëst)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "It draws a clear distinction between euthanasia as a person’s fundamental right to self-determination, even when they are not in a medically hopeless situation,",
+      "lb": "Dës Trennungslinn etabléiert den Ënnerscheed tëscht Stierfhëllef als absolutten Usproch am Kader vun der Selbstbestëmmung vum Mënsch, och wann e sech net an eng",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "That’s certainly one way of stating one’s intentions.",
+      "lb": "Dann ass et och evident, wat ee wëllt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_430c8fe9970a",
+      "statement": "Most loanwords entering Luxembourgish are assigned masculine gender by default.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "den|en"
+        }
+      ],
+      "en": "This may not be very noble, but at least it sends a clear message.",
+      "lb": "Dat ass net besonnesch nobel, mä et ass op d’mannst kloer.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(den|en) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "And a last one: ‘I fully support the vote taken just an hour ago: expanding palliative care services here in Luxembourg must remain the priority.’",
+      "lb": "An och nach: „D’Prioritéit bleift an alle Fäll an ech stinn do zu deem Vote, dee grad gemaach ginn ass, virun enger gudder Stonn den Ausbau vun der Palliativmed",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "But that’s not the point here.",
+      "lb": "Mä et geet net dodrëm.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "Gorz had obtained poison from a doctor, which allowed him not only to end the life of his wife, who was gravely ill, but also to take his own.",
+      "lb": "Deen hat sech Gëft besuergt vun engem Dokter, mat deem en net nëmme konnt seng Fra ëmbréngen, déi effektiv schwéier krank war, mä och sech selwer.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The proposal clearly introduced the idea of euthanasia as an option from the point of diagnosis of a serious illness, regardless of the disease’s course, the ra",
+      "lb": "Hei goung et eendeiteg ëm Stierfhëllef ab Diagnos vun enger méi schlëmmer Krankheet an onofhängeg dovun, wéi de Krankheetsverlaf da sollt sinn, an dovun, wéi sé",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The inability of the authors of the bill and the CSV to reach an agreement.",
+      "lb": "D’Auteure vun der Proposition de loi an d’CSV kënne sech net eenegen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The CSV parliamentary group and party respect belief systems and opinions that differ from their own.",
+      "lb": "D’CSV-Fraktioun an d’CSV als Partei hu Respekt viru verschiddenen Iwwerzeegungen, viru Meenungen, déi hir net sinn, mä déi awer selbstverständlech aneren hir kë",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "For that reason, we have not been able to reach an agreement on our amendments.",
+      "lb": "A well et ons net ëm dat selwecht gaangen ass, konnt och keng Eenegung op onsen Amendementer erbäigefouert ginn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "We have done the work and made our proposals for amendments known.",
+      "lb": "Mir hunn onst probéiert an ons Amendementspropositioune si bekannt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "If it weren’t for these, we could accept the other two, which are flawed in terms of wording and substance, but not decisive.",
+      "lb": "Wann déi net esou wieren, wéi se nun eben awer sinn, da kéint een déi zwee aner als textuell an inhaltlech Onzoulänglechkeete qualifizéieren, déi awer net bestë",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Distinguishing between euthanasia and assisted suicide bears no relevance to us, as we consider the outcome to be identical.",
+      "lb": "Dobäi ass fir ons manner wichteg, ob et sech ëm Stierfhëllef oder medezinesch Hëllef zum Selbstmord handelt, well d’Resultat ass fir ons dat selwecht.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The reason is that Wallonia has a much more developed tradition and practice in palliative medicine than Flanders does.",
+      "lb": "Neen, et läit dorun, dass Wallounien eng méi staark entwéckelt palliativ Praxis an Traditioun an der Pallativmedezin huet, déi Flandern net huet.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "That’s why we see more cases of ‘unbearable suffering’ in Flanders than in Wallonia.",
+      "lb": "Esou kënnt et dann, dass vill méi onerträglech schéngend Leiden a Flandern optauche wéi a Wallounien.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "This naturally includes recognition of the patient’s right to refuse treatment, including palliative care – a right long established in our system, even if it i",
+      "lb": "Dat Ganzt mat engem explizitte Verweis op d’Patienterecht, fir en Traitement, och e palliativen, ze refuséieren, dat schonn zënter laanger Zäit bei ons, och wan",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "This naturally includes recognition of the patient’s right to refuse treatment, including palliative care – a right long established in our system, even if it i",
+      "lb": "Dat Ganzt mat engem explizitte Verweis op d’Patienterecht, fir en Traitement, och e palliativen, ze refuséieren, dat schonn zënter laanger Zäit bei ons, och wan",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "Do we want a system that defends life, even in its final moments, or one that promotes a morbid fascination with suicide, simply because we no longer want to fa",
+      "lb": "Wëlle mer eng Kultur vum Liewen, och um Liewensenn, oder wëlle mer eng Kultur, wou de Fräidoud eng morbid Faszinatioun soll duerstellen, well mer ons mat deene ",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Do we want a society in which everything that is no longer young, beautiful, and lively is considered unbearable and should be erased from our view?",
+      "lb": "Wëlle mer eng Gesellschaft, an där alles, wat net méi jonk a schéin a lëschteg ass, am Fong onerträglech gëtt a soll aus onsem Bléck verschwannen?",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The CSV insists on the latter.",
+      "lb": "D’CSV wëllt eendeiteg dat Zweet.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "Because of potential abuse, because of the pressure that can be placed on patients, because of the ‘unbearable lightness of being’, an argument already used to ",
+      "lb": "Och wéinst de méiglechen Abusen, och wéinst dem Drock, dee kann op d’Patienten ausgeüübt ginn, och wéinst der „unerträglichen Leichtigkeit des Seins“, mat där s",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 2 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "I am a doctor myself, and I trust the medical expertise of my colleagues.",
+      "lb": "Ech si selwer Dokter, an et ka kee vu mir soen, ech wier sonnerlech mësstrauesch par rapport zu mengen Dokteschkolleegen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Nor is there a thorough assessment of the kind of suffering and the underlying reasons driving the patient’s wish, since this second doctor does not engage with",
+      "lb": "An do gëtt haaptsächlech och net am Detail gekuckt, wat fir eng Zort Leiden de Patient motivéiert a woufir, well keen Dokter de Patient ënnert d’Lupp hëlt, dee ",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "Do we not, after all, need additional checks – which may well be a little cumbersome in our view – to ensure that no one dies who might later have changed their",
+      "lb": "Oder dränge sech net nach awer Verifikatiounen op, déi onser Meenung no roueg kënnen e bësse schwéierfälleg sinn, fir ze verhënneren, dass deen, deen op eemol s",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "This is a decision about ending a person’s life at their own request.",
+      "lb": "Hei geet et drëm, ob e Mënsch op säi Verlaangen hin doutgemaach soll ginn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "But there can be no full or absolute immunity from legal action in cases of euthanasia.",
+      "lb": "Mä déi total an absolut Immunitéit vu geriichtleche Suitë vun enger Euthanasie kann et net ginn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "The medical profession is regulated and has its own disciplinary body. However, it would be absurd for them to intervene because a commission has concluded that",
+      "lb": "Déi medezinesch Professioun ass eng, déi reguléiert ass an iwwer en disziplinarescht Organ verfüügt, mä dat kann dach verstännegerweis net befaasst ginn, wann e",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "And why should the AMMD be responsible for appointing two of the three doctors?",
+      "lb": "A woufir muss et d’AMMD sinn, déi jo zwee vun deenen dräi Doktere soll stellen?",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Decisions can be made with only seven of the nine members present,",
+      "lb": "Nëmme siwe vun hiren néng Membere mussen do sinn, wa se hir Decisiounen hëlt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "We know that 70 to 80% of people in our country say they support euthanasia.",
+      "lb": "Mir wëssen, dass 70–80 % vun de Leit an onsem Land sech fir aktiv Stierfhëllef ausschwätzen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "Therefore, we uphold our position from 19 February.",
+      "lb": "Deemno bleift ons Haltung elo selbstverständlech déi, déi se den 19. Februar war.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "I am therefore opposed to the introduction of a mandatory intermediate stage, at the end of which it would be practically impossible for the individual to make ",
+      "lb": "Ech sinn dergéint, dass hei eng obligatoresch Zwëschenetapp agebaut gëtt, souzesoen e Passageexamen, um Enn vun deem et fir déi concernéiert Persoun praktesch o",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 3 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "This issue has, of course, been the subject of numerous debates in the general public as well as in the media, which is hardly surprising given the sensitive na",
+      "lb": "Dës Fro gouf natierlech an der Ëffentlechkeet, an de Medien diskutéiert, kontrovers diskutéiert, wat bei esou engem sensibele Sujet jo och net verwonnerlech ass",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_73a7f3d6dede",
+      "statement": "The subjunctive (conditional) is predominantly formed using the subjunctive forms of the auxiliary ginn (géifen) plus the infinitive of the main verb.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "géif|geif"
+        }
+      ],
+      "en": "Mr President, I sincerely hope that once this law has been democratically adopted, the smear campaigns will finally come to an end, and that it will be recognis",
+      "lb": "Här President, ech hoffe wierklech, dass, nodeems dat Gesetz hei demokratesch gestëmmt ass, déi Hetzcampagne elo endlech ophält, dass endlech erkannt an unerkan",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(géif|geif) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "However, I believe such fears are unfounded, as this law contains a number of legal safeguards.",
+      "lb": "Ech sinn awer där Meenung, dass déi Angscht net begrënnt ass, well am Gesetz eng ganz Rei vu Garde-fouen agebaut sinn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_4748b3f93481",
+      "statement": "The feminine definite article 'der' generally does not cliticize to dative prepositions.",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": null,
+          "value": "^(?!zur).*der$"
+        }
+      ],
+      "en": "The doctor must follow to a very strict procedure and start by informing the patient about their medical condition.",
+      "lb": "Den Dokter muss sech un eng ganz strikt Prozedur halen, ugefaangen domadder, dass hien de Patient muss iwwer säi medezineschen Zoustand opklären.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?!zur).*der$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "At the same time, a Control and Assessment Committee will be established, which will not only register all end-of-life provisions but, more importantly, ensure ",
+      "lb": "Et gëtt och eng Commission nationale de contrôle et d’évaluation geschaf, déi net nëmmen d’Dispositions de fin de vie soll enregistréieren, mä déi och virun all",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Nevertheless, it should be emphasised that a doctor who follows the procedure as set out in the law can be certain of full legal protection.",
+      "lb": "Ech muss awer och ënnersträichen, dass en Dokter, wann en d’Prozeduren, wéi se am Gesetz virgesi sinn, respektéiert, doudsécher déi néideg Rechtssécherheet huet",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "statement": "Possessive articles have specific base forms for singular and plural possessors, which agree with the possessor's person and number.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(mäin|däin|säin|hir|eis|är)"
+        }
+      ],
+      "en": "Opponents of euthanasia claim that elderly and vulnerable citizens would have to fear for their lives and that such a law would pressure or bully people into eu",
+      "lb": "D’Euthanasiegéigner behaapten, eeler a schwaach Matbierger misste mat esou engem Gesetz ëm hiert Liewe fäerten. Esou Leit géifen ënner Drock gesat ginn, jo, si ",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((mäin|däin|säin|hir|eis|är)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Mr President, I must say that those who claim such things hold an extremely pessimistic view of humanity and see in human beings above all what is bad and evil.",
+      "lb": "Ech muss soen, Här President, déi, déi esou eppes behaapten, hunn eng extrem pessimistesch Vue a gesinn am Mënsch virun allem dat Schlecht an dat Béist.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "To my knowledge, the possibility of divorce exists, but no one is forced to get divorced.",
+      "lb": "Menges Wëssens ass d’Méiglechkeet vum Scheeden, vum Divorce do, si forcéiert awer kee Mënsch sech scheeden ze loossen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "Mr Bodry, you have the floor.",
+      "lb": "Här Bodry, Dir hutt d’Wuert.",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 1 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "That is anything but self-evident.",
+      "lb": "Dat ass a bleift keng Selbstverständlechkeet.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "Every individual should also be granted the right to refuse palliative care; that too is a human right, and to shape one’s final weeks and one’s departure from ",
+      "lb": "All Eenzelnem sollt een och dat Recht zougestoen, eventuell eng Palliativbetreiung ze verweigeren och dat ass e Mënscherecht a seng lescht Wochen, säin Ausschee",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_b8a95b630126",
+      "statement": "Full forms of the definite article can function as demonstratives, receiving word stress to indicate proximity or emphasis.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": null,
+          "value": "(dee|déi|dësen|dës|dëst)"
+        }
+      ],
+      "en": "But I do believe that everyone should be granted a choice in this matter.",
+      "lb": "Ech mengen awer, dass ee sollt jiddwerengem e Choix an där doter Fro loossen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((dee|déi|dësen|dës|dëst)) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "All the doctors we speak to say so.",
+      "lb": "Dat soen all d’Dokteren, mat deenen ee schwätzt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "It is now clearly stated—so that no ambiguity arises—that children and people with dementia do not fall under this law and are therefore not subject to the prov",
+      "lb": "Et ass elo kloergestallt, fir dass keng Ambiguitéit opkënnt, dass zum Beispill Kanner, dass dement Leit net ënnert dat heite Gesetz falen, also net ënnert d’Bes",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "It is now clearly stated—so that no ambiguity arises—that children and people with dementia do not fall under this law and are therefore not subject to the prov",
+      "lb": "Et ass elo kloergestallt, fir dass keng Ambiguitéit opkënnt, dass zum Beispill Kanner, dass dement Leit net ënnert dat heite Gesetz falen, also net ënnert d’Bes",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Absolute protection against abuse does not exist.",
+      "lb": "En absolutte Schutz géint Mëssbräich kann een net hunn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "I can only warn against legislating with the obsession of regulating every conceivable exceptional case. If we do that, we produce poor laws, because perfection",
+      "lb": "An ech kann nëmmen dervir warnen, wa mer ëmmer just nach Gesetzer maachen an der Optik, dass mer déi absolut Ausnamefäll och nach wëlle matreegelen, dass mer an",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "The CSV has shifted its position; that is true.",
+      "lb": "D’CSV huet sech beweegt, dat stëmmt.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "And the vote in the Chamber ultimately also reflects all those nuances that one may personally hold with regard to these questions.",
+      "lb": "An de Vote an der Chamber dréckt jo eigentlech och all déi Nuancen do aus, déi een och perséinlech kann hunn zu deenen dote Froen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "A number of individual provisions and minor details have changed, but the main points and the philosophical essence of our proposal remain intact.",
+      "lb": "Eng Rei vun eenzelnen Dispositiounen a kleng Detailer hu geännert, mä d’Haaptpunkten an déi philosophesch Essenz vun eiser Propos bleiwe bestoen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "I already said earlier, during the debate on the law on palliative care, that for us Greens, palliative care and active assisted dying are complementary—that is",
+      "lb": "Ech hat virdru beim Gesetz iwwert d’Soins palliatifs scho gesot, datt fir eis Gréng d’Soins palliatifs an d’aktiv Stierfhëllef complementaire sinn, dat heescht ",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_7af453fdf249",
+      "statement": "The verbal suffixes -t and -s have zero allomorphs (-∅) when the verb stem ends in an alveolar obstruent ([t, d, s, z]).",
+      "constraints": [
+        {
+          "kind": "must_exclude_regex",
+          "level": "token",
+          "value": "^(?:.*(?:tt|dd|ss|zz))$"
+        }
+      ],
+      "en": "This term, euthanasia, and what is meant by it, was unfortunately completely abused in Germany by the Nazis, because the barbaric mass exterminations carried ou",
+      "lb": "Dëse Begrëff Euthanasie a wat domadder gemengt ass, ass leider an Däitschland vun den Nazien total mëssbraucht ginn, well déi barbaresch Massevernichtungen, due",
+      "messages": [
+        "applicability not required by caller",
+        "must_exclude_regex(^(?:.*(?:tt|dd|ss|zz))$) => 3 violation(s)"
+      ]
+    },
+    {
+      "card_id": "LB_353e50a17df4",
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunction (complementizer) must take the inflectional suffix {-s}.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "sentence",
+          "value": "(datt|wéini|wéin)\\s*s\\b"
+        }
+      ],
+      "en": "This term, euthanasia, and what is meant by it, was unfortunately completely abused in Germany by the Nazis, because the barbaric mass exterminations carried ou",
+      "lb": "Dëse Begrëff Euthanasie a wat domadder gemengt ass, ass leider an Däitschland vun den Nazien total mëssbraucht ginn, well déi barbaresch Massevernichtungen, due",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex((datt|wéini|wéin)\\s*s\\b) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Can you truly not imagine that a doctor who helps a desperate patient might do so out of genuine compassion, perhaps even out of Christian charity?",
+      "lb": "Kënnt Der Iech wierklech net virstellen, datt en Dokter, dee sengem verzweifelte Patient hëlleft, dat just aus engem absolut positive Matgefill, eventuell aus c",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "And that therefore no law is needed.",
+      "lb": "Duerfir bräicht een dach eigentlech kee Gesetz ze maachen.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_0c9c0e28da81",
+      "statement": "The definite article in Luxembourgish has two forms: a full form and a reduced (clitic) form. The choice depends on whether an adjective intervenes in the noun phrase.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Abuses can occur precisely where there is no regulation—not only in the context of assisted dying, but especially in countries where euthanasia is completely pr",
+      "lb": "Abuse kënnen nämlech grad do passéieren, an net nëmmen am Fall vu Stierfhëllef – net nëmmen am Fall vu Stierfhëllef! –, mä besonnesch a Länner, wou d’Euthanasie",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^deen$', '^déin$', \"^d\\\\\\\\'\", '^den$', '^dem$', '^der$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "But if someone wanted to do that to a grandmother and her inheritance, Ladies and Gentlemen, they would not need drugs such as pentobarbital or pancuronium, whi",
+      "lb": "Mä wann een dat wéilt maache mat der Boma a mat der Ierfschaft, dofir brauch een, Dir Dammen an Dir Hären, iwwregens guer net déi Medikamenter, Pentobarbital be",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "statement": "The most common past tense is the present perfect, formed analytically with an auxiliary (sinn or hunn) and the past participle.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "phrase",
+          "value": ".*(hunn|hu(?:nn)?|sinn).*ge.*"
+        }
+      ],
+      "en": "And so would other drugs administered at higher doses.",
+      "lb": "An dat geet och mat anere Medikamenter, déi vill méi héich doséiert ginn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(.*(hunn|hu(?:nn)?|sinn).*ge.*) => 0 hit(s) [whole-string]"
+      ]
+    },
+    {
+      "card_id": "LB_d121073f582e",
+      "statement": "The suffix -en is the default plural marker for most masculine and feminine nouns and borrowings.",
+      "constraints": [
+        {
+          "kind": "must_include_regex",
+          "level": "token",
+          "value": "^.*en$"
+        }
+      ],
+      "en": "And so would other drugs administered at higher doses.",
+      "lb": "An dat geet och mat anere Medikamenter, déi vill méi héich doséiert ginn.",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_regex(^.*en$) => False [token-wise; anchored]"
+      ]
+    },
+    {
+      "card_id": "LB_55952182c95e",
+      "statement": "Luxembourgish does not distinguish between strong and weak adjective inflection; the same suffixes are used regardless of whether the article is definite or indefinite.",
+      "constraints": [
+        {
+          "kind": "must_include_any_regex",
+          "level": "token",
+          "value": null
+        }
+      ],
+      "en": "Ladies and Gentlemen, I ask whether such a situation is not far more explosive and irresponsible than the purely hypothetical abuses that might occur under an a",
+      "lb": "Dir Dammen an Dir Hären, ech stellen d’Fro, ob esou eng Situatioun net vill méi brisant an onverantwortlech ass, wéi reng hypotheetesch Abusen, déi et kéint eve",
+      "messages": [
+        "applicability not required by caller",
+        "must_include_any_regex(['^dënn-en$', '^dënn-en$']) => 0 hits"
+      ]
+    }
+  ]
+}

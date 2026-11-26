@@ -32,7 +32,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from grammetarl.rewards.grammar_reward import grammar_reward_verdicts, grammar_reward_weighted
 from grammetarl.rewards.reliability import ReliabilityTable
 from grammetarl.schema import MBGCard
-from grammetarl.validator import TranslationVerifier
+from grammetarl.validator import TranslationVerifier, has_source_conditional
 from scripts.label_with_judge import key
 
 
@@ -51,6 +51,11 @@ def main() -> None:
     ap.add_argument("--labeled-out", default="data/processed/labeled_gated.jsonl")
     ap.add_argument("--min-precision", type=float, default=0.5,
                     help="Predicate precision vs the judge (held-out number when available)")
+    ap.add_argument("--quality", default="",
+                    help="artifacts/audit/rule_quality_matrix*.json: only rules certified usable "
+                         "(agreement AND discrimination AND not self-restating) may label pairs")
+    ap.add_argument("--allow-provisional", action="store_true",
+                    help="also admit rules that pass quality but fall below the support floor")
     ap.add_argument("--min-agreement", type=float, default=0.0,
                     help="Also require the card's constraint agreement (support-shrunk) under the SAME "
                     "applicability gating the pipeline uses. Without it a card with a good predicate but "
@@ -72,12 +77,20 @@ def main() -> None:
             ok_pred.add(cid)
     ok_rel = {cid for cid in {c.id for c in cards}
               if table.weight(cid) > 0.0 and table.agreement(cid) >= args.min_agreement}
-    def has_source_conditional(c: MBGCard) -> bool:
-        return any(x.kind == "source_conditional" for x in c.output_constraints)
-
     # A source-conditional rule is gated by its own condition (the source pattern), so it does not
     # need a separately validated target-side predicate - the axis every compiled predicate failed.
     allowed = {c.id for c in cards if c.id in ok_rel and (c.id in ok_pred or has_source_conditional(c))}
+
+    # A rule whose constraint cannot fail (discrimination ~0) contributes a CONSTANT reward: it can
+    # never penalize, so "0% false penalties" over such a set is a measurement artifact, not quality.
+    # --quality ties the label gate to the three-axis matrix so the same rules are certified once.
+    if args.quality:
+        qm = json.loads(Path(args.quality).read_text("utf-8"))
+        keep = {k for k, v in qm.items() if v.get("usable")
+                or (args.allow_provisional and v.get("provisional"))}
+        dropped = sorted(allowed - keep)
+        allowed &= keep
+        print(f"quality-gated: dropped {len(dropped)} {dropped} -> allowed {len(allowed)}")
     subset = [c for c in cards if c.id in allowed]
 
     cache: dict[str, bool] = {}
