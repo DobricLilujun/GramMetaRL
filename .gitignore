@@ -40,3 +40,6 @@ artifacts/recompile/*
 !artifacts/recompile/report.json
 
 !data/rules/mbg_cards_precise_app.jsonl
+
+!data/rules/manual_triggers.json
+!data/processed/labeled_gated.jsonl

@@ -236,3 +236,47 @@ Gate G26 requires the table to exist, weights in [0,1], >=5 rules with weight > 
 reward-sanity artifact to show the weighted false-penalty rate strictly below the unweighted one.
 Wired into `run_eval` (`--reliability`, default `data/rules/reliability.json`); `grammar_verify`
 now returns `rule_ids` aligned 1:1 with `verdicts` so weights can be attached downstream.
+
+## 4. Applicability predicates: measured precision, and the gated verifier
+
+Applicability is the gate that decides whether a check runs, so a bad predicate is worse than a bad
+constraint: a false positive re-imports the false penalty, a false negative silently deletes signal.
+The judge cache is ground truth for this, so predicates are scored with zero model calls
+(`scripts/validate_triggers.py`).
+
+| predicate source | judge-applicable checks | predicate fires | agreement | precision | recall |
+|---|---|---|---|---|---|
+| bulk LLM-compiled (Strata, precise subset) | 17 | 341 | 14 | **0.041** | 0.824 |
+| hand-authored from judge-labeled examples | 123 | 199 | 69 | **0.347** | 0.561 |
+| same, held-out half (rows 601-1200) | 69 | 112 | 40 | **0.357** | 0.580 |
+
+Per card (held-out P/R): possessive determiner 0.77/0.57, present perfect 0.67/0.55, default -en
+plural 0.50/0.40 - kept; subordinate clause 0.19/0.65 and 1sg present 0.30/0.75 - rejected for
+precision. Guided authoring beats bulk compilation by ~8.5x on precision at similar recall, and the
+held-out half shows it is not fit to the pool.
+
+Two structural findings:
+1. **The judge labels applicability of the card's stated trigger, not of the whole rule
+   configuration.** For LB_353e50a17df4 ("complementizer takes {-s} with a 2sg subject") the judge
+   marks "subordinate clause present" applicable (31/369) while none of the positives contain a 2sg
+   subject. A predicate fitted to the *rule* rather than the *trigger* cannot agree with it.
+2. **For always-surface-present rules, applicability is near-degenerate**: LB_0c9c0e28da81 is judged
+   applicable on 162 pairs and not applicable on 157 - a coin flip on a corpus where almost every
+   sentence contains a definite article. Fitting a predicate to that label set would be fitting
+   noise; these rules need phrase-level structure (which NP, is an adjective intervening), i.e. P3.
+
+### Gated composition (`scripts/gated_pipeline_measurement.py`)
+A card may emit a verdict only if (a) its predicate validated at precision >= 0.5 against the judge
+and (b) its machine constraints have reliability weight > 0. Over the 1,200 judged CC0 pairs:
+
+| stage | labeled pairs | decided checks | false-penalty rate | rules |
+|---|---|---|---|---|
+| unweighted, recompiled constraints | 162 | 371 | 55.0% violation rate | 11 |
+| reliability-weighted, recompiled | 359 scored | 371 | 25.1% | 11 |
+| **predicate-gated + reliability-weighted** | **440** | 558 | **8.9%** | 2 |
+
+So the pipeline now produces 2.7x the verified labels of the best previous configuration at ~6x
+lower error. Honest limitation: those 440 labels come from just **2 rules** (possessive determiners,
+default -en plural), so `valid_rules_heldout` is empty for this split (0 rows) - rule-generalization
+cannot be measured until more rules pass the gate. Getting there is a predicate-quality problem, not
+a data-volume problem.
