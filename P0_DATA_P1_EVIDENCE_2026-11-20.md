@@ -280,3 +280,29 @@ lower error. Honest limitation: those 440 labels come from just **2 rules** (pos
 default -en plural), so `valid_rules_heldout` is empty for this split (0 rows) - rule-generalization
 cannot be measured until more rules pass the gate. Getting there is a predicate-quality problem, not
 a data-volume problem.
+
+## 5. One denominator: reliability measured under the gating the pipeline actually uses
+
+Correction of a real error in section 4. The 8.9% false-penalty figure was computed with weights
+built from a JUDGE-gated audit while the pipeline gates on the card's own PREDICATE. Two different
+meanings of "this rule applies here". Re-measuring with `scripts/predicate_gated_audit.py` (every
+decision from the compiled predicates, no judge) and rebuilding weights from it:
+
+| gate (predicate precision >= 0.5) | allowed cards | scored pairs | labeled pairs | decided checks | FP rate |
+|---|---|---|---|---|---|
+| agreement > 0 (any weight) | 3 | 632 | 510 | 838 | **19.9%** (was reported as 8.9% under the mismatched denominator) |
+| agreement >= 0.6 | 2 | - | 440 | 558 | 8.9% |
+| agreement >= 0.7 | 1 | - | 359 | 359 | **0.0%** |
+
+So the honest statement is a frontier, not a single number: the verifier can certify 359 CC0 pairs
+with ZERO false penalties (one rule: default -en plural), or 440 pairs at 8.9% (adding possessive
+determiners), or 510 pairs at 19.9% (adding a present-perfect rule whose predicate validated but
+whose constraint agrees only 51% of the time - a coin flip).
+
+Predicate-gated, ungated-by-quality over the same 1,200 pairs: 6,046 decided checks but 63.2%
+violation rate. Again: unvalidated predicates manufacture yield.
+
+The high-agreement cards waiting on predicate validation (from `reliability_predicate_gated.json`):
+LB_9789dfb15623 comparative particle 0.94 agreement on 146 checks, LB_e51077fe7961 pronoun forms
+0.80 on 249 checks - both had ZERO judge coverage, which is why they could not pass the predicate
+gate. The `--judge-all` run in progress targets exactly them.

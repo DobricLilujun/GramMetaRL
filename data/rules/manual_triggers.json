@@ -1,0 +1,50 @@
+{
+  "_comment": "Hand-authored applicability predicates, one per card, matched against the card's own stated trigger_condition (the judge labels applicability of the trigger, not of the whole rule configuration). Kept separate from generated card sets so they can be re-applied to any card revision and re-scored against the judge cache.",
+  "triggers": [
+    {
+      "card_id": "LB_353e50a17df4",
+      "source_text": "The clause is a subordinate clause.",
+      "side": "target",
+      "kind": "regex",
+      "pattern": "\\b(datt|dass|well|wéini|wann|ob|wat|fir datt|esou datt)\\b",
+      "level": "sentence",
+      "negated": false
+    },
+    {
+      "card_id": "LB_374581869ba8",
+      "source_text": "Present tense indicative, 1st person singular subject",
+      "side": "target",
+      "kind": "regex",
+      "pattern": "(?=.*\\b(ech|mäer)\\b)(?=.*\\b[a-zäéëiöûüàâçøåæ]+en\\b)",
+      "level": "sentence",
+      "negated": false
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "source_text": "A possessive determiner is used",
+      "side": "target",
+      "kind": "regex",
+      "pattern": "\\b(mäi|meng|däi|däin|dein|sen|seng|säin|hir|hiren|eise|eiser|äer|är)\\w*\\b",
+      "level": "token",
+      "negated": false
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "source_text": "The clause is in the present perfect (analytic past)",
+      "side": "target",
+      "kind": "regex",
+      "pattern": "(?=.*\\b(hu[a-z()]*|huet|hunn|sinn|sin|ass)\\b)(?=.*\\bge[a-zäéëiöûüàâç']+\\b)",
+      "level": "sentence",
+      "negated": false
+    },
+    {
+      "card_id": "LB_d121073f582e",
+      "source_text": "A masculine or feminine plural noun is present",
+      "side": "target",
+      "kind": "regex",
+      "pattern": "\\b(de|den|déi|der)\\b[^,;.]{0,30}\\b[a-zäéëiöûüàâç]{3,}en\\b",
+      "level": "sentence",
+      "negated": false
+    }
+  ]
+}

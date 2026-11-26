@@ -44,7 +44,13 @@ def main() -> None:
     ap.add_argument("--pairs", default="data/external/pairs_en_lb.jsonl")
     ap.add_argument("--cache", default="data/external/judge_cache.jsonl")
     ap.add_argument("--rows", type=int, default=1200)
-    ap.add_argument("--min-precision", type=float, default=0.5)
+    ap.add_argument("--min-precision", type=float, default=0.5,
+                    help="Predicate precision vs the judge (held-out number when available)")
+    ap.add_argument("--min-agreement", type=float, default=0.0,
+                    help="Also require the card's constraint agreement (support-shrunk) under the SAME "
+                    "applicability gating the pipeline uses. Without it a card with a good predicate but "
+                    "a coin-flip constraint still ships - which is exactly what inflated the earlier "
+                    "false-penalty estimate.")
     ap.add_argument("--out", default="artifacts/audit/gated_pipeline.json")
     args = ap.parse_args()
 
@@ -59,7 +65,8 @@ def main() -> None:
         prec = ho.get("precision", st["precision"])  # prefer the held-out number
         if st["judged_pairs"] > 0 and prec >= args.min_precision:
             ok_pred.add(cid)
-    ok_rel = {cid for cid in {c.id for c in cards} if table.weight(cid) > 0.0}
+    ok_rel = {cid for cid in {c.id for c in cards}
+              if table.weight(cid) > 0.0 and table.agreement(cid) >= args.min_agreement}
     allowed = {c.id for c in cards if c.id in ok_pred and c.id in ok_rel}
     subset = [c for c in cards if c.id in allowed]
 
