@@ -400,3 +400,40 @@ their own trigger). That is the single concrete unlock for P1: a `source_conditi
 (source pattern => target pattern), plus an honest verdict of "undecidable from this language pair"
 for rules the source cannot condition at all - e.g. polite address forms, because English marks no
 clusivity/formality, so LB_27c64c1f7e4b should be dropped from the machine-checked set, not tuned.
+
+## 9. Closing the loop: targeted judge pass gives the real applicability base rate
+
+`label_with_judge.py --judge-all` judged 26 predicate-bearing cards x 292 pairs (4,672 new
+decisions; cache now 8,868) on gpu7/Strata. This removes the coverage hole from section 4.
+
+Applicability base rate under unbiased judging: **402 of 7,592 checks (5.3%)** - far below what the
+retrieval-mode judge implied, because retrieval mode both pre-selected related cards and skipped
+cards that already had predicates.
+
+Predicate quality with full coverage (micro): precision **0.254**, recall 0.637; held-out half
+0.262 / 0.615 - so the number generalizes, but the gate is far from usable.
+
+| card | judge-applicable /292 | predicate fires | P (held-out) | R (held-out) |
+|---|---|---|---|---|
+| LB_34e781490e7b reduced article form | 93 | 204 | 0.31 (0.33) | 0.69 (0.70) |
+| LB_9d86392ccf45 feminine article case | 63 | 144 | 0.31 (0.36) | 0.72 (0.72) |
+| LB_473d56626cdb masculine article case | 67 | 94 | 0.34 (0.43) | 0.48 (0.49) |
+| LB_9789dfb15623 comparative particle | 24 | 34 | 0.50 (0.42) | 0.71 (0.80) |
+| LB_27c64c1f7e4b polite address | **0** | 81 | 0.00 | 0.00 |
+| LB_e51077fe7961 pronoun case | 4 | 20 | 0.20 (0.38) | 1.00 |
+| LB_2ebda66afe75 / LB_bf1449011785 / LB_55471d5dc4b4 loanwords | 0 | 0 | - | - |
+
+Two conclusions:
+1. **LB_27c64c1f7e4b is undecidable for en->lb**, not merely hard: the judge marked the rule
+   applicable in 0 of 292 pairs (English marks no formality distinction), while its predicate fires
+   on 81. It must be removed from the machine-checked set - a card being "correct about
+   Luxembourgish" does not make it checkable from this source language.
+2. Even the best hand-authored predicate (comparative) falls to held-out precision 0.42, and the
+   strongest bulk-compiled ones sit at 0.31-0.43. Surface regexes on a single side cannot express
+   "the clause contains an attributive adjective between article and noun".
+
+Bottom line for P1, all three axes measured on real data: 0 of 8 candidate rules satisfy
+agreement >= 0.65 AND discrimination >= 0.5 AND non-tautological, and the applicability predicates
+that would gate even those sit at precision 0.25-0.43. The card-to-verifier compiler is the
+bottleneck, and the required upgrade is structural: source-conditional constraints
+(source pattern => target pattern) plus explicit `undecidable_for_pair` handling.

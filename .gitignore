@@ -45,3 +45,6 @@ artifacts/recompile/*
 !data/processed/labeled_gated.jsonl
 
 !data/rules/mbg_cards_recompiled_manual.jsonl
+
+!artifacts/audit/trigger_quality*.json
+!data/processed/tagged_judged_direct.jsonl

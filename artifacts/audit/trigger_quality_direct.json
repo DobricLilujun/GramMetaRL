@@ -1,0 +1,530 @@
+{
+  "cards": "data/rules/mbg_cards_recompiled_manual.jsonl",
+  "cards_with_predicates": 26,
+  "pairs_scanned": 300,
+  "predicate_micro_heldout": {
+    "rows": 150,
+    "judge_applicable_checks": 192,
+    "predicate_fires": 450,
+    "agreement": 118,
+    "precision": 0.262,
+    "recall": 0.615
+  },
+  "predicate_micro": {
+    "judge_applicable_checks": 402,
+    "predicate_fires": 1008,
+    "agreement": 256,
+    "precision": 0.254,
+    "recall": 0.637
+  },
+  "yield_with_required_applicability": {
+    "pairs_with_any_decision": 230,
+    "satisfied_checks": 464,
+    "decided_checks": 1412,
+    "pairs_abstaining_entirely": 21,
+    "top_label_cards": {
+      "LB_d121073f582e": 97,
+      "LB_27c64c1f7e4b": 84,
+      "LB_34e781490e7b": 82,
+      "LB_9789dfb15623": 35,
+      "LB_946a24dd25d6": 32,
+      "LB_7ba71aa6e282": 31
+    }
+  },
+  "per_card": {
+    "LB_0007": {
+      "judged_pairs": 0,
+      "judge_applicable": 0,
+      "predicate_fires": 0,
+      "both": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "statement": "The voiced plosive [g] occurs only in syllable onsets. In medial and f",
+      "heldout": {
+        "judged_pairs": 0,
+        "judge_applicable": 0,
+        "predicate_fires": 0,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_fb5d91622d69": {
+      "judged_pairs": 0,
+      "judge_applicable": 0,
+      "predicate_fires": 0,
+      "both": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "statement": "Initial voiceless alveolar fricative [s] is not allowed in core lexico",
+      "heldout": {
+        "judged_pairs": 0,
+        "judge_applicable": 0,
+        "predicate_fires": 0,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_7eec267b5068": {
+      "judged_pairs": 0,
+      "judge_applicable": 0,
+      "predicate_fires": 0,
+      "both": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "statement": "Word-final devoicing is blocked and consonants are voiced if the follo",
+      "heldout": {
+        "judged_pairs": 0,
+        "judge_applicable": 0,
+        "predicate_fires": 0,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_0009": {
+      "judged_pairs": 0,
+      "judge_applicable": 0,
+      "predicate_fires": 0,
+      "both": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "statement": "Word-final [n] is deleted unless the following word begins with a vowe",
+      "heldout": {
+        "judged_pairs": 0,
+        "judge_applicable": 0,
+        "predicate_fires": 0,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_d121073f582e": {
+      "judged_pairs": 22,
+      "judge_applicable": 5,
+      "predicate_fires": 9,
+      "both": 3,
+      "precision": 0.333,
+      "recall": 0.6,
+      "f1": 0.429,
+      "statement": "The suffix -en is the default plural marker for most masculine and fem",
+      "heldout": {
+        "judged_pairs": 8,
+        "judge_applicable": 2,
+        "predicate_fires": 5,
+        "both": 2,
+        "precision": 0.4,
+        "recall": 1.0,
+        "f1": 0.571
+      }
+    },
+    "LB_ce9b853ce4ee": {
+      "judged_pairs": 0,
+      "judge_applicable": 0,
+      "predicate_fires": 0,
+      "both": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "statement": "The plural suffix -er triggers umlaut and/or consonant mutation in the",
+      "heldout": {
+        "judged_pairs": 0,
+        "judge_applicable": 0,
+        "predicate_fires": 0,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_9789dfb15623": {
+      "judged_pairs": 292,
+      "judge_applicable": 24,
+      "predicate_fires": 34,
+      "both": 17,
+      "precision": 0.5,
+      "recall": 0.708,
+      "f1": 0.586,
+      "statement": "For most adjectives, the comparative is formed by placing the particle",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 10,
+        "predicate_fires": 19,
+        "both": 8,
+        "precision": 0.421,
+        "recall": 0.8,
+        "f1": 0.552
+      }
+    },
+    "LB_2e47463db059": {
+      "judged_pairs": 292,
+      "judge_applicable": 1,
+      "predicate_fires": 10,
+      "both": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "statement": "A small set of high-frequency adjectives form the comparative syntheti",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 0,
+        "predicate_fires": 2,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_473d56626cdb": {
+      "judged_pairs": 292,
+      "judge_applicable": 67,
+      "predicate_fires": 94,
+      "both": 32,
+      "precision": 0.34,
+      "recall": 0.478,
+      "f1": 0.398,
+      "statement": "The masculine singular definite article has distinct forms for Nominat",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 35,
+        "predicate_fires": 40,
+        "both": 17,
+        "precision": 0.425,
+        "recall": 0.486,
+        "f1": 0.453
+      }
+    },
+    "LB_9d86392ccf45": {
+      "judged_pairs": 292,
+      "judge_applicable": 63,
+      "predicate_fires": 144,
+      "both": 45,
+      "precision": 0.312,
+      "recall": 0.714,
+      "f1": 0.435,
+      "statement": "The feminine singular definite article has distinct forms for Nominati",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 32,
+        "predicate_fires": 64,
+        "both": 23,
+        "precision": 0.359,
+        "recall": 0.719,
+        "f1": 0.479
+      }
+    },
+    "LB_37643acfef1c": {
+      "judged_pairs": 292,
+      "judge_applicable": 25,
+      "predicate_fires": 48,
+      "both": 11,
+      "precision": 0.229,
+      "recall": 0.44,
+      "f1": 0.301,
+      "statement": "The neuter singular definite article has distinct forms for Nominative",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 14,
+        "predicate_fires": 21,
+        "both": 5,
+        "precision": 0.238,
+        "recall": 0.357,
+        "f1": 0.286
+      }
+    },
+    "LB_b6ca111c6511": {
+      "judged_pairs": 292,
+      "judge_applicable": 64,
+      "predicate_fires": 139,
+      "both": 42,
+      "precision": 0.302,
+      "recall": 0.656,
+      "f1": 0.414,
+      "statement": "The plural definite article has distinct forms for Nominative/Accusati",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 25,
+        "predicate_fires": 64,
+        "both": 15,
+        "precision": 0.234,
+        "recall": 0.6,
+        "f1": 0.337
+      }
+    },
+    "LB_34e781490e7b": {
+      "judged_pairs": 292,
+      "judge_applicable": 93,
+      "predicate_fires": 204,
+      "both": 64,
+      "precision": 0.314,
+      "recall": 0.688,
+      "f1": 0.431,
+      "statement": "The definite article uses a reduced form (e.g., d', de, den) when the ",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 43,
+        "predicate_fires": 90,
+        "both": 30,
+        "precision": 0.333,
+        "recall": 0.698,
+        "f1": 0.451
+      }
+    },
+    "LB_d24d2597cb78": {
+      "judged_pairs": 292,
+      "judge_applicable": 0,
+      "predicate_fires": 70,
+      "both": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "statement": "The indefinite article form 'eng' is used with cardinal numbers and pl",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 0,
+        "predicate_fires": 29,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_e51077fe7961": {
+      "judged_pairs": 292,
+      "judge_applicable": 4,
+      "predicate_fires": 20,
+      "both": 4,
+      "precision": 0.2,
+      "recall": 1.0,
+      "f1": 0.333,
+      "statement": "First and second person personal pronouns have distinct forms for the ",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 3,
+        "predicate_fires": 8,
+        "both": 3,
+        "precision": 0.375,
+        "recall": 1.0,
+        "f1": 0.545
+      }
+    },
+    "LB_27c64c1f7e4b": {
+      "judged_pairs": 292,
+      "judge_applicable": 0,
+      "predicate_fires": 81,
+      "both": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "statement": "Luxembourgish uses the 2nd person plural forms (Dir/Der, Iech) to addr",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 0,
+        "predicate_fires": 36,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_946a24dd25d6": {
+      "judged_pairs": 22,
+      "judge_applicable": 6,
+      "predicate_fires": 8,
+      "both": 6,
+      "precision": 0.75,
+      "recall": 1.0,
+      "f1": 0.857,
+      "statement": "Possessive articles have specific base forms for singular and plural p",
+      "heldout": {
+        "judged_pairs": 9,
+        "judge_applicable": 3,
+        "predicate_fires": 4,
+        "both": 3,
+        "precision": 0.75,
+        "recall": 1.0,
+        "f1": 0.857
+      }
+    },
+    "LB_7ba71aa6e282": {
+      "judged_pairs": 292,
+      "judge_applicable": 25,
+      "predicate_fires": 91,
+      "both": 19,
+      "precision": 0.209,
+      "recall": 0.76,
+      "f1": 0.328,
+      "statement": "When a dative preposition is followed by a masculine or neuter weak de",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 14,
+        "predicate_fires": 45,
+        "both": 9,
+        "precision": 0.2,
+        "recall": 0.643,
+        "f1": 0.305
+      }
+    },
+    "LB_89efbbfdabf2": {
+      "judged_pairs": 292,
+      "judge_applicable": 10,
+      "predicate_fires": 23,
+      "both": 8,
+      "precision": 0.348,
+      "recall": 0.8,
+      "f1": 0.485,
+      "statement": "Certain bisyllabic prepositions have a variant ending in -t, which is ",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 3,
+        "predicate_fires": 9,
+        "both": 2,
+        "precision": 0.222,
+        "recall": 0.667,
+        "f1": 0.333
+      }
+    },
+    "LB_15af0fc3dca0": {
+      "judged_pairs": 292,
+      "judge_applicable": 3,
+      "predicate_fires": 1,
+      "both": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "statement": "The original t-less variant of certain bisyllabic prepositions is used",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 2,
+        "predicate_fires": 1,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_374581869ba8": {
+      "judged_pairs": 33,
+      "judge_applicable": 1,
+      "predicate_fires": 1,
+      "both": 1,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "statement": "In Luxembourgish, the 1st person singular present indicative form of r",
+      "heldout": {
+        "judged_pairs": 14,
+        "judge_applicable": 0,
+        "predicate_fires": 0,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_f73c08e1e60c": {
+      "judged_pairs": 15,
+      "judge_applicable": 4,
+      "predicate_fires": 3,
+      "both": 1,
+      "precision": 0.333,
+      "recall": 0.25,
+      "f1": 0.286,
+      "statement": "The most common past tense is the present perfect, formed analytically",
+      "heldout": {
+        "judged_pairs": 8,
+        "judge_applicable": 1,
+        "predicate_fires": 1,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_353e50a17df4": {
+      "judged_pairs": 106,
+      "judge_applicable": 7,
+      "predicate_fires": 28,
+      "both": 3,
+      "precision": 0.107,
+      "recall": 0.429,
+      "f1": 0.171,
+      "statement": "In subordinate clauses with a 2nd person singular subject, the conjunc",
+      "heldout": {
+        "judged_pairs": 47,
+        "judge_applicable": 5,
+        "predicate_fires": 12,
+        "both": 1,
+        "precision": 0.083,
+        "recall": 0.2,
+        "f1": 0.118
+      }
+    },
+    "LB_55471d5dc4b4": {
+      "judged_pairs": 292,
+      "judge_applicable": 0,
+      "predicate_fires": 0,
+      "both": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "statement": "French discourse particles, interjections, and greetings are frequentl",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 0,
+        "predicate_fires": 0,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_2ebda66afe75": {
+      "judged_pairs": 292,
+      "judge_applicable": 0,
+      "predicate_fires": 0,
+      "both": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "statement": "Several Luxembourgish kinship terms are borrowed from French, includin",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 0,
+        "predicate_fires": 0,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    },
+    "LB_bf1449011785": {
+      "judged_pairs": 292,
+      "judge_applicable": 0,
+      "predicate_fires": 0,
+      "both": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "statement": "Some Luxembourgish color terms are borrowed from French, such as 'mof'",
+      "heldout": {
+        "judged_pairs": 142,
+        "judge_applicable": 0,
+        "predicate_fires": 0,
+        "both": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    }
+  }
+}
