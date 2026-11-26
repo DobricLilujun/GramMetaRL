@@ -1,7 +1,17 @@
+# Reward weight band, enforced by gate G29 in scripts/smoke_test.py.
+#
+# Two measured constraints, not taste:
+#  1. w_grammar > w_mt  - the paper's claim is that card-grounded verifiers are the PRIMARY signal;
+#     a reference metric that can be farmed lexically must not be able to outvote them.
+#     (An earlier version of this file had grammar 0.40 vs mt+tool 0.45, which violated its own plan.)
+#  2. w_mt + w_tool > 0  - a grammar-only reward is farmable. Measured case: a gibberish rollout earned
+#     +1.0 because \bmeng(en)?\b matched the verb mengen ("to mean"), not a possessive article
+#     (scripts/match_context_audit.py; evidence doc 12.5). The reference term is what stops a policy
+#     from emitting content-free output that happens to satisfy surface checks.
 weights:
-  mt: 0.25
-  grammar: 0.40
-  tool: 0.20
+  mt: 0.30
+  grammar: 0.45
+  tool: 0.10
   trace: 0.10
   efficiency: 0.05
 metrics:

@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import yaml
 import statistics
 import sys
 import time
@@ -646,6 +647,25 @@ def main() -> int:
     else:
         warn("G28 P1 reward signal measurable on policy rollouts",
              "no artifacts/p1/reward_smoke*.json yet (run scripts/p1_reward_smoke.py)")
+
+    # G29 reward weight band. Both halves are measured findings, see the config comment: grammar must
+    # dominate the reference metric (else the contribution is vacuous), and the reference metric must
+    # survive (else the grammar term is farmable with content-free output).
+    rw_path = ROOT / "grammetarl" / "configs" / "reward" / "grammar_reward.yaml"
+    if rw_path.exists():
+        try:
+            rw = yaml.safe_load(rw_path.read_text("utf-8")).get("weights", {})
+        except Exception as exc:
+            rw = {}
+            gate("G29 reward weights inside the measured band", False, f"unparsable config: {exc}")
+        if rw:
+            wg, wm, wt = float(rw.get("grammar", 0)), float(rw.get("mt", 0)), float(rw.get("tool", 0))
+            gate("G29 reward weights inside the measured band (grammar>mt AND mt+tool>0)",
+                 wg > wm and (wm + wt) > 0.0 and wg > 0.0,
+                 f"grammar={wg} mt={wm} tool={wt} -> grammar>mt {wg > wm}, "
+                 f"mt+tool={wm + wt:.2f} (must stay >0: a grammar-only reward is farmable)")
+    else:
+        warn("G29 reward weights inside the measured band", f"missing {rw_path}")
 
     # report ----------------------------------------------------------------------
     print("\n" + "=" * 78)
