@@ -370,3 +370,33 @@ Consequences, stated plainly:
    exactly the ones blocked only by missing predicate validation - which is what the targeted
    `--judge-all` pass is producing. The right gate is therefore two-sided:
    agreement >= 0.65 AND discrimination >= 0.5 AND predicate precision >= 0.5.
+
+## 8. Third criterion, and the honest bottom line: 0 rules pass all three
+
+The discrimination test has a blind spot: perturbations are built FROM the constraint, so a rule can
+bite on its own span and still verify nothing about the translation. Inspection shows exactly that -
+the two "usable" rules restate their own trigger:
+
+| rule | applicability predicate | output constraint |
+|---|---|---|
+| LB_27c64c1f7e4b polite address | target token `^(?:dir|der|iech)$` | `^dir$` OR `^der$` OR `^iech$` |
+| LB_9789dfb15623 comparative | target `\bméi\b` | `méi\s+\w+` |
+
+Both fire exactly when the constraint is satisfied, so the "check" is the trigger wearing a hat.
+`scripts/rule_quality_matrix.py` now flags this mechanically (predicate and constraint reduce to the
+same literal surface material).
+
+Result under the three-sided gate (agreement >= 0.65, discrimination >= 0.5, not self-restating):
+
+**usable rules: 0 of 8 candidates.** Breakdown: 3 vacuous (discrimination 5-18%), 2 tautological,
+3 weak (agreement 0.59-0.64, or n=1). G27 now fails with that breakdown instead of passing on a
+weaker criterion.
+
+What this demands, stated as a specification rather than a complaint: a machine-checkable grammar
+rule over a parallel pair must be **conditional on the source**, i.e.
+`if the SOURCE exhibits X then the TARGET must realize Y` - which is what a translation rule is.
+Containment checks on the target alone are either vacuous (always true) or tautological (equal to
+their own trigger). That is the single concrete unlock for P1: a `source_conditional` constraint kind
+(source pattern => target pattern), plus an honest verdict of "undecidable from this language pair"
+for rules the source cannot condition at all - e.g. polite address forms, because English marks no
+clusivity/formality, so LB_27c64c1f7e4b should be dropped from the machine-checked set, not tuned.

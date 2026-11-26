@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import collections
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -68,6 +69,39 @@ def main() -> None:
             if r.verdict == "satisfied" and len(satisfied_by_rule[r.rule_id]) < args.samples_per_rule:
                 satisfied_by_rule[r.rule_id].append(rec)
 
+    def pattern_literals(pats: list[str]) -> set[str]:
+        """Literal surface material inside a pattern, anchors/quantifiers/escapes removed."""
+        out_set: set[str] = set()
+        for pat in pats:
+            if not pat:
+                continue
+            cleaned = re.sub(r"\\[bBwWsSdD]|\(\?:|\)|\(|\^|\$|[|*+?{}\[\]]", " ", pat)
+            for tok in re.split(r"[^0-9A-Za-zÀ-ÿ'’]+", cleaned):
+                if len(tok) >= 2 and not tok.isspace():
+                    out_set.add(tok.lower())
+        return out_set
+
+    def restates_constraint(card: MBGCard) -> tuple[bool, str]:
+        """True when the applicability predicate and the output constraint are the same test.
+
+        Such a rule cannot verify a translation: it fires exactly when its own constraint is
+        satisfied, so the "check" is a restatement of the trigger. Discrimination measured against
+        perturbations of that same span looks good while the rule verifies nothing about the source.
+        """
+        pred_lits: set[str] = set()
+        for pr in card.applicability:
+            if pr.accepted and pr.pattern:
+                pred_lits |= pattern_literals([pr.pattern])
+        cons_lits: set[str] = set()
+        for c in card.output_constraints:
+            pats = ([c.value] if c.value else []) + list(c.values or [])
+            cons_lits |= pattern_literals(pats)
+        if pred_lits and cons_lits and pred_lits == cons_lits:
+            return True, f"identical literals {sorted(pred_lits)}"
+        if pred_lits and cons_lits and pred_lits <= cons_lits and len(pred_lits) >= 1 and len(cons_lits - pred_lits) == 0:
+            return True, f"predicate subset {sorted(pred_lits)}"
+        return False, ""
+
     out = {}
     for card in cand:
         pats, token_level = [], False
@@ -96,6 +130,7 @@ def main() -> None:
         tested = stats["tested"]
         disc = stats["violated"] / tested if tested else 0.0
         r = rel[card.id]
+        redundant, why_redundant = restates_constraint(card)
         out[card.id] = {
             "statement": card.statement[:80],
             "constraint_kinds": [c.kind for c in card.output_constraints],
@@ -106,9 +141,20 @@ def main() -> None:
             "perturbations_tested": tested,
             "discrimination": round(disc, 3),
             "escaped_examples": escaped,
-            "usable": bool(r["agreement"] >= 0.65 and disc >= 0.5),
+            "predicate_restates_constraint": redundant,
+            "redundancy_note": why_redundant,
+            # three-sided: agrees with correct translations, bites on broken ones, and is not just
+            # its own trigger restated.
+            "usable": bool(r["agreement"] >= 0.65 and disc >= 0.5 and not redundant),
         }
-        flag = "USABLE" if out[card.id]["usable"] else ("VACUOUS" if disc < 0.2 else "weak")
+        if redundant:
+            flag = "TAUTOLOGICAL (predicate == constraint)"
+        elif disc < 0.2:
+            flag = "VACUOUS"
+        elif r["agreement"] < 0.65:
+            flag = "weak (agreement)"
+        else:
+            flag = "USABLE"
         print(f"  {card.id} agree={r['agreement']:.2f} (n={r['applicable']:4d}) "
               f"discrimination={disc:6.1%} (tested={tested:4d}) -> {flag}  {card.statement[:52]}")
 

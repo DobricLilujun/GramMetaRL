@@ -510,11 +510,17 @@ def main() -> int:
         qm = json.loads(qm_path.read_text("utf-8"))
         usable = [k for k, v in qm.items() if v.get("usable")]
         vacuous = [k for k, v in qm.items() if v.get("discrimination", 0) < 0.2]
+        tauto = [k for k, v in qm.items() if v.get("predicate_restates_constraint")]
+        weak = [k for k, v in qm.items()
+                if not v.get("usable") and v.get("discrimination", 0) >= 0.2 and not v.get("predicate_restates_constraint")
+                and k not in vacuous]
         gate(
-            "G27 at least one rule passes agreement AND discrimination",
+            "G27 at least one rule is agree>=.65, discriminates>=.5, and is not its own trigger",
             len(usable) >= 1,
-            f"usable={len(usable)} {usable} vacuous={len(vacuous)} "
-            f"(best discrimination={max((v.get('discrimination', 0) for v in qm.values()), default=0):.1%})",
+            f"usable={len(usable)} vacuous(disc<.2)={len(vacuous)} "
+            f"tautological(predicate==constraint)={len(tauto)} weak(agreement/n)={len(weak)} "
+            f"| best agree={max((v.get('agreement', 0) for v in qm.values()), default=0):.2f} "
+            f"best disc={max((v.get('discrimination', 0) for v in qm.values()), default=0):.1%}",
         )
     else:
         gate("G27 at least one rule passes agreement AND discrimination", False,
