@@ -126,6 +126,14 @@ def main() -> None:
     ap.add_argument("--cache", default="data/external/judge_cache.jsonl")
     ap.add_argument("--rows", type=int, default=200)
     ap.add_argument("--top-k", type=int, default=6)
+    ap.add_argument(
+        "--judge-all",
+        action="store_true",
+        help="Skip retrieval: judge every (card, pair) combination. Needed to score applicability "
+        "predicates, because retrieval only ever surfaced a few candidates per pair and most "
+        "predicate-bearing cards were never judged at all.",
+    )
+    ap.add_argument("--card-ids", default=None, help="With --judge-all, restrict to these card ids (comma-separated)")
     ap.add_argument("--batch-pairs", type=int, default=4)
     ap.add_argument("--endpoint", required=True)
     ap.add_argument("--model", required=True)
@@ -161,8 +169,17 @@ def main() -> None:
             if len(pairs) >= args.rows:
                 break
 
-    # Build candidate lists: rules whose applicability the verifier cannot decide by itself.
+    # Candidate lists.
+    # Retrieval mode: rules whose applicability the verifier cannot decide by itself.
+    # --judge-all mode: every requested card against every pair, with no filters. This is required
+    # to score applicability predicates: retrieval mode deliberately skips cards that already carry
+    # a predicate ("already decidable; no judge needed"), which is exactly why 21 of the 26
+    # predicate-bearing cards had ZERO judge decisions and their precision was unmeasurable.
     for rec in pairs:
+        rec["pair_id"] = hashlib.sha1(f"{rec.get('src')}|{rec['tgt_ref']}".encode("utf-8")).hexdigest()[:16]
+        if args.judge_all:
+            rec["candidate_ids"] = list(args.card_ids.split(",")) if args.card_ids else list(cards_by_id)
+            continue
         hits = []
         for h in index.retrieve(rec.get("src", ""), top_k=args.top_k):
             card = None
@@ -179,10 +196,9 @@ def main() -> None:
             if not any("regex" in (x.kind or "") for x in c.output_constraints):
                 continue
             if any(p.accepted for p in c.applicability):
-                continue  # already decidable by the verifier; no judge needed
+                continue  # retrieval mode: the verifier can already decide this one
             hits.append(c.id)
         rec["candidate_ids"] = hits
-        rec["pair_id"] = hashlib.sha1(f"{rec.get('src')}|{rec.get('tgt_ref')}".encode("utf-8")).hexdigest()[:16]
     pairs = [p for p in pairs if p["candidate_ids"]]
     print(f"pairs with undecidable-but-executable candidates: {len(pairs)}")
 
