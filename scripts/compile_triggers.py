@@ -30,7 +30,7 @@ from grammetarl.llm_http import chat_text
 from grammetarl.schema import MBGCard, TriggerCondition
 from grammetarl.validator import TranslationVerifier
 
-SYSTEM = """You compile grammar-rule triggers into executable applicability predicates.
+SYSTEM = r"""You compile grammar-rule triggers into executable applicability predicates.
 
 For each card you get: id, statement, scope, prose trigger_conditions, and examples
 (source = English side, target = Luxembourgish side).
@@ -54,7 +54,24 @@ Hard rules:
   needs meaning, so use kind=llm_check for those.
 - level=token only for word-form inventories, and then the regex must be anchored (^(a|b|c)$).
 - Never put a sentence or a gloss in `pattern`. If you cannot express it, use kind=llm_check.
-- Emit at most 3 predicates per card. Do not invent triggers that are not in the list given."""
+- Emit at most 3 predicates per card. Do not invent triggers that are not in the list given.
+
+HOW TO COMPOUND TWO SURFACE SIGNALS (this is the important technique):
+At level=phrase/sentence you may use anchored lookaheads to require several surface signals at once.
+A Python regex like  (?=.*\bdatt\b)(?=.*\bdu\b)  means "the sentence contains both a complementizer
+and the 2sg pronoun". Use that instead of giving up.
+
+Worked templates (adapt the vocabulary to the rule; do not copy blindly):
+  subordinate clause with a 2sg subject -> (?=.*\b(datt|wéini|well|dass|ob)\b)(?=.*\b(du|s)\b)
+  noun phrase with an attributive adjective (any case) -> \b(deen|den|dem|der|déi|d'|dat|d')\s+\S+\s+\S
+  possessive determiner present -> \b(mäi(n)?|meng(en)?|däi(n)?|dein(en)?|säin|sen|hir(en)?|eise(n)?|Är)\b
+  present perfect (analytic past) -> \b(huet|hues|hunn|hutt|ass|sinn)\b.*\b(g|gaangen|gemaach|gewuer|...)\b
+  plural noun phrase (default -en plural) -> \b(de|d'|den|dem|der)\b[^.]{0,40}\b\w+(en|eren)\b
+  dative preposition + feminine article -> \b(vun|op|mat|an|to|fir|nom|em|am|op der)\b[^,;.]{0,30}\b(der|d')\b
+
+DECISION RULE: kind=llm_check ONLY when there is no surface signal at all on either side (e.g.
+"the referent is female", "this is a loanword"). Rules about word order, case, agreement, tense,
+clitics, articles, plurals and pronouns ALWAYS have a surface signal: compile it."""
 
 
 def prose_masquerading(pattern: str) -> bool:
