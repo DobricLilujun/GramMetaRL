@@ -520,3 +520,29 @@ def _conditional_card_plain() -> MBGCard:
         kind="must_include_any_regex", description="comparative suffix",
         values=[r"\b\w+er\b"], level="token")]
     return c
+
+
+def test_main_verify_subcommand_emits_json():
+    """`main.py verify` printed `report.__dict__`, but VerificationReport/RuleCheckResult are
+    @dataclass(slots=True) and have no __dict__, so the subcommand died with AttributeError.
+    Guard the CLI path end-to-end, not just asdict()."""
+    import json
+    import subprocess
+    import sys
+
+    repo = Path(__file__).resolve().parents[1]
+    cards = repo / "data" / "rules" / "mbg_cards_condonly.jsonl"
+    proc = subprocess.run(
+        [sys.executable, "main.py", "verify",
+         "--cards", str(cards),
+         "--sentence", "Our children are taller than their parents.",
+         "--translation", "Eis Kanner si méi grouss wéi hir Elteren.",
+         "--rule-ids", "LB_9789dfb15623,LB_946a24dd25d6"],
+        cwd=repo, capture_output=True, text=True,
+    )
+    assert proc.returncode == 0, proc.stderr[-500:]
+    report = json.loads(proc.stdout[proc.stdout.index("{"):])
+    assert report["decided"] == 2 and report["overall_passed"] is True
+    assert [r["verdict"] for r in report["results"]] == ["satisfied", "satisfied"]
+    # the report must stay weight-alignable: rule_ids and verdicts in the same order
+    assert [r["rule_id"] for r in report["results"]] == ["LB_9789dfb15623", "LB_946a24dd25d6"]

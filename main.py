@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from dataclasses import asdict
 from pathlib import Path
 
 from grammetarl import ExampleAgent, RuleIndex, TranslationVerifier, build_mbg_from_pdf, load_cards
@@ -116,7 +117,9 @@ def cmd_verify(args: argparse.Namespace) -> None:
         translation=args.translation,
         rules=selected,
     )
-    print(json.dumps(report.__dict__, default=lambda o: o.__dict__, ensure_ascii=False, indent=2))
+    # VerificationReport and RuleCheckResult are @dataclass(slots=True), which have no __dict__:
+    # serializing report.__dict__ raised AttributeError and the whole `verify` subcommand was dead.
+    print(json.dumps(asdict(report), ensure_ascii=False, indent=2))
 
 
 def cmd_init_workspace(args: argparse.Namespace) -> None:

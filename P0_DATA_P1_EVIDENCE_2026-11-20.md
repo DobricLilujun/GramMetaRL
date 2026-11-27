@@ -664,3 +664,41 @@ Consequence for reward design, stated as a requirement: the grammar term must ne
 `R = w_mt*R_mt + w_g*R_grammar` with `w_mt > 0` — the MT term is what stops a policy from farming
 grammar checks with content-free output. An earlier draft of the P1 plan set `w_mt = 0`; that is now
 ruled out by measurement.
+
+## 13. README rewritten as a usage report (2026-11-26), and what that audit found
+
+The README is now the operating manual for the measurement stack: environments, machine reachability,
+license policy, every pipeline command, the three-axis certification protocol, the gate table, artifact
+inventory, and the failure modes. Every number in it was re-read off the artifacts rather than from memory.
+Writing it surfaced four things:
+
+1. **A cited file did not exist.** I wrote `scripts/check.sh` (it belongs to a different project in this
+   session). The trux env simply has no `ruff`. Removed.
+2. **Numbers quoted from memory were wrong.** Possessive discrimination is **91.4%** in the tracked matrix
+   artifact (92.6% came from a different perturbation sample), and my verdict tally mis-binned two rows.
+   Artifact-exact tally on the CC0 pool (`artifacts/audit/rule_quality_conditional.json`, keys
+   `n_agreement` / `perturbations_tested` / `predicate_restates_constraint`):
+   usable 2 · provisional 2 · vacuous 3 · self-restating 1 (`LB_27c64c1f7e4b`, n=1,993, disc 70.2%) ·
+   below-floor 1 (`LB_2ebda66afe75`, 0.595 at n=33).
+   On the CC BY-NC pool a **different** pair certifies (`LB_363a21684c8f` 0.945/n=361,
+   `LB_2ebda66afe75` 0.762/n=38) while the comparative rule **drops to 0.626 and fails**. Certification is
+   pool-dependent; the README now states this instead of implying portability.
+3. **Pool tags are `techgov_lu_en` (8,972 CC0) and `luxalign_v3_lb_en` (39,464 CC BY-NC).** Community
+   Tatoeba-style rows were never ingested; the README previously implied a third pool that does not exist
+   in the file.
+4. **A real dead code path, found by running the README example.** `main.py verify` crashed with
+   `AttributeError: 'VerificationReport' object has no attribute '__dict__'`: both `VerificationReport` and
+   `RuleCheckResult` are `@dataclass(slots=True)`, and slots dataclasses have no `__dict__`. The subcommand
+   had never worked since the slots conversion. Fixed with `dataclasses.asdict`, plus a CLI-level
+   regression test that runs the subcommand and asserts both certified rules decide `satisfied` in the
+   right order (so the weight-alignment contract is covered too). **Tests: 31 passed.**
+
+Also rebuilt the training dataset on the current labels so the README's commands reproduce what is on disk:
+`data/processed/gated_condonly/` = train 1,427 / valid 158 / valid_rules_heldout **0** (100% CC0-1.0).
+The empty rule-held-out split is reported, not hidden: with 2 certified rules, a rule-level held-out split
+is undefined, so cross-rule generalization remains unmeasurable until coverage grows.
+
+New limitation recorded (measured, not inferred): `main.py retrieve --top-k 3` on
+"Our children are taller than their parents." returns the possessive card plus two irrelevant
+phonotactics cards, all tied at 0.336, and **misses the comparative card**. Measurement passes named
+`--card-ids`, so no published number depends on retrieval; the P1 agent trajectory will.
