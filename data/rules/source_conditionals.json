@@ -1,0 +1,87 @@
+{
+  "_comment": "Hand-authored source-conditional constraints: IF the English source exhibits X, the Luxembourgish target must realize Y. Only rules the SOURCE can condition are listed - polite address forms (LB_27c64c1f7e4b) are deliberately absent because English marks no formality, measured: judged applicable in 0/292 pairs. Applicability comes from the source side, so no separately validated target-side predicate is needed.",
+  "constraints": [
+    {
+      "card_id": "LB_9789dfb15623",
+      "description": "English comparative (X-er than / more X / bare -er adjective) requires the analytic comparative with méi",
+      "source_pattern": "(?:\\bmore\\s+(?!than\\b|or\\b|less\\b|enough\\b|merely\\b|simply\\b)[a-zà-ÿ]{2,}\\b|\\b[a-zà-ÿ]{2,}er than\\b)",
+      "values": [
+        "\\bméi\\s+[a-zà-ÿ]+\\b"
+      ],
+      "level": "phrase",
+      "why": "tightened twice from measured violations: \\b\\w+er\\b matched after/under/number, then 'more than'/'more or less' matched idiomatic paraphrases; the remaining condition demands more + an adjective word",
+      "allow_untested": true
+    },
+    {
+      "card_id": "LB_f73c08e1e60c",
+      "description": "English present perfect (have/has + past participle) requires the analytic past",
+      "source_pattern": "\\b(has|have|had)\\s+(?:[a-zà-ÿ]+ed|built|gone|done|made|seen|known|given|taken|found|kept|left|told|said|been|worn|drawn|grown|thrown|eaten|written|spoken|chosen|broken|beaten|fallen|forgotten|hidden|ridden|risen|shaken|stolen|run)\\b",
+      "values": [
+        "\\b(hu[a-z()]*|huet|hunn|sinn|sin|ass|as)\\b[^.]{0,80}\\b(ge[a-zà-ÿ']+|gaangen|gewuer|gewies|gewues)\\w*"
+      ],
+      "level": "sentence",
+      "why": "the source marks perfect aspect; the target must show auxiliary + participle"
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "description": "A SINGULAR English possessor (my/his/her/its) requires a singular-possessor possessive article",
+      "source_pattern": "\\b(my|his|her|its)\\b",
+      "values": [
+        "\\bmäi(n|en|em|er)?\\b",
+        "\\bmeng(en|er|em)?\\b",
+        "\\bsäin(e|en|em|er)?\\b",
+        "\\bseng(e|en|em|er)?\\b",
+        "\\bhir(e|en|em|er)?\\b",
+        "\\bsen(e|en|em)?\\b",
+        "\\bdäi(n|en|em|er)?\\b"
+      ],
+      "level": "token",
+      "why": "full inflection paradigms instead of \\bX\\w*\\b: the greedy form matched däischtere ('those darker') and sent ('sand'), which made the check fire on non-possessives"
+    },
+    {
+      "card_id": "LB_73a7f3d6dede",
+      "description": "English conditional would + verb requires the Luxembourgish conditional auxiliary géif-",
+      "source_pattern": "\\b(would|wouldn't|would've)\\b",
+      "values": [
+        "\\bgéif\\w*\\b"
+      ],
+      "level": "token",
+      "why": "the source marks irrealis mood; the target must carry the conditional auxiliary"
+    },
+    {
+      "card_id": "LB_363a21684c8f",
+      "description": "The indefinite pronoun een may NOT open the sentence when English opens with One/someone",
+      "source_pattern": "^\\s*(one|someone|somebody)\\b",
+      "values": [
+        "^\\s*\\*?\\s*(een|ee\\(n\\)|e\\(n\\))\\b"
+      ],
+      "level": "phrase",
+      "negate": true,
+      "why": "positional prohibition: English marks the initial slot, so applicability is source-derived; the card's own example is the starred violation *Ee(n) kann hei net parken"
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "description": "A first-person plural possessor (our) requires the plural-possessor article eis-",
+      "source_pattern": "\\b(our|ours)\\b",
+      "values": [
+        "\\beis(e|en|em|er)?\\b"
+      ],
+      "level": "token",
+      "allow_untested": true,
+      "why": "decidable half: 'our' has no homophonous singular variant"
+    },
+    {
+      "card_id": "LB_946a24dd25d6",
+      "description": "Third-person plural possessor (their) requires SOME possessive article (their admits both är- and hir- variants, so possessor NUMBER is not decidable for this person)",
+      "source_pattern": "\\b(their|theirs)\\b",
+      "values": [
+        "\\bär(e|en|em)?\\b",
+        "\\bhir(e|en|em|er)?\\b",
+        "\\beis(e|en|em|er)?\\b"
+      ],
+      "level": "token",
+      "allow_untested": true,
+      "why": "measured: 52% of this rule's violations contained a possessive article of the other number, and Luxembourgish allows hir- as a variant of är- for 'their' (hirer Zäit = their time), so requiring är- manufactured false violations; the check is weakened to presence-of-possessive and the description states exactly which claim is being made"
+    }
+  ]
+}

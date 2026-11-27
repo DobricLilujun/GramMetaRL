@@ -1,0 +1,253 @@
+{
+  "LB_d121073f582e": {
+    "statement": "The suffix -en is the default plural marker for most masculine and feminine noun",
+    "constraint_kinds": [
+      "must_include_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.9981,
+    "n_agreement": 1054,
+    "agreement_measured": 1.0,
+    "n_measured": 987,
+    "weight": 0.9962,
+    "perturbations_tested": 325,
+    "discrimination": 0.311,
+    "escaped_examples": [
+      {
+        "how": "single-token: wrong plural 'enger' -> 'engereren'",
+        "orig": "de Schneiderfësch hält sech gären op Plaze mat enger staarker Stréimung op",
+        "bad": "de Schneiderfësch hält sech gären op Plaze mat engereren staarker Stréimung op",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "single-token: wrong plural 'festgehalen' -> 'festgehaleren'",
+        "orig": "de Kommitee huet festgehalen, datt no all Sëtzung e Rapport geschriwwe gëtt",
+        "bad": "de Kommitee huet festgehaleren, datt no all Sëtzung e Rapport geschriwwe gëtt",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false,
+    "provisional": false
+  },
+  "LB_9789dfb15623": {
+    "statement": "For most adjectives, the comparative is formed by placing the particle méi befor",
+    "constraint_kinds": [
+      "source_conditional"
+    ],
+    "token_level": false,
+    "agreement": 0.8112,
+    "n_agreement": 192,
+    "agreement_measured": 0.661,
+    "n_measured": 118,
+    "weight": 0.6224,
+    "perturbations_tested": 234,
+    "discrimination": 0.714,
+    "escaped_examples": [
+      {
+        "how": "single-token: mangle 'méi kuerz'",
+        "orig": "de Piccolo ass méi kuerz ewéi eng Querflütt",
+        "bad": "de Piccolo ass méi kuerx ewéi eng Querflütt",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "single-token: mangle 'méi gepusht'",
+        "orig": "den Trainer huet eis haut um Training nach méi gepusht ewéi soss",
+        "bad": "den Trainer huet eis haut um Training nach méi gepushx ewéi soss",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": true,
+    "provisional": false
+  },
+  "LB_363a21684c8f": {
+    "statement": "The indefinite personal pronoun 'een' cannot appear in the sentence-initial posi",
+    "constraint_kinds": [
+      "source_conditional"
+    ],
+    "token_level": false,
+    "agreement": 0.9,
+    "n_agreement": 16,
+    "agreement_measured": 1.0,
+    "n_measured": 13,
+    "weight": 0.8,
+    "perturbations_tested": 39,
+    "discrimination": 1.0,
+    "escaped_examples": [],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false,
+    "provisional": true
+  },
+  "LB_e51077fe7961": {
+    "statement": "First and second person personal pronouns have distinct forms for the nominative",
+    "constraint_kinds": [
+      "must_include_any_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.806,
+    "n_agreement": 759,
+    "agreement_measured": 0.7917,
+    "n_measured": 1181,
+    "weight": 0.6121,
+    "perturbations_tested": 129,
+    "discrimination": 0.434,
+    "escaped_examples": [
+      {
+        "how": "single-token: wrong plural 'du' -> 'dueren'",
+        "orig": "boff, et ass mir dach egal, wat s du méchs!",
+        "bad": "boff, et ass mir dach egal, wat s dueren méchs!",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "single-token: wrong plural 'oder' -> 'odereren'",
+        "orig": "hues de matkritt, wat gesot gouf, oder hues de erëm geschlof?",
+        "bad": "hues de matkritt, wat gesot gouf, odereren hues de erëm geschlof?",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false,
+    "provisional": false
+  },
+  "LB_27c64c1f7e4b": {
+    "statement": "Luxembourgish uses the 2nd person plural forms (Dir/Der, Iech) to address a sing",
+    "constraint_kinds": [
+      "must_include_any_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.9981,
+    "n_agreement": 1046,
+    "agreement_measured": 1.0,
+    "n_measured": 947,
+    "weight": 0.9962,
+    "perturbations_tested": 121,
+    "discrimination": 0.868,
+    "escaped_examples": [
+      {
+        "how": "single-token: wrong plural 'der' -> 'dereren'",
+        "orig": "d’Blénkerte fënnt een an der Musel, an der Sauer an an der Our",
+        "bad": "d’Blénkerte fënnt een an der Musel, an dereren Sauer an an der Our",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "single-token: wrong plural 'der' -> 'dereren'",
+        "orig": "d’Kanner hunn de ganze Mëtteg op der Spillplaz an der Sandkaul gespillt",
+        "bad": "d’Kanner hunn de ganze Mëtteg op dereren Spillplaz an der Sandkaul gespillt",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": true,
+    "redundancy_note": "identical literals ['der', 'dir', 'iech']",
+    "usable": false,
+    "provisional": false
+  },
+  "LB_946a24dd25d6": {
+    "statement": "Possessive articles have specific base forms for singular and plural possessors,",
+    "constraint_kinds": [
+      "source_conditional",
+      "source_conditional",
+      "source_conditional"
+    ],
+    "token_level": true,
+    "agreement": 0.6361,
+    "n_agreement": 793,
+    "agreement_measured": 0.7373,
+    "n_measured": 1180,
+    "weight": 0.2723,
+    "perturbations_tested": 148,
+    "discrimination": 0.932,
+    "escaped_examples": [
+      {
+        "how": "single-token: swap ending 'eisen' -> 'eiser'",
+        "orig": "d’Kanner hunn eisen Hond am Gaart an enger Bidde gewäsch",
+        "bad": "d’Kanner hunn eiser Hond am Gaart an enger Bidde gewäsch",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "single-token: singularize 'eisen' -> 'eis'",
+        "orig": "d’Kanner hunn eisen Hond am Gaart an enger Bidde gewäsch",
+        "bad": "d’Kanner hunn eis Hond am Gaart an enger Bidde gewäsch",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": true,
+    "provisional": false
+  },
+  "LB_374581869ba8": {
+    "statement": "In Luxembourgish, the 1st person singular present indicative form of regular ver",
+    "constraint_kinds": [
+      "must_include_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.9931,
+    "n_agreement": 284,
+    "agreement_measured": 1.0,
+    "n_measured": 392,
+    "weight": 0.9861,
+    "perturbations_tested": 316,
+    "discrimination": 0.348,
+    "escaped_examples": [
+      {
+        "how": "single-token: wrong plural 'hien' -> 'hieren'",
+        "orig": "hien huet mer Sue geléint, well ech mäi Portmonni vergiess hat",
+        "bad": "hieren huet mer Sue geléint, well ech mäi Portmonni vergiess hat",
+        "verdict": "satisfied"
+      },
+      {
+        "how": "single-token: wrong plural 'menger' -> 'mengereren'",
+        "orig": "ech leeden d’Firma zesumme mat menger Associée",
+        "bad": "ech leeden d’Firma zesumme mat mengereren Associée",
+        "verdict": "satisfied"
+      }
+    ],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false,
+    "provisional": false
+  },
+  "LB_55471d5dc4b4": {
+    "statement": "French discourse particles, interjections, and greetings are frequently used in ",
+    "constraint_kinds": [
+      "must_include_any_regex"
+    ],
+    "token_level": true,
+    "agreement": 0.6,
+    "n_agreement": 1,
+    "agreement_measured": null,
+    "n_measured": 0,
+    "weight": 0.2,
+    "perturbations_tested": 0,
+    "discrimination": 0.0,
+    "escaped_examples": [],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false,
+    "provisional": false
+  },
+  "LB_2ebda66afe75": {
+    "statement": "Several Luxembourgish kinship terms are borrowed from French, including 'Tatta',",
+    "constraint_kinds": [
+      "must_include_any_regex"
+    ],
+    "token_level": false,
+    "agreement": 0.7143,
+    "n_agreement": 10,
+    "agreement_measured": 0.5217,
+    "n_measured": 23,
+    "weight": 0.4286,
+    "perturbations_tested": 36,
+    "discrimination": 1.0,
+    "escaped_examples": [],
+    "predicate_restates_constraint": false,
+    "redundancy_note": "",
+    "usable": false,
+    "provisional": false
+  }
+}

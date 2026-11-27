@@ -642,8 +642,9 @@ def main() -> int:
         if float(sm.get("nonzero_spread_rate", 0.0)) < 0.5:
             warn("G28b most GRPO groups carry zero advantage for this reward",
                  f"only {sm.get('nonzero_spread_rate'):.1%} of groups have a nonzero reward spread; the "
-                 f"rest give zero gradient. Raise certified-rule coverage or policy competence (SFT) "
-                 f"before spending RL compute")
+                 f"rest give zero gradient. Measured 2026-11-27: raising certified-rule coverage does NOT "
+                 f"fix this (2->8 rules changed it by <=4.2pp on identical hypotheses); the levers are "
+                 f"rules mined from the policy's own errors and policy competence (SFT)")
     else:
         warn("G28 P1 reward signal measurable on policy rollouts",
              "no artifacts/p1/reward_smoke*.json yet (run scripts/p1_reward_smoke.py)")
@@ -666,6 +667,39 @@ def main() -> int:
                  f"mt+tool={wm + wt:.2f} (must stay >0: a grammar-only reward is farmable)")
     else:
         warn("G29 reward weights inside the measured band", f"missing {rw_path}")
+
+    # G30 per-rule reward usefulness, measured on policy rollouts (scripts/p1_signal_by_rule.py).
+    # Two measured facts behind it: (a) three certified rules have a NEGATIVE policy-vs-reference
+    # violation gap, so in RL they push the policy away from professional usage; (b) advantage coverage
+    # on the stratified prompt set is 11.9% [5.2,25.0], and going from 2 to 8 certified rules moved it
+    # by at most +4.2pp on identical hypotheses - coverage is not the lever.
+    sig_path = ROOT / "artifacts/p1/signal_condv3_stratified.json"
+    if sig_path.exists():
+        try:
+            sig = json.loads(sig_path.read_text("utf-8"))
+        except Exception as exc:
+            sig = {}
+            gate("G30 per-rule reward usefulness measured", False, f"unparsable: {exc}")
+        if sig:
+            neg = [r["rule_id"] for r in sig.get("per_rule", []) if (r.get("gap") or 0.0) < -0.05]
+            pos = [r["rule_id"] for r in sig.get("per_rule", []) if (r.get("gap") or 0.0) > 0.05]
+            gate("G30 at least one reward rule separates the policy from professional usage (gap>0.05)",
+                 bool(pos),
+                 f"positive gap (can teach): {pos}; NEGATIVE gap (penalises professionals harder than "
+                 f"the policy, noise for RL): {neg}")
+            rate = float(sig.get("nonzero_spread_rate") or 0.0)
+            if rate < 0.3:
+                dv = sig.get("rollout_diversity", {})
+                warn("G30b advantage coverage on the stratified prompt set",
+                     f"{rate:.1%} of {sig.get('groups')} groups carry a nonzero advantage; rollout text "
+                     f"itself varies (distinct/group={dv.get('mean_distinct_hypotheses_per_group')}, "
+                     f"greedy-vs-sampled similarity={dv.get('mean_similarity_rollout0_vs_rest')}, "
+                     f"CI={sig.get('nonzero_spread_rate_ci95')}), so the gap is in what the rules look "
+                     f"at, not in output diversity")
+    else:
+        warn("G30 per-rule reward usefulness measured",
+             "no artifacts/p1/signal_condv3_stratified.json yet "
+             "(run scripts/p1_signal_by_rule.py --rollout-log <stratified log>)")
 
     # report ----------------------------------------------------------------------
     print("\n" + "=" * 78)

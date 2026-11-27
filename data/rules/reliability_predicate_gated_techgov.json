@@ -1,0 +1,218 @@
+{
+  "source_audit": "artifacts/audit/predicate_gated_techgov_full.json",
+  "shrinkage": 4.0,
+  "n_rules_measured": 26,
+  "n_rules_weight_gt_0": 10,
+  "total_applicable_checks": 34184,
+  "total_decided_checks": 34184,
+  "rules": {
+    "LB_fb5d91622d69": {
+      "applicable": 0,
+      "satisfied": 0,
+      "violated": 0,
+      "raw_agreement": null,
+      "agreement": 0.5,
+      "weight": 0.0
+    },
+    "LB_d121073f582e": {
+      "applicable": 2041,
+      "satisfied": 2041,
+      "violated": 0,
+      "raw_agreement": 1.0,
+      "agreement": 0.999,
+      "weight": 0.998
+    },
+    "LB_ce9b853ce4ee": {
+      "applicable": 0,
+      "satisfied": 0,
+      "violated": 0,
+      "raw_agreement": null,
+      "agreement": 0.5,
+      "weight": 0.0
+    },
+    "LB_9789dfb15623": {
+      "applicable": 680,
+      "satisfied": 629,
+      "violated": 51,
+      "raw_agreement": 0.925,
+      "agreement": 0.9225,
+      "weight": 0.845
+    },
+    "LB_2e47463db059": {
+      "applicable": 340,
+      "satisfied": 110,
+      "violated": 230,
+      "raw_agreement": 0.3235294117647059,
+      "agreement": 0.3256,
+      "weight": 0.0
+    },
+    "LB_473d56626cdb": {
+      "applicable": 1980,
+      "satisfied": 147,
+      "violated": 1833,
+      "raw_agreement": 0.07424242424242425,
+      "agreement": 0.0751,
+      "weight": 0.0
+    },
+    "LB_9d86392ccf45": {
+      "applicable": 3250,
+      "satisfied": 433,
+      "violated": 2817,
+      "raw_agreement": 0.13323076923076924,
+      "agreement": 0.1337,
+      "weight": 0.0
+    },
+    "LB_37643acfef1c": {
+      "applicable": 1252,
+      "satisfied": 50,
+      "violated": 1202,
+      "raw_agreement": 0.039936102236421724,
+      "agreement": 0.0414,
+      "weight": 0.0
+    },
+    "LB_b6ca111c6511": {
+      "applicable": 2740,
+      "satisfied": 272,
+      "violated": 2468,
+      "raw_agreement": 0.09927007299270073,
+      "agreement": 0.0999,
+      "weight": 0.0
+    },
+    "LB_34e781490e7b": {
+      "applicable": 4810,
+      "satisfied": 1823,
+      "violated": 2987,
+      "raw_agreement": 0.379002079002079,
+      "agreement": 0.3791,
+      "weight": 0.0
+    },
+    "LB_d24d2597cb78": {
+      "applicable": 1731,
+      "satisfied": 5,
+      "violated": 1726,
+      "raw_agreement": 0.0028885037550548816,
+      "agreement": 0.004,
+      "weight": 0.0
+    },
+    "LB_e51077fe7961": {
+      "applicable": 1940,
+      "satisfied": 1548,
+      "violated": 392,
+      "raw_agreement": 0.797938144329897,
+      "agreement": 0.7973,
+      "weight": 0.5947
+    },
+    "LB_27c64c1f7e4b": {
+      "applicable": 1993,
+      "satisfied": 1993,
+      "violated": 0,
+      "raw_agreement": 1.0,
+      "agreement": 0.999,
+      "weight": 0.998
+    },
+    "LB_946a24dd25d6": {
+      "applicable": 1826,
+      "satisfied": 939,
+      "violated": 887,
+      "raw_agreement": 0.5142387732749178,
+      "agreement": 0.5142,
+      "weight": 0.0284
+    },
+    "LB_7ba71aa6e282": {
+      "applicable": 2240,
+      "satisfied": 602,
+      "violated": 1638,
+      "raw_agreement": 0.26875,
+      "agreement": 0.2692,
+      "weight": 0.0
+    },
+    "LB_89efbbfdabf2": {
+      "applicable": 428,
+      "satisfied": 120,
+      "violated": 308,
+      "raw_agreement": 0.2803738317757009,
+      "agreement": 0.2824,
+      "weight": 0.0
+    },
+    "LB_15af0fc3dca0": {
+      "applicable": 91,
+      "satisfied": 46,
+      "violated": 45,
+      "raw_agreement": 0.5054945054945055,
+      "agreement": 0.5053,
+      "weight": 0.0105
+    },
+    "LB_374581869ba8": {
+      "applicable": 676,
+      "satisfied": 676,
+      "violated": 0,
+      "raw_agreement": 1.0,
+      "agreement": 0.9971,
+      "weight": 0.9941
+    },
+    "LB_f73c08e1e60c": {
+      "applicable": 1598,
+      "satisfied": 1018,
+      "violated": 580,
+      "raw_agreement": 0.6370463078848561,
+      "agreement": 0.6367,
+      "weight": 0.2734
+    },
+    "LB_353e50a17df4": {
+      "applicable": 1642,
+      "satisfied": 16,
+      "violated": 1626,
+      "raw_agreement": 0.0097442143727162,
+      "agreement": 0.0109,
+      "weight": 0.0
+    },
+    "LB_55471d5dc4b4": {
+      "applicable": 1,
+      "satisfied": 1,
+      "violated": 0,
+      "raw_agreement": 1.0,
+      "agreement": 0.6,
+      "weight": 0.2
+    },
+    "LB_2ebda66afe75": {
+      "applicable": 33,
+      "satisfied": 20,
+      "violated": 13,
+      "raw_agreement": 0.6060606060606061,
+      "agreement": 0.5946,
+      "weight": 0.1892
+    },
+    "LB_bf1449011785": {
+      "applicable": 5,
+      "satisfied": 0,
+      "violated": 5,
+      "raw_agreement": 0.0,
+      "agreement": 0.2222,
+      "weight": 0.0
+    },
+    "LB_0007": {
+      "applicable": 950,
+      "satisfied": 0,
+      "violated": 950,
+      "raw_agreement": 0.0,
+      "agreement": 0.0021,
+      "weight": 0.0
+    },
+    "LB_0009": {
+      "applicable": 1937,
+      "satisfied": 0,
+      "violated": 1937,
+      "raw_agreement": 0.0,
+      "agreement": 0.001,
+      "weight": 0.0
+    },
+    "LB_7eec267b5068": {
+      "applicable": 0,
+      "satisfied": 0,
+      "violated": 0,
+      "raw_agreement": null,
+      "agreement": 0.5,
+      "weight": 0.0
+    }
+  }
+}

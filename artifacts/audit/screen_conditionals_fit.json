@@ -1,0 +1,361 @@
+{
+ "pairs_scanned": 8972,
+ "skip": 0,
+ "candidates": {
+  "negation_not": {
+   "applicable": 581,
+   "satisfied": 534,
+   "violated": 47,
+   "agreement": 0.9191,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "USABLE",
+   "why": "",
+   "source_pattern": "\\b(not|n't)\\b",
+   "values": [
+    "\\bnet\\b",
+    "\\bnee\\b",
+    "\\bnimmer\\b",
+    "\\bnie\\b",
+    "\\bniemools\\b",
+    "\\bniumools\\b",
+    "\\bkeen\\b",
+    "\\bkeng\\b",
+    "\\bkee\\b"
+   ]
+  },
+  "cond_if": {
+   "applicable": 281,
+   "satisfied": 231,
+   "violated": 50,
+   "agreement": 0.8221,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "USABLE",
+   "why": "",
+   "source_pattern": "\\bif\\b",
+   "values": [
+    "\\bwa\\b",
+    "\\bwann\\b",
+    "\\bfalls\\b"
+   ]
+  },
+  "comp_that": {
+   "applicable": 326,
+   "satisfied": 244,
+   "violated": 82,
+   "agreement": 0.7485,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "USABLE",
+   "why": "",
+   "source_pattern": "\\bthat\\s+(he|she|it|they|we|i|you|the|a|un|een|d)\\b",
+   "values": [
+    "\\bdatt\\b",
+    "\\bdass\\b"
+   ]
+  },
+  "superlative": {
+   "applicable": 101,
+   "satisfied": 43,
+   "violated": 58,
+   "agreement": 0.4257,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\bthe\\s+[a-zà-ÿ]{2,}est\\b|\\bthe most\\s+[a-zà-ÿ]+",
+   "values": [
+    "\\b[a-zà-ÿ]{2,}(ste|sten)\\b",
+    "\\bmeescht",
+    "\\bbescht",
+    "\\bbeste\\b"
+   ]
+  },
+  "ability_can": {
+   "applicable": 564,
+   "satisfied": 303,
+   "violated": 261,
+   "agreement": 0.5372,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\b(can|cannot|can't|able to)\\b",
+   "values": [
+    "\\bkann\\b",
+    "\\bkënnt\\b",
+    "\\bkënne",
+    "\\bkéint",
+    "\\bkonnt",
+    "\\bfäeg\\b",
+    "\\bméiglech\\b"
+   ]
+  },
+  "oblig_must": {
+   "applicable": 328,
+   "satisfied": 207,
+   "violated": 121,
+   "agreement": 0.6311,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\b(must|have to|has to|had to)\\b",
+   "values": [
+    "\\bmuss",
+    "\\bméisst",
+    "\\bnoutwendeg\\b"
+   ]
+  },
+  "advise_should": {
+   "applicable": 141,
+   "satisfied": 72,
+   "violated": 69,
+   "agreement": 0.5106,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\bshould\\b",
+   "values": [
+    "\\bsoll",
+    "\\bsollt"
+   ]
+  },
+  "every_each": {
+   "applicable": 170,
+   "satisfied": 129,
+   "violated": 41,
+   "agreement": 0.7588,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "USABLE",
+   "why": "",
+   "source_pattern": "\\b(every|each)\\b",
+   "values": [
+    "\\ball(en)?\\b",
+    "\\bjidd"
+   ]
+  },
+  "reflexive_self": {
+   "applicable": 170,
+   "satisfied": 54,
+   "violated": 116,
+   "agreement": 0.3176,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\b(himself|herself|itself|themselves|myself|yourself|ourselves)\\b",
+   "values": [
+    "\\bselwer\\b",
+    "\\bselber\\b",
+    "\\bsëch\\b"
+   ]
+  },
+  "without": {
+   "applicable": 94,
+   "satisfied": 65,
+   "violated": 29,
+   "agreement": 0.6915,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "USABLE",
+   "why": "",
+   "source_pattern": "\\bwithout\\b",
+   "values": [
+    "\\bouni\\b"
+   ]
+  },
+  "very": {
+   "applicable": 106,
+   "satisfied": 61,
+   "violated": 45,
+   "agreement": 0.5755,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\bvery\\b",
+   "values": [
+    "\\bganz\\b",
+    "\\bsehr\\b",
+    "\\bviru\\b",
+    "\\bhimmelsméisseg\\b"
+   ]
+  },
+  "also_too": {
+   "applicable": 467,
+   "satisfied": 347,
+   "violated": 120,
+   "agreement": 0.743,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "USABLE",
+   "why": "",
+   "source_pattern": "\\b(also|too)\\b",
+   "values": [
+    "\\boch\\b"
+   ]
+  },
+  "only": {
+   "applicable": 241,
+   "satisfied": 131,
+   "violated": 110,
+   "agreement": 0.5436,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\bonly\\b",
+   "values": [
+    "\\bnëmmen\\b",
+    "\\bjust\\b",
+    "\\bbloss\\b",
+    "\\binzen\\b",
+    "\\ballene\\b"
+   ]
+  },
+  "because_of": {
+   "applicable": 77,
+   "satisfied": 46,
+   "violated": 31,
+   "agreement": 0.5974,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\b(because of|due to)\\b",
+   "values": [
+    "\\bwéinst\\b",
+    "\\bwell\\b[^.]{0,40}\\bdatt\\b"
+   ]
+  },
+  "concessive": {
+   "applicable": 40,
+   "satisfied": 12,
+   "violated": 28,
+   "agreement": 0.3,
+   "perturbations_tested": 36,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\b(although|though|even though)\\b",
+   "values": [
+    "\\bobwuel\\b",
+    "\\bobgläich\\b"
+   ]
+  },
+  "more_than": {
+   "applicable": 44,
+   "satisfied": 25,
+   "violated": 19,
+   "agreement": 0.5682,
+   "perturbations_tested": 75,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\bmore than\\b",
+   "values": [
+    "\\bméi\\b[^.]{0,40}\\b(wéi|ewéi)\\b",
+    "\\bnët??\\b[^.]{0,20}\\bn[ée]mme\\b",
+    "\\bnet nëmme\\b",
+    "\\bnet just\\b"
+   ]
+  },
+  "less_fewer": {
+   "applicable": 57,
+   "satisfied": 46,
+   "violated": 11,
+   "agreement": 0.807,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "USABLE",
+   "why": "",
+   "source_pattern": "\\b(less|fewer)\\b",
+   "values": [
+    "\\bmanner\\b",
+    "\\bwéineger\\b"
+   ]
+  },
+  "than": {
+   "applicable": 172,
+   "satisfied": 131,
+   "violated": 41,
+   "agreement": 0.7616,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "USABLE",
+   "why": "",
+   "source_pattern": "\\bthan\\b",
+   "values": [
+    "\\bwéi\\b",
+    "\\bewéi\\b"
+   ]
+  },
+  "as_as": {
+   "applicable": 52,
+   "satisfied": 8,
+   "violated": 44,
+   "agreement": 0.1538,
+   "perturbations_tested": 24,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\bas\\s+(much|many|well|good|far|easy|hard|difficult|important|large|big|early|late|fast|high|low|common|similar|komplex)\\s+as\\b",
+   "values": [
+    "\\b(sou|esou)\\b[^.]{0,40}\\b(wéi|ewéi)\\b"
+   ]
+  },
+  "both": {
+   "applicable": 78,
+   "satisfied": 5,
+   "violated": 73,
+   "agreement": 0.0641,
+   "perturbations_tested": 15,
+   "discrimination": 1.0,
+   "status": "no-support",
+   "why": "support too thin",
+   "source_pattern": "\\bboth\\b",
+   "values": [
+    "\\bbéide[n]?\\b",
+    "\\bsowuel\\b",
+    "\\bpeeceweïs\\b"
+   ]
+  },
+  "enough": {
+   "applicable": 50,
+   "satisfied": 29,
+   "violated": 21,
+   "agreement": 0.58,
+   "perturbations_tested": 87,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\benough\\b",
+   "values": [
+    "\\bgenuch\\b",
+    "\\bgenee\\b",
+    "\\bgenug\\b"
+   ]
+  },
+  "while_durative": {
+   "applicable": 88,
+   "satisfied": 12,
+   "violated": 76,
+   "agreement": 0.1364,
+   "perturbations_tested": 36,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\bwhile\\b",
+   "values": [
+    "\\bwärend\\b",
+    "\\bnodeem\\b",
+    "\\bsoulaange\\b",
+    "\\bwärendem\\b"
+   ]
+  }
+ }
+}

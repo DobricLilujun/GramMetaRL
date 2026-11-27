@@ -40,6 +40,18 @@ SYSTEM = (
 )
 
 
+def _wilson(k: int, n: int, z: float = 1.96) -> list[float]:
+    """Wilson interval for a rate. 24 groups means a +/-18pp error bar on a 29% rate; printing the
+    point estimate alone invited exactly the over-claim that the paired re-scoring later removed."""
+    if not n:
+        return [0.0, 0.0]
+    p = k / n
+    d = 1 + z * z / n
+    c = (p + z * z / (2 * n)) / d
+    h = z * ((p * (1 - p) / n + z * z / (4 * n * n)) ** 0.5) / d
+    return [round(max(0.0, c - h), 3), round(min(1.0, c + h), 3)]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="GRPO reward-side smoke on policy rollouts")
     ap.add_argument("--cards", default="data/rules/mbg_cards_condonly.jsonl")
@@ -49,6 +61,11 @@ def main() -> None:
     ap.add_argument("--pairs", default="data/external/pairs_en_lb.jsonl")
     ap.add_argument("--source-filter", default="techgov_lu_en")
     ap.add_argument("--prompts", type=int, default=40)
+    ap.add_argument("--prompts-per-rule", type=int, default=0,
+                    help="stratify prompt selection: N prompts per certified rule. Use this: with "
+                         "first-decided selection the prompt set changes when the rule set changes, "
+                         "and a measured 29.2%% -> 16.7%% 'regression' turned out to be that selection "
+                         "effect, not a rule-set effect (see P0_DATA_P1_EVIDENCE section 13).")
     ap.add_argument("--rollouts", type=int, default=4)
     ap.add_argument("--temperature", type=float, default=0.9)
     ap.add_argument("--policy-endpoint", required=True)
@@ -74,16 +91,44 @@ def main() -> None:
 
     # candidate prompts: the rule must be decidable for the pair, i.e. at least one rollout can matter
     prompts: list[dict] = []
-    with Path(args.pairs).open("r", encoding="utf-8") as f:
-        for line in f:
-            rec = json.loads(line)
-            if args.source_filter and rec.get("source") != args.source_filter:
-                continue
-            rep = v.verify(rec["src"], rec["tgt_ref"], cards)
-            if rep.decided:
-                prompts.append(rec)
-                if len(prompts) >= args.prompts:
-                    break
+    rule_support: dict[str, int] = {}
+    selected_per_rule: dict[str, int] = {}
+    if args.prompts_per_rule:
+        by_rule: dict[str, list[dict]] = {}
+        with Path(args.pairs).open("r", encoding="utf-8") as f:
+            for line in f:
+                rec = json.loads(line)
+                if args.source_filter and rec.get("source") != args.source_filter:
+                    continue
+                rep = v.verify(rec["src"], rec["tgt_ref"], cards)
+                rids = sorted({r.rule_id for r in rep.results
+                               if r.verdict in ("satisfied", "violated")})
+                for rid in rids:
+                    rule_support[rid] = rule_support.get(rid, 0) + 1
+                    if len(by_rule.setdefault(rid, [])) < args.prompts_per_rule:
+                        by_rule[rid].append(rec)
+        seen: set[str] = set()
+        for i in range(args.prompts_per_rule):        # round-robin: no rule may dominate the set
+            for rid in sorted(by_rule):
+                if i < len(by_rule[rid]):
+                    rec = by_rule[rid][i]
+                    if rec["id"] not in seen:
+                        seen.add(rec["id"])
+                        prompts.append(rec)
+                        selected_per_rule[rid] = selected_per_rule.get(rid, 0) + 1
+        print("rule support in pool (pairs whose reference decides the rule): "
+              + ", ".join(f"{k}={v}" for k, v in sorted(rule_support.items())))
+    else:
+        with Path(args.pairs).open("r", encoding="utf-8") as f:
+            for line in f:
+                rec = json.loads(line)
+                if args.source_filter and rec.get("source") != args.source_filter:
+                    continue
+                rep = v.verify(rec["src"], rec["tgt_ref"], cards)
+                if rep.decided:
+                    prompts.append(rec)
+                    if len(prompts) >= args.prompts:
+                        break
 
     print(f"prompts={len(prompts)} rollouts/prompt={args.rollouts}")
     groups: list[dict] = []
@@ -155,6 +200,15 @@ def main() -> None:
     res = {
         "cards_used": sorted(c.id for c in cards),
         "prompts": n,
+        "prompt_selection": {
+            "mode": "stratified_per_rule" if args.prompts_per_rule else "first_decided",
+            "prompts_per_rule_requested": args.prompts_per_rule,
+            "rule_support_in_pool": rule_support,
+            "prompts_selected_per_rule": selected_per_rule,
+        },
+        "protocol": {"rollout_0": "greedy (temperature 0)",
+                     "other_rollouts": f"temperature {args.temperature}"},
+        "nonzero_spread_rate_ci95": _wilson(tally["group_nonzero_spread"], n),
         "rollouts_per_prompt": args.rollouts,
         "policy_model": args.policy_model,
         "rollout_tally": dict(tally),

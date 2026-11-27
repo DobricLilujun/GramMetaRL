@@ -1,0 +1,124 @@
+{
+ "_comment": "v2 = v1 plus the data-driven perfect fix and four hand-authored conditionals that pass the card-example admission test",
+ "constraints": [
+  {
+   "card_id": "LB_9789dfb15623",
+   "description": "English comparative (X-er than / more X / bare -er adjective) requires the analytic comparative with méi",
+   "source_pattern": "(?:\\bmore\\s+(?!than\\b|or\\b|less\\b|enough\\b|merely\\b|simply\\b)[a-zà-ÿ]{2,}\\b|\\b[a-zà-ÿ]{2,}er than\\b)",
+   "values": [
+    "\\bméi\\s+[a-zà-ÿ]+\\b"
+   ],
+   "level": "phrase",
+   "why": "tightened twice from measured violations: \\b\\w+er\\b matched after/under/number, then 'more than'/'more or less' matched idiomatic paraphrases; the remaining condition demands more + an adjective word",
+   "allow_untested": true
+  },
+  {
+   "card_id": "LB_946a24dd25d6",
+   "description": "A SINGULAR English possessor (my/his/her/its) requires a singular-possessor possessive article",
+   "source_pattern": "\\b(my|his|her|its)\\b",
+   "values": [
+    "\\bmäi(n|en|em|er)?\\b",
+    "\\bmeng(en|er|em)?\\b",
+    "\\bsäin(e|en|em|er)?\\b",
+    "\\bseng(e|en|em|er)?\\b",
+    "\\bhir(e|en|em|er)?\\b",
+    "\\bsen(e|en|em)?\\b",
+    "\\bdäi(n|en|em|er)?\\b"
+   ],
+   "level": "token",
+   "why": "full inflection paradigms instead of \\bX\\w*\\b: the greedy form matched däischtere ('those darker') and sent ('sand'), which made the check fire on non-possessives"
+  },
+  {
+   "card_id": "LB_73a7f3d6dede",
+   "description": "English conditional would + verb requires the Luxembourgish conditional auxiliary géif-",
+   "source_pattern": "\\b(would|wouldn't|would've)\\b",
+   "values": [
+    "\\bgéif\\w*\\b"
+   ],
+   "level": "token",
+   "why": "the source marks irrealis mood; the target must carry the conditional auxiliary"
+  },
+  {
+   "card_id": "LB_363a21684c8f",
+   "description": "The indefinite pronoun een may NOT open the sentence when English opens with One/someone",
+   "source_pattern": "^\\s*(one|someone|somebody)\\b",
+   "values": [
+    "^\\s*\\*?\\s*(een|ee\\(n\\)|e\\(n\\))\\b"
+   ],
+   "level": "phrase",
+   "negate": true,
+   "why": "positional prohibition: English marks the initial slot, so applicability is source-derived; the card's own example is the starred violation *Ee(n) kann hei net parken"
+  },
+  {
+   "card_id": "LB_946a24dd25d6",
+   "description": "A first-person plural possessor (our) requires the plural-possessor article eis-",
+   "source_pattern": "\\b(our|ours)\\b",
+   "values": [
+    "\\beis(e|en|em|er)?\\b"
+   ],
+   "level": "token",
+   "allow_untested": true,
+   "why": "decidable half: 'our' has no homophonous singular variant"
+  },
+  {
+   "card_id": "LB_946a24dd25d6",
+   "description": "Third-person plural possessor (their) requires SOME possessive article (their admits both är- and hir- variants, so possessor NUMBER is not decidable for this person)",
+   "source_pattern": "\\b(their|theirs)\\b",
+   "values": [
+    "\\bär(e|en|em)?\\b",
+    "\\bhir(e|en|em|er)?\\b",
+    "\\beis(e|en|em|er)?\\b"
+   ],
+   "level": "token",
+   "allow_untested": true,
+   "why": "measured: 52% of this rule's violations contained a possessive article of the other number, and Luxembourgish allows hir- as a variant of är- for 'their' (hirer Zäit = their time), so requiring är- manufactured false violations; the check is weakened to presence-of-possessive and the description states exactly which claim is being made"
+  },
+  {
+   "card_id": "LB_f73c08e1e60c",
+   "level": "phrase",
+   "source_pattern": "\\b(has|have|had)\\s+(?:[a-zà-ÿ']+ed|been|built|gone|done|made|seen|known|given|taken|found|kept|left|told|said|worn|drawn|grown|thrown|eaten|written|spoken|chosen|broken|beaten|fallen|forgotten|hidden|ridden|risen|shaken|stolen|run)\\b",
+   "values": [
+    "\\b(hu[a-z()']*|sin|sinn|ass|as|war|waren|hätt|hieren|wiren)\\b[^.]{0,120}\\bge[a-zà-ÿ']+",
+    "\\b(hu[a-z()']*|sin|sinn|ass|as|war|waren|hätt|hieren|wiren)\\b[^.]{0,120}\\b[a-zà-ÿ]{4,}(éiert|iert|éit)",
+    "\\b(hu[a-z()']*|sin|sinn|ass|as|war|waren|hätt|hieren|wiren)\\b[^.]{0,120}\\b(gewues|gewuescht|gewier|gewuer|gewueschter|gewiescht|gaangen|hat)\\b"
+   ],
+   "description": "The source marks perfect aspect; the target must show an auxiliary and a participle.",
+   "why": "v1 required ge-prefix or a hand-picked irregular list and an 80-char window; decomposition of 388 violations showed 34.8% DID contain a hu-auxiliary, 26.3% a copula and 14.7% a ge-word, so the verdict was a form-list/window artifact. Window 120, loan-verb participles (-éiert/-iert) and gewiescht/gewuer added. Tense-choice divergences (present + zanter, simple past) remain a real translation-strategy difference and are expected to keep this rule from certifying."
+  },
+  {
+   "card_id": "LB_9a1ce174385f",
+   "level": "phrase",
+   "source_pattern": "\\bhad\\s+(?:[a-zà-ÿ']+ed|been|built|gone|done|made|seen|known|given|taken|found|kept|left|told|said|proposed|allowed|refused|agreed|decided|announced|reported|wanted|tried|ordered)\\b",
+   "values": [
+    "\\b(hat[a-z()']*|hatten|haten|hueten|hueren|hätt|w[aä]r[a-z()']*|waren|wiren)\\b[^.]{0,120}\\b(ge[a-zà-ÿ']+|[a-zà-ÿ]{4,}(éiert|iert)|gaangen|hat)\\b"
+   ],
+   "description": "The source marks past perfect; the target must show a past auxiliary plus participle.",
+   "why": "the card's own pair is 'they had built' -> 'si hate(n) gebaut'; the auxiliary pattern keeps the (n) variant written in the book."
+  },
+  {
+   "card_id": "LB_353e50a17df4",
+   "level": "sentence",
+   "source_pattern": "\\b(that|when|if|because|although|while)\\s+you\\b",
+   "values": [
+    "\\bs\\s+du\\b",
+    "\\bsdu\\b"
+   ],
+   "description": "A subordinate clause with a 2nd person singular subject shows the clitic before 'du'.",
+   "why": "book pairs: 'We know that you leave.'->'Mir wëssen, datt s du fortgees.' and 'I don't know when you will arrive.'->'Ech weess net, wéini s du ukënns.' Note the polite register (Dir) is a legitimate alternative rendering of English 'you', so agreement is expected to be partial."
+  },
+  {
+   "card_id": "LB_d24d2597cb78",
+   "level": "phrase",
+   "source_pattern": "\\b(?:approximately|around|about)?\\s*\\b\\d{1,4}\\s+[a-zà-ÿ]{3,}\\b",
+   "values": [
+    "\\beng(en)?\\b[^.]{0,20}\\d",
+    "\\b(ronn|ongeféier|zirka|rond)\\b[^.]{0,20}\\d"
+   ],
+   "description": "An approximate cardinal plus plural noun is introduced by 'eng' (or an approximative adverb) in Luxembourgish.",
+   "why": "book pairs 'approximately 20 people'->'eng 20 Leit', 'with approximately 100 boats'->'mat engen 100 Boter'; the alternates are the approximative adverbs actually used in the corpus (ronn 180 Staaten)."
+  }
+ ],
+ "_dropped": {
+  "LB_ab00cf7fe49b": "article-before-proper-name is decidable from the source only through capitalization, and TranslationVerifier.normalize_text casefolds both sides (grammetarl/validator.py:82), so no source pattern can fire post-normalization. The admission test rejected it rather than letting it ship as an untestable constraint. P3 needs case-preserving verification."
+ }
+}

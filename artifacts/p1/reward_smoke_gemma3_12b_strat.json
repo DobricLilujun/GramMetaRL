@@ -1,0 +1,66 @@
+{
+  "cards_used": [
+    "LB_946a24dd25d6",
+    "LB_9789dfb15623",
+    "LB_MIN01_comp_that",
+    "LB_MIN02_cond_if",
+    "LB_MIN03_every_each",
+    "LB_MIN04_negation_not",
+    "LB_MIN05_than",
+    "LB_MIN06_without"
+  ],
+  "prompts": 42,
+  "prompt_selection": {
+    "mode": "stratified_per_rule",
+    "prompts_per_rule_requested": 6,
+    "rule_support_in_pool": {
+      "LB_946a24dd25d6": 1973,
+      "LB_MIN04_negation_not": 581,
+      "LB_9789dfb15623": 310,
+      "LB_MIN05_than": 172,
+      "LB_MIN01_comp_that": 326,
+      "LB_MIN02_cond_if": 281,
+      "LB_MIN06_without": 94,
+      "LB_MIN03_every_each": 170
+    },
+    "prompts_selected_per_rule": {
+      "LB_946a24dd25d6": 5,
+      "LB_9789dfb15623": 3,
+      "LB_MIN01_comp_that": 4,
+      "LB_MIN02_cond_if": 6,
+      "LB_MIN03_every_each": 6,
+      "LB_MIN04_negation_not": 6,
+      "LB_MIN05_than": 6,
+      "LB_MIN06_without": 6
+    }
+  },
+  "protocol": {
+    "rollout_0": "greedy (temperature 0)",
+    "other_rollouts": "temperature 0.9"
+  },
+  "nonzero_spread_rate_ci95": [
+    0.052,
+    0.25
+  ],
+  "rollouts_per_prompt": 3,
+  "policy_model": "gemma3:12b",
+  "rollout_tally": {
+    "rollout_ok": 126,
+    "group_zero_spread": 37,
+    "ref_ok": 36,
+    "ref_penalized": 6,
+    "group_nonzero_spread": 5
+  },
+  "groups_nonzero_spread": 5,
+  "nonzero_spread_rate": 0.11904761904761904,
+  "mean_spread": 0.21235502397519465,
+  "median_spread": 0.0,
+  "reward_mean": 0.6416199071136082,
+  "reward_stdev_across_groups": 0.6461623549239782,
+  "reward_min": -1.0,
+  "reward_max": 1.0,
+  "reference_penalized_rate": 0.14285714285714285,
+  "reference_mean_reward": 0.7335765430829531,
+  "policy_minus_reference": -0.09195663596934489,
+  "abstain_rollout_rate": 0.0
+}

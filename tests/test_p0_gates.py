@@ -546,3 +546,41 @@ def test_main_verify_subcommand_emits_json():
     assert [r["verdict"] for r in report["results"]] == ["satisfied", "satisfied"]
     # the report must stay weight-alignable: rule_ids and verdicts in the same order
     assert [r["rule_id"] for r in report["results"]] == ["LB_9789dfb15623", "LB_946a24dd25d6"]
+
+
+# --------------------------------------------------------------------------- measured signal protocol
+
+def test_wilson_interval_brackets_the_rate_and_shrinks_with_n():
+    """The smoke prints a rate; at 24 groups the point estimate alone was over-read as a
+    29% -> 17% regression. The interval has to be part of the artifact."""
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    from p1_reward_smoke import _wilson
+
+    lo7, hi7 = _wilson(7, 24)
+    assert lo7 <= 7 / 24 <= hi7
+    assert hi7 - lo7 > 0.15          # n=24 is a wide interval; that is the point of reporting it
+    lo70, hi70 = _wilson(70, 240)    # same rate, 10x the groups
+    assert hi70 - lo70 < (hi7 - lo7) / 2
+    assert _wilson(0, 0) == [0.0, 0.0]
+
+
+def test_rule_quality_reader_accepts_rule_keyed_artifact(tmp_path):
+    """scripts/rule_quality_matrix.py writes a dict keyed by rule id; a reader that assumes a
+    {'rules': [...]} shape silently selects zero rules, which looks like a passing empty smoke."""
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    from p1_signal_by_rule import usable_ids
+
+    keyed = tmp_path / "keyed.json"
+    keyed.write_text(__import__("json").dumps({
+        "LB_A": {"usable": True, "agreement": 0.9},
+        "LB_B": {"usable": False, "agreement": 0.3},
+    }), encoding="utf-8")
+    assert usable_ids(keyed) == {"LB_A"}
+
+    legacy = tmp_path / "legacy.json"
+    legacy.write_text(__import__("json").dumps(
+        {"rules": [{"rule_id": "LB_C", "usable": True}, {"rule_id": "LB_D", "usable": False}]}),
+        encoding="utf-8")
+    assert usable_ids(legacy) == {"LB_C"}

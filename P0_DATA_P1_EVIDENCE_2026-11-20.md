@@ -702,3 +702,195 @@ New limitation recorded (measured, not inferred): `main.py retrieve --top-k 3` o
 "Our children are taller than their parents." returns the possessive card plus two irrelevant
 phonotactics cards, all tied at 0.336, and **misses the comparative card**. Measurement passes named
 `--card-ids`, so no published number depends on retrieval; the P1 agent trajectory will.
+
+## 14. Expanding certified rules 2 to 8, and the negative result that killed "coverage is the bottleneck" (2026-11-27)
+
+The P1 plan named certified-rule count (2) as the binding constraint on reward signal density. This
+section records the attempt to lift it, what was built, and the measurement that contradicted the
+hypothesis in its strong form.
+
+### 14.1 Why hand-authoring more conditionals did not work
+
+`data/rules/source_conditionals_v2.json` fixed the present-perfect patterns (window 120 chars,
+loan-verb participles `-eiert/-iert`, `gewiescht/gewuer`) and added four hand-authored conditionals
+(past perfect, proper-name article, 2sg clitic `s du`, `eng` + cardinal). Applied to the card set
+(10 constraints accepted, 0 rejected), audited on the fit half and certified on the held-out half:
+
+| rule | held-out agreement |
+|---|---|
+| perfect (fixed) | 0.402 |
+| past perfect | 0.30 |
+| 2sg clitic `s du` | 0.23 |
+| `eng` + cardinal | 0.08 |
+| possessive (previous) | 0.74 |
+| comparative (previous) | 1.00 |
+
+Every new rule was refuted. The violation decomposition of the perfect rule explains why without any
+appeal to intuition: of 388 "violations", 34.8% contained a `hu*` auxiliary, 26.3% a copula, 14.7% a
+`ge-` word, so about 76% of them already had the correct morphology somewhere in the clause. Fixing
+that took agreement from 0.215 to 0.402 - still far below the 0.65 floor. **The binding property is
+target-form obligatoriness, not regex quality.** English tense/aspect at phrase level maps many-to-many
+onto Luxembourgish, so a source cue does not license a single required target form. A rule can be
+perfectly implemented and still be wrong as a reward.
+
+One candidate died at admission for a harness reason worth recording: the proper-name article rule
+depends on capitalisation, and `grammetarl/validator.py:82` `normalize_text` NFKC-normalises and
+**casefolds** before any pattern runs. Capitalisation-dependent constraints are untestable in this
+harness; the admission test caught it rather than a green number hiding it.
+
+### 14.2 Screening instead of authoring
+
+`scripts/screen_source_conditionals.py` screens candidate conditionals against the corpus directly
+(screen on the fit half, certify on the held-out half, ship only if **both** halves clear the floor).
+22 candidates in `data/rules/screened_conditionals.json`, mined from the corpus by reading which
+English function words have stable Luxembourgish counterparts, then corrected from measured violations:
+
+- `than` needed **`eweéi/ewéi`**: agreement 0.49 to 0.76 (LLB writes `ewéi` for `than` frequently).
+- the `-est` superlative source condition fired on `interest`, `request`, `suggest` (they end in
+  `-est`); requiring `the X-est` fixed the trigger, agreement still 0.43 because LLB often uses the
+  analytic superlative.
+- `as ... as` matched across unrelated `as` tokens in one sentence; restricted to an adjective list,
+  agreement still 0.15, so the candidate was dropped.
+
+The screening probe also had a bug, found because `tested` came out far below the number of samples:
+`verifier_discrimination.corrupt_all` defaults to `min_instances=2` and refuses to perturb when the
+target contains a single instance ("single-token corruption is enough"). For function-word cues that is
+almost always the case, so 40 sampled targets produced 9 tested perturbations and the rules were
+labelled "support too thin" by a probe limitation, not by the data. Screening now calls it with
+`min_instances=1`, and `tested` reached 120 per candidate.
+
+Certified on both halves (fit, held-out agreement, held-out n = pairs where the source condition fires):
+
+| mined rule | fit | held-out | disc (matrix) |
+|---|---|---|---|
+| `negation_not` (not/n't -> net/keen/keng/...) | 0.92 / 581 | 0.89 / 177 | 96.7% |
+| `cond_if` (if -> wa/wann/falls) | 0.82 / 281 | 0.81 / 115 | 100% |
+| `comp_that` (that + subject -> datt/dass) | 0.75 / 326 | 0.75 / 103 | 100% |
+| `every_each` (every/each -> all/jidd) | 0.76 / 170 | 0.77 / 86 | 100% |
+| `than` (than -> weéi/ewéi) | 0.76 / 172 | 0.85 / 71 | 96.7% |
+| `without` (without -> ouni) | 0.69 / 94 | 0.72 / 43 | 100% |
+
+The screening probe's own discrimination column is **1.00 for all 22 candidates**, including the garbage
+ones; the 96.7-100% above comes from the three-axis matrix (`rule_quality_condv3_heldout.json`), which
+corrupts all instances. See 14.6 - this axis does not do the work people assume it does.
+
+`also_too` scored 0.74 on the fit half and **0.64 on the held-out half, so it is refuted**: selecting on
+the fit half alone over-fits, which is exactly what the two-half criterion is for. Rejected by genuine
+divergence: `superlative` 0.42, `ability_can` 0.43 (fit 0.54), `oblig_must` 0.63, `reflexive_self` 0.27,
+`while_durative` 0.12, `both` 0.06, `as_as` 0.08. LLB restructures the clause instead of using a
+never/both-style adverb, so those source cues license no single target cue.
+
+### 14.3 Mined rules are cards, with provenance that says they are mined
+
+`scripts/make_mined_cards.py` emits `data/rules/mbg_cards_mined.jsonl` (6 cards). They carry
+`source.source_id = CORPUS_MINED_TECHGOV`, an excerpt that says "no book evidence: derived from corpus
+agreement, not extracted", `rule_status = "variable"` (the schema has no `statistical`), and the
+measured agreement in the statement. Their examples are corpus instances taken from the **fit half**
+with the licence and pair id in the note, so the card self-test does not leak the held-out certification.
+Merged set: `data/rules/mbg_cards_condv3.jsonl` = 87 book cards + 6 mined = 93.
+
+Three-axis matrix on the held-out half (`artifacts/audit/rule_quality_condv3_heldout.json`):
+**8 rules USABLE** - `LB_9789dfb15623` comparative, `LB_946a24dd25d6` possessive, and
+`LB_MIN01..06`. Discrimination 96.7-100%. Still 1 vacuous (`LB_55471d5dc4b4`), 1 tautological
+(`LB_27c64c1f7e4b`), and several weak-on-discrimination suffix rules.
+
+End-to-end over all 8,972 CC0 pairs with only the certified rules (`--quality` gating):
+
+| | 2 rules | 8 rules |
+|---|---|---|
+| pairs scored | 2,228 | 3,270 |
+| pairs labelled | 1,585 | **2,555** |
+| decided checks | 2,283 | 3,907 |
+| professional translations receiving a negative grammar reward | 28.9% | **22.3%** (weighted 23.9%) |
+
+Coverage up a third, false penalty rate down. On the label side the expansion was an unqualified win.
+
+### 14.4 The RL readout went the other way
+
+Same protocol as the previous smoke (gemma3:12b, 24 prompts, 3 rollouts, first rollout greedy, rest at
+temperature 0.9), 2 certified rules vs 8:
+
+| | 2 rules | 8 rules |
+|---|---|---|
+| nonzero_spread_rate | 29.2% | **16.7%** |
+| mean spread | 0.583 | 0.333 |
+| reward mean | 0.694 | 0.833 |
+| reference mean | 0.750 | 0.833 |
+| policy minus reference | -0.056 | **0.000** |
+
+More rules made the GRPO advantage **rarer**, and the policy now scores exactly like the professional
+reference. Before interpreting that as a regression, the confound: `p1_reward_smoke.py` selects prompts
+as "the first pairs whose reference has a decided check", so changing the rule set also changes the
+prompt set, and the two runs were not on the same pairs.
+
+`scripts/p1_signal_by_rule.py` removes the confound by re-scoring the **stored hypotheses** offline
+(zero model calls) under different rule subsets. It first reproduced the online number exactly
+(29.2% on the old log with the 2-rule set), which validates the offline path:
+
+| hypothesis set | 2 rules | 8 rules |
+|---|---|---|
+| old prompt set (selected by 2 rules) | 29.2% | 29.2% |
+| new prompt set (selected by 8 rules) | 12.5% | 16.7% |
+
+So on identical hypotheses the 6 mined rules changed the spread rate by at most +4.2pp (one group,
+`cond_if`), and the apparent 29.2% to 16.7% drop was **mostly the prompt set**.
+
+Per-rule signal on the new prompt set (policy violated rate vs the professional reference's, same rules):
+
+| rule | policy n | policy viol | ref viol | gap | groups where it creates spread |
+|---|---|---|---|---|---|
+| `LB_946a24dd25d6` possessive | 36 | 11.1% | 16.7% | **-5.6%** | 3/24 |
+| `LB_MIN02_cond_if` | 3 | 66.7% | 0.0% | +66.7% | 1/24 |
+| `LB_MIN04_negation_not` | 12 | 0.0% | 0.0% | 0 | 0/24 |
+| `LB_MIN01_comp_that` | 12 | 0.0% | 0.0% | 0 | 0/24 |
+| `LB_MIN05_than` | 9 | 0.0% | 0.0% | 0 | 0/24 |
+| `LB_9789dfb15623` comparative | 9 | 0.0% | 0.0% | 0 | 0/24 |
+
+This is the whole story in one table. A high-support certified rule can be **saturated**: `negation_not`
+fires on 12 rollouts and the 12B satisfies it every time, exactly like the professionals, so it adds
+decided checks and zero advantage. The only rule with a positive gap is `cond_if`, on n=3 checks. And
+the possessive rule's gap is **negative** - it penalises professional translations (16.7%) more often
+than the model (11.1%) - which is the same noisy-negative fact from section 11, now visible inside the
+reward.
+
+### 14.5 What the P1 plan now has to say
+
+The claim "certified-rule count is the binding constraint on signal density" is **falsified in its strong
+form**: going 2 to 8 certified rules did not raise advantage coverage. The measured levers are:
+
+1. **Rule difficulty relative to the policy.** Select/derive rules where the policy violates and the
+   professional reference satisfies (positive gap). Saturated function-word cues are useful for labels
+   and for the eval, useless for GRPO advantage.
+2. **Prompt sampling.** Advantage is a within-group property; which pairs are sampled dominates the
+   measured rate. `p1_reward_smoke.py` now takes `--prompts-per-rule N` to stratify selection so every
+   certified rule gets its own groups instead of whatever the first decidable pairs happen to contain.
+3. **Statistical power.** 7/24 vs 4/24 is not a difference. The smoke now emits a Wilson interval
+   (`nonzero_spread_rate_ci95`); at n=24 it is about +/-18pp, larger than every effect reported above.
+   A stratified run (8 rules x 6 prompts) is the first experiment in this line with a defensible n.
+
+Operational fact found while polling that run: on `/raid` a log file created by a background process is
+not visible to a new exec for roughly 30-60s. Polling with `ls`/`grep` on the log looks like a failed
+launch; `ps` shows the process immediately. Do not relaunch on the basis of a missing log - that is how
+a job gets run twice.
+
+### 14.6 The discrimination axis does no work on cue-type rules
+
+`artifacts/audit/screen_conditionals_{fit,heldout}.json` report `discrimination = 1.00` for **all 22**
+candidates, including the ones the corpus refutes outright: `both` 0.06 agreement, `as_as` 0.08,
+`while_durative` 0.12. A rule with essentially zero agreement and perfect discrimination is not a paradox:
+discrimination asks whether the check flips when the **target cue** is corrupted, and for a
+`source_conditional` whose check is "target contains one of these cue tokens", corrupting that token flips
+the check by construction.
+
+What discrimination was built for is suffix/surface shape rules (`-en` plural at 5.3% = cannot bite). For a
+cue rule it degenerates: a single-token cue list is self-certifying, and the only reason `negation_not` and
+`than` read 96.7% instead of 100% in the matrix is that their cue lists contain synonyms, so corrupting one
+leaves another valid.
+
+Consequence for the measurement contract, stated plainly: **for cue-type `source_conditional` rules the
+three axes collapse to two effective ones** - agreement against professional translations, and
+non-tautology. The support floors (`n >= 30` decided checks, `>= 20` perturbations) and the two-half
+protocol are therefore carrying the entire burden of proof for the 6 mined rules, and a future hardening
+step is a discrimination probe that breaks the *source* condition instead of the target cue (i.e. test
+whether removing `if` from the English side makes the constraint abstain - an applicability-sensitivity
+axis, not a target-flip axis).

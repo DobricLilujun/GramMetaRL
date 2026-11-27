@@ -1,0 +1,15 @@
+{
+  "rule": "LB_f73c08e1e60c",
+  "counts": {
+    "undecided:not_applicable": 8479,
+    "aux_copula": 102,
+    "satisfied": 105,
+    "aux_huet": 135,
+    "part_ge": 57,
+    "part_loan_eiert": 21,
+    "residual": 25,
+    "part_en": 48
+  },
+  "violations": 388,
+  "pairs_scanned": 8972
+}

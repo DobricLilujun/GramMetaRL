@@ -11,20 +11,27 @@ cannot be measured are reported as undecidable and abstain instead of producing 
 
 ---
 
-## 0. Status at a glance (measured, 2026-11-26)
+## 0. Status at a glance (measured, 2026-11-27)
 
 | item | value | where it comes from |
 |---|---|---|
-| Gate table | **PASS=28 FAIL=2 WARN=9** | `scripts/smoke_test.py` |
-| Unit tests | **31 passed** | `tests/` |
-| Cards extracted from the grammar book | **87** | `data/rules/mbg_cards_condonly.jsonl` |
-| Rules certified usable (3 axes + support floors, CC0 pool) | **2** | `artifacts/audit/rule_quality_conditional.json` |
+| Gate table | **PASS=29 FAIL=2 WARN=10** | `scripts/smoke_test.py` |
+| Unit tests | **33 passed** | `tests/` |
+| Cards: 87 book-extracted + 6 corpus-mined | **93** | `data/rules/mbg_cards_condv3.jsonl` |
+| Rules certified usable (3 axes + support floors, CC0 pool) | **8** (2 book + 6 mined) | `artifacts/audit/rule_quality_condv3_heldout.json` |
 | Rules certified on the CC BY-NC pool (reported separately) | **2** (a *different* pair — see §5) | `artifacts/audit/rule_quality_condonly_luxalign.json` |
-| Labeled pairs (certified rules only, 100% CC0) | **1,585** | `data/processed/labeled_condonly.jsonl` |
-| SFT/RL dataset (train / valid / rule-held-out) | **1,427 / 158 / 0** | `data/processed/gated_condonly/` |
-| Honest false-penalty rate (professional translations penalized) | **28.9%** (weighted 29.2%) | `artifacts/audit/gated_condonly_techgov.json` |
-| GRPO advantage coverage on policy rollouts | **29.2%** of groups have nonzero spread | `artifacts/p1/reward_smoke_gemma3_12b.json` |
-| Reward noise floor (reference translation penalized) | **12.5%** | same artifact |
+| Labeled pairs (certified rules only, 100% CC0) | **2,555** | `data/processed/labeled_condv3.jsonl` |
+| SFT/RL dataset (train / valid / rule-level held-out) | **2,183 / 243 / 129** (1 of 8 rules held out) | `data/processed/gated_condv3/` |
+| Honest false-penalty rate (professional translations penalized) | **22.3%** (weighted 23.9%) | `artifacts/audit/gated_condv3_techgov.json` |
+| GRPO advantage coverage, stratified prompt set (the honest number) | **11.9%** of groups [CI 5.2–25.0] | `artifacts/p1/reward_smoke_gemma3_12b_strat.json` |
+| Rules that actually separate policy from professionals (violation gap > 0.05) | **3 of 8**, one strongly (`cond_if` +44pp) | `artifacts/p1/signal_condv3_stratified.json` |
+| Reward noise floor (reference translation penalized) | **14.3%** | `artifacts/p1/reward_smoke_gemma3_12b_strat.json` |
+
+Headline measured result of 2026-11-27: **rule coverage is not the RL bottleneck.** Going from 2 to 8
+certified rules raised label yield by a third and *lowered* the false-penalty rate, but changed GRPO
+advantage coverage by at most +4.2pp on identical hypotheses; under stratified prompt selection the
+coverage is 11.9%. The bottleneck is rules that see the policy's actual errors. See §8 and
+evidence §14.
 
 The two FAIL gates are both about *predicate* applicability (G21: 5/100 trigger conditions are in
 executable form; G24: 26/87 cards carry an admitted predicate). They are currently bypassed in practice by
@@ -238,6 +245,42 @@ Discrimination is **sample-sensitive**: the `-en` plural rule measured 5.3% on t
 the held-out slice with identical code, and the possessive rule read 92.6% in one sample and 91.4% in
 another. Single percentages over-claim; no confidence intervals yet.
 
+### 5.1 Corpus-mined `source_conditional` rules (2026-11-27)
+
+Hand-authored conditionals mostly failed: past perfect 0.30, 2sg clitic 0.23, `eng`+cardinal 0.08 held out
+(evidence §14.1). The property that predicts survival is **how obligatory the target form is**, not regex
+care. So new rules are mined from the corpus and screened, not invented:
+
+```bash
+# candidates (22) live in data/rules/screened_conditionals.json; screen on the FIT half only
+$PY scripts/screen_source_conditionals.py --candidates data/rules/screened_conditionals.json \
+    --rows 4000 --out artifacts/audit/screen_conditionals_fit.json
+$PY scripts/screen_source_conditionals.py --candidates data/rules/screened_conditionals.json \
+    --skip 4000 --out artifacts/audit/screen_conditionals_heldout.json
+# a candidate ships only if BOTH halves clear agree>=0.65, disc>=0.5, n>=30, tested>=20
+
+# certified candidates -> real MBG cards with honest provenance
+$PY scripts/make_mined_cards.py            # -> data/rules/mbg_cards_mined.jsonl (6 cards)
+$PY scripts/apply_source_conditionals.py --cards data/rules/mbg_cards_condv2.jsonl \
+    --specs data/rules/source_conditionals_v2.json --out data/rules/mbg_cards_condv3.jsonl
+
+# then the normal held-out certification on the merged set
+$PY scripts/predicate_gated_audit.py --cards data/rules/mbg_cards_condv3.jsonl --rows 4000 \
+    --emit-reliability data/rules/reliability_condv3_fit.json --out artifacts/audit/condv3_fit.json
+$PY scripts/rule_quality_matrix.py --cards data/rules/mbg_cards_condv3.jsonl --skip 4000 \
+    --reliability data/rules/reliability_condv3_fit.json \
+    --out artifacts/audit/rule_quality_condv3_heldout.json
+```
+
+Mined cards carry `source.source_id = CORPUS_MINED_TECHGOV`, `rule_status = "variable"` (there is no
+`statistical` in the schema), an excerpt that states "no book evidence", and examples drawn from the **fit
+half** so the card self-test does not leak the held-out certification. Two protocol traps found while
+building this: `verifier_discrimination.corrupt_all` defaults to `min_instances=2` and silently returns
+nothing for single-instance cues (screening passes `min_instances=1`, otherwise `tested` collapses and a
+rule is called "too thin" because of the probe); and a loose **source** condition is as damaging as a loose
+predicate — `-est` fired on `interest`/`request`/`suggest`, and `as … as` matched across unrelated `as`
+tokens.
+
 ---
 
 ## 6. Labels and the training dataset
@@ -245,25 +288,28 @@ another. Single percentages over-claim; no confidence intervals yet.
 ```bash
 # labels: only matrix-certified rules, reliability-weighted, applicability required
 $PY scripts/gated_pipeline_measurement.py \
-    --cards data/rules/mbg_cards_condonly.jsonl \
-    --reliability data/rules/reliability_condonly.json \
-    --quality artifacts/audit/rule_quality_conditional.json --min-agreement 0.65 \
+    --cards data/rules/mbg_cards_condv3.jsonl \
+    --reliability data/rules/reliability_condv3_fit.json \
+    --quality artifacts/audit/rule_quality_condv3_heldout.json --min-agreement 0.65 \
     --rows 0 --source-filter techgov_lu_en \
-    --labeled-out data/processed/labeled_condonly.jsonl \
-    --out artifacts/audit/gated_condonly_techgov.json
-# -> pairs_scored 2,228 / labeled_pairs 1,585 / decided_checks 2,283 / false_penalty 28.9%
+    --labeled-out data/processed/labeled_condv3.jsonl \
+    --out artifacts/audit/gated_condv3_techgov.json
+# -> pairs_scored 3,270 / labeled_pairs 2,555 / decided_checks 3,907 / false_penalty 22.3% (weighted 23.9%)
 
-# dataset: pair-level splits; rule-level held-out needs >= ~7 rules to be meaningful
+# dataset: pair-level splits + rule-level held-out
 PYTHONPATH=. $PY grammetarl/training/build_dataset.py \
-    --from-cards data/rules/mbg_cards_condonly.jsonl \
-    --external-tagged data/processed/labeled_condonly.jsonl \
-    --out-dir gated_condonly --no-lexicon
-# -> train 1,427 / valid 158 / valid_rules_heldout 0  (100% CC0-1.0)
+    --from-cards data/rules/mbg_cards_condv3.jsonl \
+    --external-tagged data/processed/labeled_condv3.jsonl \
+    --out-dir gated_condv3 --no-lexicon
+# -> train 2,183 / valid 243 / valid_rules_heldout 129  (1 of 8 rules held out, overlap 0, 100% CC0-1.0)
 ```
 
-`data/processed/labeled_condonly.jsonl` is the current label file. **`labeled_conditional.jsonl`
-(3,269 rows) is superseded** — it was produced before the discrimination gate and contains ~2,000 checks
-from a rule that cannot bite. Do not train on it.
+**Rule-level held-out became measurable only after the rule set reached 8.** At 2 certified rules it was
+undefined (`valid_rules_heldout.jsonl` was empty, which §13 of the evidence doc reports rather than
+hides); now one rule (`LB_MIN03_every_each`) is held out entirely and 129 pairs score cross-rule
+generalization. `data/processed/labeled_condonly.jsonl` (1,585 rows, 2 rules) and
+`labeled_conditional.jsonl` (3,269 rows, pre-discrimination-gate, ~2,000 checks from a rule that cannot
+bite) are both superseded by `labeled_condv3.jsonl`.
 
 Reward-side sanity check (no policy involved):
 
@@ -296,21 +342,24 @@ Measured effect of weighting on professional translations: false penalties drop 
 `verl` is deliberately not installed in this environment (it would conflict with the extraction stack).
 
 ```bash
-$PY scripts/p1_reward_smoke.py --prompts 24 --rollouts 3 --temperature 0.9 \
-    --cards data/rules/mbg_cards_condonly.jsonl \
-    --reliability data/rules/reliability_condonly.json \
-    --quality artifacts/audit/rule_quality_conditional.json \
+# the honest protocol: stratify prompt selection so every certified rule gets its own groups
+$PY scripts/p1_reward_smoke.py --prompts-per-rule 6 --rollouts 3 --temperature 0.9 \
+    --cards data/rules/mbg_cards_condv3.jsonl \
+    --reliability data/rules/reliability_condv3_fit.json \
+    --quality artifacts/audit/rule_quality_condv3_heldout.json \
     --policy-endpoint http://127.0.0.1:11434/v1 --policy-model gemma3:12b \
     --timeout 400 --max-tokens 220 \
-    --out artifacts/p1/reward_smoke_gemma3_12b.json \
-    --rollout-log artifacts/p1/rollouts_gemma3_12b.jsonl      # log is not tracked, JSON is
+    --out artifacts/p1/reward_smoke_gemma3_12b_strat.json \
+    --rollout-log artifacts/p1/rollouts_gemma3_12b_strat.jsonl   # log is not tracked, JSON is
+# rollout 0 of every group is greedy (temperature 0), the rest at --temperature; recorded in the artifact
 ```
 
-Measured per policy (this is the table that decides which policy to warm up):
+Measured per policy:
 
 | policy | Luxembourgish? | `nonzero_spread_rate` | reading |
 |---|---|---|---|
-| `gemma3:12b` | real, imperfect | **0.292** | 71% of groups give zero advantage; `reference_penalized_rate` 12.5%; `policy_minus_reference` **−0.056** (two certified rules barely separate a 12B generalist from professionals → signal near saturation) |
+| `gemma3:12b`, 8 rules, **stratified** | real, imperfect | **0.119** [CI 0.052–0.25] | the defensible number: 42 groups, 6 per rule; `reference_penalized_rate` 14.3%; `policy_minus_reference` −0.092 |
+| `gemma3:12b`, 2 rules, first-decided prompts | real, imperfect | 0.292 | superseded as a headline: that prompt set was selected by the 2-rule set, so it flattered it |
 | `qwen2.5-coder:7b` | gibberish | 0.0 | every rollout scores −1.0 → zero advantage |
 | `qwen2.5:14b` | gibberish | 0.0 | same |
 | `gemma3:4b-it-fp16` | weak/gibberish | 0.0 | same |
@@ -320,16 +369,61 @@ Measured per policy (this is the table that decides which policy to warm up):
 this reward at all, because a group of identical rewards has zero advantage. That is the empirical
 argument for the SFT warmup step in `paper/research_plans/P1_card_to_verifier_reward.md`.
 
+### 8.1 Coverage is not the bottleneck (measured 2026-11-27, evidence §14)
+
+Going 2 → 8 certified rules raised label yield (+61% labelled pairs) and *lowered* the false-penalty rate
+(28.9% → 22.3%), but the RL readout went the other way: 29.2% → 16.7% spread rate. That comparison was
+confounded: `--prompts N` selects "the first pairs whose reference decides a rule", so the rule set
+changes the prompt set. `scripts/p1_signal_by_rule.py` re-scores the **stored hypotheses** offline (zero
+model calls) and reproduced the online 29.2% exactly, then held hypotheses fixed:
+
+| hypothesis set | 2 rules | 8 rules |
+|---|---|---|
+| prompts selected by the 2-rule set | 29.2% | 29.2% |
+| prompts selected by the 8-rule set | 12.5% | 16.7% |
+
+Per-rule readout on the stratified run (18 policy checks per rule) is what actually tells you which rules
+belong in a reward — policy violation rate vs the professional reference's:
+
+| rule | policy viol | ref viol | gap | creates group spread |
+|---|---|---|---|---|
+| `LB_MIN02_cond_if` | 61.1% | 16.7% | **+44.4pp** | 1/42 |
+| `LB_MIN03_every_each` | 38.9% | 33.3% | +5.6 | 1/42 |
+| `LB_MIN01_comp_that` | 5.6% | 0.0% | +5.6 | 1/42 |
+| `LB_MIN05_than` | 16.7% | 16.7% | 0.0 | 0/42 |
+| `LB_9789dfb15623` comparative | 0.0% | 0.0% | 0.0 | 0/42 |
+| `LB_946a24dd25d6` possessive | 7.4% | 11.1% | −3.7 | 1/42 |
+| `LB_MIN06_without` | 27.8% | 33.3% | −5.6 | 1/42 |
+| `LB_MIN04_negation_not` | 0.0% | 10.0% | **−10.0** | 0/42 |
+
+Three readings, all of them measurements:
+
+1. A rule can be **saturated**: `negation_not` is the highest-agreement mined rule (0.89 held-out), fires
+   on 30 rollouts, and the 12B satisfies it 100% of the time → zero advantage.
+2. A certified rule can have a **negative gap**: it penalises professional translations more often than
+   the policy, so in RL it pulls the policy away from professional usage. Gate **G30** names these.
+3. Rollouts are not degenerate (mean distinct hypotheses per group 2.93 of 3; greedy-vs-sampled text
+   similarity 0.812), so the missing signal is in **what the rules look at**, not in sampling.
+
+```bash
+# reproduce the table above from a rollout log, offline, no model calls
+$PY scripts/p1_signal_by_rule.py --rollout-log artifacts/p1/rollouts_gemma3_12b_strat.jsonl \
+    --out artifacts/p1/signal_condv3_stratified.json
+# compare rule subsets on identical hypotheses (the paired test that removed the confound):
+$PY scripts/p1_signal_by_rule.py --rollout-log artifacts/p1/rollouts_gemma3_12b.jsonl \
+    --rule-ids LB_946a24dd25d6,LB_9789dfb15623 --out /tmp/sig.json
+```
+
 ---
 
 ## 9. Gates
 
 ```bash
-$PY scripts/smoke_test.py --cards data/rules/mbg_cards_condonly.jsonl \
+$PY scripts/smoke_test.py --cards data/rules/mbg_cards_condv3.jsonl \
     --policy-endpoint http://127.0.0.1:11434/v1 --policy-model qwen2.5-coder:7b
 ```
 
-Current: **PASS=28 FAIL=2 WARN=9.** `P0 gate is GREEN only when every FAIL is cleared (WARN = measured
+Current: **PASS=29 FAIL=2 WARN=10.** `P0 gate is GREEN only when every FAIL is cleared (WARN = measured
 risk, report it).`
 
 Gate families:
@@ -341,8 +435,10 @@ Gate families:
 - G25 no prose/identifier in a regex slot
 - G26 reward is reliability-weighted, not oracle-assumed
 - G27 ≥1 rule with agreement ≥ 0.65 **and** discrimination ≥ 0.5 **and** not its own trigger
-- G28 P1 reward signal measured on rollouts; **G28b WARN** advantage coverage < 50% (29.2%)
+- G28 P1 reward signal measured on rollouts; **G28b WARN** advantage coverage < 50% (11.9% stratified)
 - G29 reward weights inside the measured band
+- G30 ≥1 reward rule has a positive policy-vs-reference violation gap (**PASS**: `cond_if` +44pp);
+  **G30b WARN** advantage coverage on the stratified prompt set, with rollout diversity printed next to it
 
 Note: the trux env has no `ruff`, so lint runs on a machine that has it. Tests, the gate table and the
 re-measurement scripts all run on trux.
@@ -377,11 +473,19 @@ in-run**; the table is only a weight source. Compare fit vs held-out before call
 
 ## 11. What is in git, and what is not
 
-Tracked: code, `tests/`, card sets `data/rules/*.jsonl`, rule specs
-(`data/rules/{source_conditionals,manual_triggers,reliability*}.json`), CC0 labels
-`data/processed/labeled_*.jsonl`, and the evidence JSON:
-`artifacts/audit/{precision_*,rule_quality_*,condonly*,gated_condonly*,violations_*,trigger_quality*}.json`
-plus `artifacts/p1/*.json`.
+Tracked: code, `tests/`, card sets `data/rules/mbg_cards*.jsonl` (all generations, including
+`mbg_cards_mined.jsonl` and the merged `mbg_cards_condv3.jsonl`), rule specs
+(`data/rules/{source_conditionals*,screened_conditionals,manual_triggers,reliability*}.json`), CC0 labels
+`data/processed/labeled_*.jsonl` (verified: 100% of rows in every one of them are CC0-1.0), and the
+evidence JSON: `artifacts/audit/{precision_*,rule_quality_*,condonly*,condv*_fit,screen_conditionals_*,
+gated_cond*,violations_*,trigger_quality*}.json` plus `artifacts/p1/*.json`.
+
+Not tracked: raw OCR output, rollout logs (`*.jsonl` under `artifacts/p1/`), the built dataset splits
+(`data/processed/gated_condv3/{train,valid,valid_rules_heldout}.jsonl` = 2,183 / 243 / 129 rows — rebuild
+with the §6 command, they are derived from tracked labels + tracked cards), model caches, the Overleaf
+clone in `paper/` (it has its own git remote; only push it when explicitly authorized), and `data/external/`
+(48k rows with per-row licenses — regenerate with `scripts/fetch_external_pairs.py`, provenance in
+`MANIFEST.json`).
 
 Not tracked: raw OCR output, rollout logs (`*.jsonl` under `artifacts/p1/`), model caches, the Overleaf
 clone in `paper/` (it has its own git remote; only push it when explicitly authorized), and `data/external/`
@@ -392,7 +496,7 @@ Deeper documents:
 
 | file | content |
 |---|---|
-| `P0_DATA_P1_EVIDENCE_2026-11-20.md` | the full session record, §1–12, including every wrong claim and its correction (§10 is explicitly annotated "superseded by §11") |
+| `P0_DATA_P1_EVIDENCE_2026-11-20.md` | the full session record, §1–14, including every wrong claim and its correction (§10 is explicitly annotated "superseded by §11"; §14.4 supersedes the 29.2% headline) |
 | `SMOKE_P0_BASELINE_2026-11-19.md` | the original P0 baseline gate run |
 | `STATUS_REPORT.md` | earlier milestone status |
 | `PRD_VERL_GRAMMAR_AGENT.md` | product spec for the verl agent side |
@@ -433,15 +537,43 @@ Deeper documents:
    rule plus two irrelevant phonotactics cards, all tied at score 0.336 — the comparative rule is not in
    the top 3. Measurement iterates named `--card-ids`, so nothing measured today depends on retrieval,
    but the agent's retrieve-tool path in a P1 rollout will hit this wall.
-7. **Rule-level held-out is undefined at n=2 rules** (`valid_rules_heldout.jsonl` is empty). Generalization
-   across rules cannot be measured until more rules are certified; use the fit/held-out *row* protocol of
-   §10 meanwhile.
+7. **Rule-level held-out was undefined at n=2 rules and is now defined.** With 8 certified rules,
+   `build_dataset.py` holds out one whole rule (`LB_MIN03_every_each`, 129 pairs) — cross-rule
+   generalization is measurable for the first time. At n=2 it silently produced an empty file, which is
+   reported in evidence §13 rather than hidden.
 8. **Judge cache is first-wins.** Appending a re-ask cannot overwrite an earlier judgment; delete the
    keyed line if a judgment must change.
 9. **Interpretation attached to a regex bucket produces false findings.** Luxembourgish capitalizes every
    noun, so "article + capitalized token" is *not* a proper-name test (it matched
    `den Attentater` = the attackers). `violation_decomposition.py` therefore takes buckets as
    `NAME=REGEX` and adds no meaning.
+10. **Coverage is not RL signal.** 2 → 8 certified rules: labels +61%, false-penalty −6.6pp, advantage
+    coverage at most +4.2pp on identical hypotheses (§8.1). Saturated cues are good labels and useless
+    advantages.
+11. **A certified rule can be anti-professional in a reward.** `LB_MIN04_negation_not` (held-out agreement
+    0.89) has a **−10pp** policy-vs-reference violation gap: professionals get penalised more than the
+    policy. In GRPO that drags the policy away from professional usage. Gate G30 names these rules; the
+    fix is to exclude them from the reward term while keeping them for labels/eval.
+12. **Smoke comparisons are confounded by prompt selection.** `--prompts N` takes the first pairs whose
+    reference decides a rule, so a new rule set changes the prompt set and a "regression" can be pure
+    selection (§8.1). Use `--prompts-per-rule` and `scripts/p1_signal_by_rule.py` (paired, offline).
+13. **Rates at n=24 need intervals.** 7/24 vs 4/24 is not a difference; both smoke scripts now emit
+    `nonzero_spread_rate_ci95` (Wilson). At 42 groups the stratified rate is 0.119 [0.052, 0.25].
+14. **Capitalization-dependent constraints are untestable in this harness.** `normalize_text`
+    (`grammetarl/validator.py:82`) NFKC-normalises **and casefolds** before any pattern runs, so a rule
+    that depends on a capital noun cannot be admitted; the admission test rejects it rather than letting a
+    green number hide it.
+15. **Orthographic variation is not modelled (scope note, not measured).** Constraints match the corpus
+    spelling after normalisation; a policy that uses a different accepted spelling of the same word is
+    scored as violating. No agreement number in this repo is spelling-corrected, and no number here quantifies
+    how much of the disagreement that is — it is a known unmeasured source of noise, sitting next to the
+    false-satisfy mode in item 4.
+16. **Discrimination is 1.00 for every cue-type rule, so it certifies nothing there.** Screening reported
+    `discrimination = 1.00` for all 22 mined candidates, including `both` (agreement 0.06) and `as_as`
+    (0.08): corrupting a single-token target cue flips the check by construction. For
+    `source_conditional` cue rules the certification therefore rests on agreement + non-tautology + support
+    floors only; the missing axis is **applicability sensitivity** (does the constraint abstain when the
+    *source* cue is removed?), not a target-flip test. Evidence §14.6.
 
 ---
 
@@ -458,6 +590,9 @@ Deeper documents:
 | A gate passes on one pair | support floors: `--min-support 30 --min-tested 20` |
 | Held-out numbers look identical to fit numbers | confirm the matrix is measuring in-run and `--reliability` points at the **fit** table |
 | `pkill -f spark_worker.sh` kills the ssh session | pattern matches the ssh command line; use the bracket form `spark_[w]orker.sh` |
+| a background run's log file "does not exist" for the first minute | `/raid` NFS visibility lag (~30–60 s) for files created by a detached process. `ps` shows the process immediately — do **not** relaunch because `ls`/`grep` found no log, that is how a job runs twice. Start with `setsid … < /dev/null & disown` and poll in a separate exec |
+| a smoke metric "drops" after changing the rule set | probably prompt selection, not the rules (§12 item 12); re-score the stored rollout log with `scripts/p1_signal_by_rule.py` before believing it |
+| `nonzero_spread_rate` jumps between runs of the same config | n is small: read `nonzero_spread_rate_ci95`, and use `--prompts-per-rule` so each rule gets its own groups |
 
 ---
 
@@ -465,12 +600,19 @@ Deeper documents:
 
 | plan | one-line status |
 |---|---|
-| **P1** card-to-verifier reward | reward side measured end-to-end; **29.2% advantage coverage** and **2 certified rules** are the binding constraints; SFT warmup now empirically required |
+| **P1** card-to-verifier reward | reward side measured end-to-end. **Advantage coverage 11.9% [5.2–25.0]** on the stratified protocol; 3 of 8 certified rules have a positive policy-vs-reference gap, one strongly (`cond_if`). Binding constraints now: rules that target the policy's own errors, and policy competence (SFT) |
 | **P2** turn-level credit | blocked on P1 having a non-degenerate signal |
-| **P3** rules as code (morphology/POS engine) | the strongest case made by data: undecidable `equivalence`/`optionality` (~13% of constraints), the false-satisfy failure mode, and the 19.2% possessive+adjective construction |
+| **P3** rules as code (morphology/POS engine) | the strongest case made by data: undecidable `equivalence`/`optionality` (~13% of constraints), the false-satisfy failure mode, the 19.2% possessive+adjective construction, and now the saturated-cue result (surface cues cannot see the differences between rollouts) |
 | **P4** curriculum / self-play | not started |
 | **P5** benchmark transfer | not started |
 
-The next concrete step with the best measured payoff is **card coverage, not reward tuning**: compile more
-`source_conditional` cards (the only applicability route with measured precision 0.50–0.57), certify them
-through §10, then re-run §8 and check whether `nonzero_spread_rate` rises.
+The previously stated next step — "card coverage, not reward tuning" — is **falsified**: coverage went 2 → 8
+and advantage coverage did not follow. The next concrete steps, in order of measured payoff:
+
+1. **Mine rules from the policy's own errors**, not from corpus averages: take the stored rollout logs, find
+   target-side patterns that the policy produces (or misses) relative to professional references, then push
+   those candidates through the same three-axis certification. `cond_if` is the existence proof (+44pp gap).
+2. **Exclude negative-gap rules from the reward term** (keep them as labels/eval features) — G30 reports them.
+3. **SFT warmup** on `gated_condv3` (train 2,183 / valid 243 / rule-held-out 129) so the policy is capable
+   enough for the reward to bite at all.
+4. Statistical power: ≥6 prompts per rule and ≥3 rollouts, and read the CI, not the point.

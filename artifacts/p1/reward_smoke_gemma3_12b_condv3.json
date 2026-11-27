@@ -1,0 +1,34 @@
+{
+  "cards_used": [
+    "LB_946a24dd25d6",
+    "LB_9789dfb15623",
+    "LB_MIN01_comp_that",
+    "LB_MIN02_cond_if",
+    "LB_MIN03_every_each",
+    "LB_MIN04_negation_not",
+    "LB_MIN05_than",
+    "LB_MIN06_without"
+  ],
+  "prompts": 24,
+  "rollouts_per_prompt": 3,
+  "policy_model": "gemma3:12b",
+  "rollout_tally": {
+    "rollout_ok": 72,
+    "group_nonzero_spread": 4,
+    "ref_ok": 22,
+    "group_zero_spread": 20,
+    "ref_penalized": 2
+  },
+  "groups_nonzero_spread": 4,
+  "nonzero_spread_rate": 0.16666666666666666,
+  "mean_spread": 0.3333333333333333,
+  "median_spread": 0.0,
+  "reward_mean": 0.8333333333333334,
+  "reward_stdev_across_groups": 0.3967460238079361,
+  "reward_min": -0.3333333333333333,
+  "reward_max": 1.0,
+  "reference_penalized_rate": 0.08333333333333333,
+  "reference_mean_reward": 0.8333333333333334,
+  "policy_minus_reference": 0.0,
+  "abstain_rollout_rate": 0.0
+}

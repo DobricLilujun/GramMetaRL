@@ -1,0 +1,250 @@
+{
+ "_comment": "candidate source conditionals screened against professional translations; provenance = corpus-mined, NOT book-extracted; survivors need a card or an explicit mined-rule label before shipping",
+ "candidates": [
+  {
+   "name": "negation_not",
+   "source_pattern": "\\b(not|n't)\\b",
+   "values": [
+    "\\bnet\\b",
+    "\\bnee\\b",
+    "\\bnimmer\\b",
+    "\\bnie\\b",
+    "\\bniemools\\b",
+    "\\bniumools\\b",
+    "\\bkeen\\b",
+    "\\bkeng\\b",
+    "\\bkee\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "cond_if",
+   "source_pattern": "\\bif\\b",
+   "values": [
+    "\\bwa\\b",
+    "\\bwann\\b",
+    "\\bfalls\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "comp_that",
+   "source_pattern": "\\bthat\\s+(he|she|it|they|we|i|you|the|a|un|een|d)\\b",
+   "values": [
+    "\\bdatt\\b",
+    "\\bdass\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "superlative",
+   "source_pattern": "\\bthe\\s+[a-zà-ÿ]{2,}est\\b|\\bthe most\\s+[a-zà-ÿ]+",
+   "values": [
+    "\\b[a-zà-ÿ]{2,}(ste|sten)\\b",
+    "\\bmeescht",
+    "\\bbescht",
+    "\\bbeste\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "ability_can",
+   "source_pattern": "\\b(can|cannot|can't|able to)\\b",
+   "values": [
+    "\\bkann\\b",
+    "\\bkënnt\\b",
+    "\\bkënne",
+    "\\bkéint",
+    "\\bkonnt",
+    "\\bfäeg\\b",
+    "\\bméiglech\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "oblig_must",
+   "source_pattern": "\\b(must|have to|has to|had to)\\b",
+   "values": [
+    "\\bmuss",
+    "\\bméisst",
+    "\\bnoutwendeg\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "advise_should",
+   "source_pattern": "\\bshould\\b",
+   "values": [
+    "\\bsoll",
+    "\\bsollt"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "every_each",
+   "source_pattern": "\\b(every|each)\\b",
+   "values": [
+    "\\ball(en)?\\b",
+    "\\bjidd"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "reflexive_self",
+   "source_pattern": "\\b(himself|herself|itself|themselves|myself|yourself|ourselves)\\b",
+   "values": [
+    "\\bselwer\\b",
+    "\\bselber\\b",
+    "\\bsëch\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "without",
+   "source_pattern": "\\bwithout\\b",
+   "values": [
+    "\\bouni\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "very",
+   "source_pattern": "\\bvery\\b",
+   "values": [
+    "\\bganz\\b",
+    "\\bsehr\\b",
+    "\\bviru\\b",
+    "\\bhimmelsméisseg\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "also_too",
+   "source_pattern": "\\b(also|too)\\b",
+   "values": [
+    "\\boch\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "only",
+   "source_pattern": "\\bonly\\b",
+   "values": [
+    "\\bnëmmen\\b",
+    "\\bjust\\b",
+    "\\bbloss\\b",
+    "\\binzen\\b",
+    "\\ballene\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "because_of",
+   "source_pattern": "\\b(because of|due to)\\b",
+   "values": [
+    "\\bwéinst\\b",
+    "\\bwell\\b[^.]{0,40}\\bdatt\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "concessive",
+   "source_pattern": "\\b(although|though|even though)\\b",
+   "values": [
+    "\\bobwuel\\b",
+    "\\bobgläich\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "more_than",
+   "source_pattern": "\\bmore than\\b",
+   "values": [
+    "\\bméi\\b[^.]{0,40}\\b(wéi|ewéi)\\b",
+    "\\bnët??\\b[^.]{0,20}\\bn[ée]mme\\b",
+    "\\bnet nëmme\\b",
+    "\\bnet just\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "less_fewer",
+   "source_pattern": "\\b(less|fewer)\\b",
+   "values": [
+    "\\bmanner\\b",
+    "\\bwéineger\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "than",
+   "source_pattern": "\\bthan\\b",
+   "values": [
+    "\\bwéi\\b",
+    "\\bewéi\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "as_as",
+   "source_pattern": "\\bas\\s+(much|many|well|good|far|easy|hard|difficult|important|large|big|early|late|fast|high|low|common|similar|komplex)\\s+as\\b",
+   "values": [
+    "\\b(sou|esou)\\b[^.]{0,40}\\b(wéi|ewéi)\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "both",
+   "source_pattern": "\\bboth\\b",
+   "values": [
+    "\\bbéide[n]?\\b",
+    "\\bsowuel\\b",
+    "\\bpeeceweïs\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "enough",
+   "source_pattern": "\\benough\\b",
+   "values": [
+    "\\bgenuch\\b",
+    "\\bgenee\\b",
+    "\\bgenug\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  },
+  {
+   "name": "while_durative",
+   "source_pattern": "\\bwhile\\b",
+   "values": [
+    "\\bwärend\\b",
+    "\\bnodeem\\b",
+    "\\bsoulaange\\b",
+    "\\bwärendem\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)"
+  }
+ ]
+}
