@@ -681,6 +681,22 @@ def main() -> int:
             sig = {}
             gate("G30 per-rule reward usefulness measured", False, f"unparsable: {exc}")
         if sig:
+            al = sig.get("alignment") or {}
+            dec = int(al.get("concordant", 0)) + int(al.get("discordant", 0))
+            crate = float(al.get("concordant_rate") or 0.0)
+            # G31: spread is not the objective; direction is. Concordance compares, for every
+            # within-group rollout pair whose rewards differ, whether the higher-reward rollout is also
+            # the one lexically closer to the professional reference. Measured on 42 stratified groups
+            # x 3 rollouts with the 8 certified rules: 2 concordant vs 8 discordant (20%). A reward that
+            # fires mostly against professional usage cannot carry the training gradient alone.
+            gate("G31 reward gradient is reference-aligned (concordance>=0.5, decisive pairs>=10)",
+                 dec >= 10 and crate >= 0.5,
+                 f"concordant={al.get('concordant')} discordant={al.get('discordant')} rate={crate:.1%} "
+                 f"CI={al.get('concordant_rate_ci95')}; ties: reward={al.get('tie_reward')} "
+                 f"similarity={al.get('tie_similarity')} both={al.get('tie_both')}. Where the grammar "
+                 f"reward ranks two rollouts differently it usually ranks them OPPOSITE to similarity "
+                 f"with the professional reference, so these cue rules cannot be the whole reward term "
+                 f"(weight band enforced by G29)")
             neg = [r["rule_id"] for r in sig.get("per_rule", []) if (r.get("gap") or 0.0) < -0.05]
             pos = [r["rule_id"] for r in sig.get("per_rule", []) if (r.get("gap") or 0.0) > 0.05]
             gate("G30 at least one reward rule separates the policy from professional usage (gap>0.05)",

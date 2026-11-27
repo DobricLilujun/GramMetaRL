@@ -22,6 +22,7 @@ data/rules/*
 # the specs that drive apply_source_conditionals / screen_source_conditionals, and the reliability tables
 !data/rules/source_conditionals*.json
 !data/rules/screened_conditionals.json
+!data/rules/policy_gap_candidates.json
 !data/rules/reliability*.json
 !data/external/
 data/external/*
@@ -61,6 +62,7 @@ artifacts/recompile/*
 !artifacts/audit/condonly*.json
 !artifacts/audit/condv*_fit.json
 !artifacts/audit/screen_conditionals_*.json
+!artifacts/audit/screen_*.json
 !artifacts/audit/gated_cond*.json
 !artifacts/audit/gated_condonly*.json
 !artifacts/audit/violations_*.json

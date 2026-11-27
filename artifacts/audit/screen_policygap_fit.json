@@ -1,0 +1,62 @@
+{
+ "pairs_scanned": 8972,
+ "skip": 0,
+ "candidates": {
+  "pg_after_no": {
+   "applicable": 187,
+   "satisfied": 98,
+   "violated": 89,
+   "agreement": 0.5241,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\bafter\\b",
+   "values": [
+    "\\bno\\b"
+   ]
+  },
+  "pg_language_fir": {
+   "applicable": 71,
+   "satisfied": 37,
+   "violated": 34,
+   "agreement": 0.5211,
+   "perturbations_tested": 111,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\blanguage\\b",
+   "values": [
+    "\\bfir\\b"
+   ]
+  },
+  "pg_if_wann": {
+   "applicable": 281,
+   "satisfied": 169,
+   "violated": 112,
+   "agreement": 0.6014,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "refuted",
+   "why": "agreement below floor",
+   "source_pattern": "\\bif\\b",
+   "values": [
+    "\\bwann\\b"
+   ]
+  },
+  "pg_years_joer": {
+   "applicable": 168,
+   "satisfied": 114,
+   "violated": 54,
+   "agreement": 0.6786,
+   "perturbations_tested": 120,
+   "discrimination": 1.0,
+   "status": "USABLE",
+   "why": "",
+   "source_pattern": "\\byears\\b",
+   "values": [
+    "\\bjoer\\b"
+   ]
+  }
+ }
+}

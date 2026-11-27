@@ -584,3 +584,51 @@ def test_rule_quality_reader_accepts_rule_keyed_artifact(tmp_path):
         {"rules": [{"rule_id": "LB_C", "usable": True}, {"rule_id": "LB_D", "usable": False}]}),
         encoding="utf-8")
     assert usable_ids(legacy) == {"LB_C"}
+
+
+def _load_p1_signal_module():
+    import importlib.util
+
+    path = Path(__file__).resolve().parents[1] / "scripts" / "p1_signal_by_rule.py"
+    spec = importlib.util.spec_from_file_location("p1_signal_by_rule", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_similarity_proxy_is_bounded_and_discriminative():
+    """Gradient alignment compares rollouts by lexical overlap with the professional reference.
+
+    If that proxy were degenerate (always 0, or blind to an accent/apostrophe difference), the whole
+    concordance measurement - and gate G31 - would be meaningless.
+    """
+    mod = _load_p1_signal_module()
+    near = mod._token_f1("d Fabréck ass grouss", "d Fabréck ass ganz grouss")
+    far = mod._token_f1("ganz anescht Wuert hei", "de Fabréck grouss")
+    assert 0.5 < near <= 1.0
+    assert far == 0.0
+    assert mod._token_f1("", "de Fabréck") == 0.0
+
+
+def test_stratified_signal_artifacts_record_the_exclusion_tradeoff():
+    """The measured reason spread is not the objective: dropping the three anti-professional rules
+    lowers coverage on identical hypotheses, and both runs must carry the alignment block."""
+    root = Path(__file__).resolve().parents[1]
+    all8 = root / "artifacts/p1/signal_condv3_stratified.json"
+    pos5 = root / "artifacts/p1/signal_condv3_strat_pos5.json"
+    if not (all8.exists() and pos5.exists()):
+        pytest.skip("stratified signal artifacts not built in this checkout")
+    import json
+
+    a, b = json.loads(all8.read_text()), json.loads(pos5.read_text())
+    assert len(a["rules_scored"]) > len(b["rules_scored"])
+    assert a["groups"] == b["groups"]
+    # subset of rules cannot manufacture spread on the same hypotheses
+    assert b["groups_nonzero_spread"] <= a["groups_nonzero_spread"]
+    for d in (a, b):
+        al = d["alignment"]
+        dec = al["concordant"] + al["discordant"]
+        lo, hi = al["concordant_rate_ci95"]
+        assert lo <= al["concordant_rate"] <= hi
+        if dec:
+            assert abs(al["concordant_rate"] - al["concordant"] / dec) < 1e-3

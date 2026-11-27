@@ -1,0 +1,97 @@
+{
+ "rollout_log": "artifacts/p1/rollouts_gemma3_12b_strat.jsonl",
+ "rules_scored": [
+  "LB_9789dfb15623",
+  "LB_MIN01_comp_that",
+  "LB_MIN02_cond_if",
+  "LB_MIN03_every_each",
+  "LB_MIN05_than"
+ ],
+ "groups": 42,
+ "groups_nonzero_spread": 3,
+ "nonzero_spread_rate": 0.07142857142857142,
+ "nonzero_spread_rate_ci95": [
+  0.025,
+  0.19
+ ],
+ "rollout_diversity": {
+  "groups": 42,
+  "mean_distinct_hypotheses_per_group": 2.929,
+  "groups_all_rollouts_identical": 1,
+  "mean_similarity_rollout0_vs_rest": 0.812
+ },
+ "per_rule": [
+  {
+   "rule_id": "LB_9789dfb15623",
+   "policy_decided": 21,
+   "policy_violated_rate": 0.0,
+   "ref_decided": 21,
+   "ref_violated_rate": 0.0,
+   "gap": 0.0,
+   "creates_group_spread": 0,
+   "align_concordant": 0,
+   "align_discordant": 0,
+   "align_tie_similarity": 0
+  },
+  {
+   "rule_id": "LB_MIN01_comp_that",
+   "policy_decided": 18,
+   "policy_violated_rate": 0.05555555555555555,
+   "ref_decided": 18,
+   "ref_violated_rate": 0.0,
+   "gap": 0.05555555555555555,
+   "creates_group_spread": 1,
+   "align_concordant": 0,
+   "align_discordant": 2,
+   "align_tie_similarity": 0
+  },
+  {
+   "rule_id": "LB_MIN02_cond_if",
+   "policy_decided": 18,
+   "policy_violated_rate": 0.6111111111111112,
+   "ref_decided": 18,
+   "ref_violated_rate": 0.16666666666666666,
+   "gap": 0.44444444444444453,
+   "creates_group_spread": 1,
+   "align_concordant": 1,
+   "align_discordant": 1,
+   "align_tie_similarity": 0
+  },
+  {
+   "rule_id": "LB_MIN03_every_each",
+   "policy_decided": 18,
+   "policy_violated_rate": 0.3888888888888889,
+   "ref_decided": 18,
+   "ref_violated_rate": 0.3333333333333333,
+   "gap": 0.05555555555555558,
+   "creates_group_spread": 1,
+   "align_concordant": 0,
+   "align_discordant": 2,
+   "align_tie_similarity": 0
+  },
+  {
+   "rule_id": "LB_MIN05_than",
+   "policy_decided": 18,
+   "policy_violated_rate": 0.16666666666666666,
+   "ref_decided": 18,
+   "ref_violated_rate": 0.16666666666666666,
+   "gap": 0.0,
+   "creates_group_spread": 0,
+   "align_concordant": 0,
+   "align_discordant": 0,
+   "align_tie_similarity": 0
+  }
+ ],
+ "alignment": {
+  "concordant": 1,
+  "discordant": 5,
+  "tie_reward": 93,
+  "tie_similarity": 0,
+  "tie_both": 27,
+  "concordant_rate": 0.1667,
+  "concordant_rate_ci95": [
+   0.03,
+   0.564
+  ]
+ }
+}

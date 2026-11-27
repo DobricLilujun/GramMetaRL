@@ -15,8 +15,8 @@ cannot be measured are reported as undecidable and abstain instead of producing 
 
 | item | value | where it comes from |
 |---|---|---|
-| Gate table | **PASS=29 FAIL=2 WARN=10** | `scripts/smoke_test.py` |
-| Unit tests | **33 passed** | `tests/` |
+| Gate table | **PASS=29 FAIL=3 WARN=10** | `scripts/smoke_test.py` |
+| Unit tests | **35 passed** | `tests/` |
 | Cards: 87 book-extracted + 6 corpus-mined | **93** | `data/rules/mbg_cards_condv3.jsonl` |
 | Rules certified usable (3 axes + support floors, CC0 pool) | **8** (2 book + 6 mined) | `artifacts/audit/rule_quality_condv3_heldout.json` |
 | Rules certified on the CC BY-NC pool (reported separately) | **2** (a *different* pair — see §5) | `artifacts/audit/rule_quality_condonly_luxalign.json` |
@@ -26,17 +26,22 @@ cannot be measured are reported as undecidable and abstain instead of producing 
 | GRPO advantage coverage, stratified prompt set (the honest number) | **11.9%** of groups [CI 5.2–25.0] | `artifacts/p1/reward_smoke_gemma3_12b_strat.json` |
 | Rules that actually separate policy from professionals (violation gap > 0.05) | **3 of 8**, one strongly (`cond_if` +44pp) | `artifacts/p1/signal_condv3_stratified.json` |
 | Reward noise floor (reference translation penalized) | **14.3%** | `artifacts/p1/reward_smoke_gemma3_12b_strat.json` |
+| GRPO advantage coverage on an **unbiased** prompt set (140 prompts, card-independent) | **0.0%** | `artifacts/p1/corpus_gemma3_12b_breadth.json` |
+| Gradient alignment: reward ranks a rollout pair the way the reference does | **20%** of decisive pairs (2 vs 8) [CI 5.7–51.0] | `artifacts/p1/signal_condv3_stratified.json` |
+| New rules certified by mining the policy's own errors (3 families tried) | **0** | `artifacts/p1/policy_gap_mining.json`, `artifacts/audit/screen_policygap_{fit,heldout}.json` |
 
-Headline measured result of 2026-11-27: **rule coverage is not the RL bottleneck.** Going from 2 to 8
-certified rules raised label yield by a third and *lowered* the false-penalty rate, but changed GRPO
-advantage coverage by at most +4.2pp on identical hypotheses; under stratified prompt selection the
-coverage is 11.9%. The bottleneck is rules that see the policy's actual errors. See §8 and
-evidence §14.
+Headline measured result of 2026-11-27 (two parts, both negative). (1) **Rule coverage is not the RL
+bottleneck**: 2 → 8 certified rules raised label yield by a third and lowered the false-penalty rate, but
+moved advantage coverage by at most +4.2pp on identical hypotheses (§8.1, evidence §14). (2) **The
+certified set is not reward-ready**: on prompts sampled without respect to the rules the 8 rules produce
+zero advantage, and where they do rank two rollouts differently the ranking usually opposes the
+professional reference (20% concordance, gate G31 FAIL). They remain a label and evaluation asset.
+See §8.2 and evidence §15.
 
-The two FAIL gates are both about *predicate* applicability (G21: 5/100 trigger conditions are in
-executable form; G24: 26/87 cards carry an admitted predicate). They are currently bypassed in practice by
+The three FAIL gates: G21 and G24 are about *predicate* applicability (G21: 5/100 trigger conditions are
+in executable form; G24: 26/87 cards carry an admitted predicate) and are bypassed in practice by
 `source_conditional` constraints, which derive applicability from the **source** sentence instead of a
-target-side predicate — see §5 and §12.
+target-side predicate; G31 is the reward-alignment FAIL above. See §5, §8.2, §12.
 
 ### 中文快速上手
 
@@ -45,9 +50,9 @@ target-side predicate — see §5 and §12.
 PY=/raid/yewei/.venvs/gm-lite/bin/python
 cd /raid/yewei/projects_yewei/GramMetaRL
 
-$PY -m pytest tests/ -q                                   # 30 passed
-$PY scripts/smoke_test.py --cards data/rules/mbg_cards_condonly.jsonl \
-    --policy-endpoint http://127.0.0.1:11434/v1 --policy-model qwen2.5-coder:7b   # 门控表
+$PY -m pytest tests/ -q                                   # 35 passed
+$PY scripts/smoke_test.py --cards data/rules/mbg_cards_condv3.jsonl \
+    --policy-endpoint http://127.0.0.1:11434/v1 --policy-model qwen2.5-coder:7b   # 门控表 PASS=29 FAIL=3 WARN=10
 ```
 
 重新认证一条规则（留出协议，见 §10）不需要调用任何模型：判定缓存 `data/external/judge_cache.jsonl`
@@ -414,6 +419,73 @@ $PY scripts/p1_signal_by_rule.py --rollout-log artifacts/p1/rollouts_gemma3_12b.
     --rule-ids LB_946a24dd25d6,LB_9789dfb15623 --out /tmp/sig.json
 ```
 
+### 8.2 Reward readiness is alignment, not coverage (measured 2026-11-27, evidence §15)
+
+Two measurements say the current certified set is not a usable training reward, and both are cheap to
+re-run offline.
+
+**An unbiased prompt set gives zero advantage.** `scripts/p1_reward_smoke.py --breadth 140` samples
+prompts by stride over the whole pool, without regard to whether any rule fires:
+
+    140 prompts x 1 greedy rollout (gemma3:12b) -> nonzero_spread_rate = 0.0
+
+The 11.9% figure is conditional on per-rule prompt selection. Plan against the unbiased number.
+
+**Where the reward does rank two rollouts, it usually ranks them against the reference.** For every
+within-group rollout pair, `p1_signal_by_rule.py` compares the sign of the grammar-reward difference with
+the sign of the token-F1-to-reference difference:
+
+    concordant 2, discordant 8 -> 20.0% [95% CI 5.7, 51.0]
+    ties: reward-only 89, similarity-only 0, both 27
+
+n = 10 decisive pairs, so discordance is not statistically established — what is established is the shape:
+the rules are blind on 89 of 120 pairs, and in the remainder they more often oppose than support the
+professional ranking. Gate **G31** requires concordance ≥ 0.5 with ≥ 10 decisive pairs and therefore
+**FAILs**. Consequence: `w_grammar` (gate G29) is not a safety margin, it is the reason a blind-to-opposing
+rule term is survivable at all.
+
+**Dropping the anti-professional rules lowers coverage**, which proves spread was never the objective:
+
+| rule set (identical 126 hypotheses) | nonzero spread |
+|---|---|
+| 8 certified rules | 5/42 = 11.9% [5.2, 25.0] |
+| 5 rules, negative-gap rules dropped | 3/42 = 7.1% [2.5, 19.0] |
+
+Excluding them is a **correctness** lever (the gradient stops pointing away from professionals), not a
+signal-density lever.
+
+```bash
+# unbiased prompt set (rollout corpus for mining and for the honest coverage number)
+$PY scripts/p1_reward_smoke.py --model gemma3:12b --breadth 140 --rollouts 1 --temp 0 \
+    --cards data/rules/mbg_cards_condv3.jsonl --reliability data/rules/reliability_condv3_fit.json \
+    --log-out artifacts/p1/rollouts_gemma3_12b_breadth.jsonl \
+    --out artifacts/p1/reward_smoke_gemma3_12b_breadth.json
+# alignment + per-rule alignment + spread for any rule subset, offline
+$PY scripts/p1_signal_by_rule.py --rollout-log artifacts/p1/rollouts_gemma3_12b_strat.jsonl \
+    --rule-ids LB_MIN01_comp_that,LB_MIN02_cond_if,LB_MIN03_every_each,LB_9789dfb15623,LB_MIN05_than \
+    --out artifacts/p1/signal_condv3_strat_pos5.json
+```
+
+### 8.3 Mining the policy's own errors: three families, zero new certified rules (evidence §15)
+
+`scripts/mine_policy_gaps.py` mines candidates in two stages — pool statistics on the **fit half only**
+(support ≥ 30, professional agreement ≥ 0.5, cue specificity `lift = p(form|cue)/p(form|cue absent) ≥ 2`),
+then ranking by the policy-vs-reference gap measured on stored rollouts — and emits specs in exactly the
+`data/rules/screened_conditionals.json` shape so the existing two-half screener consumes them.
+
+| family | stage A | teachable after stage B | certified (two halves) | why it failed |
+|---|---|---|---|---|
+| single-token cue, required form | 155 | 4 | **0** | cues professionals obey are already obeyed by the 12B (saturated) |
+| ordered pairs `t1 .* t2` | 0 | 0 | **0** | arithmetic: a multi-element constraint cannot clear an unconditional agreement floor of 0.65 |
+| exclusion (`negate: true`) | 1,287 | 739 | **not shipped** | survivors are near-synonyms/frequency variants (`during→während`, `so→just`): reference imitation wearing a grammar label |
+
+Guard added by a real bug: the first version stored hypotheses as `{text: token_set}`, so every policy
+rate printed 0.00; the script now hard-stops when all policy rates are zero. The lift axis is load-bearing
+too — an earlier corpus-only pass promoted `has → den` (a dative article with lift ≈ 1).
+
+**The next mining criterion is concordance, not gap**: score candidates by whether their verdict
+differences rank rollouts like the reference does (free offline once rollouts are stored).
+
 ---
 
 ## 9. Gates
@@ -423,8 +495,9 @@ $PY scripts/smoke_test.py --cards data/rules/mbg_cards_condv3.jsonl \
     --policy-endpoint http://127.0.0.1:11434/v1 --policy-model qwen2.5-coder:7b
 ```
 
-Current: **PASS=29 FAIL=2 WARN=10.** `P0 gate is GREEN only when every FAIL is cleared (WARN = measured
-risk, report it).`
+Current: **PASS=29 FAIL=3 WARN=10.** `P0 gate is GREEN only when every FAIL is cleared (WARN = measured
+risk, report it).` Pass `--policy-endpoint`/`--policy-model`: without them the policy-dependent gates
+change state and the tally reads PASS=27 FAIL=4 for the same card set.
 
 Gate families:
 
@@ -437,6 +510,8 @@ Gate families:
 - G27 ≥1 rule with agreement ≥ 0.65 **and** discrimination ≥ 0.5 **and** not its own trigger
 - G28 P1 reward signal measured on rollouts; **G28b WARN** advantage coverage < 50% (11.9% stratified)
 - G29 reward weights inside the measured band
+- G30 ≥1 reward rule with positive policy-vs-reference gap; **G30b WARN** advantage coverage < 30%
+  (11.9% stratified, 0.0% unbiased); **G31 FAIL** reward-vs-reference gradient concordance < 0.5
 - G30 ≥1 reward rule has a positive policy-vs-reference violation gap (**PASS**: `cond_if` +44pp);
   **G30b WARN** advantage coverage on the stratified prompt set, with rollout diversity printed next to it
 
@@ -475,17 +550,20 @@ in-run**; the table is only a weight source. Compare fit vs held-out before call
 
 Tracked: code, `tests/`, card sets `data/rules/mbg_cards*.jsonl` (all generations, including
 `mbg_cards_mined.jsonl` and the merged `mbg_cards_condv3.jsonl`), rule specs
-(`data/rules/{source_conditionals*,screened_conditionals,manual_triggers,reliability*}.json`), CC0 labels
-`data/processed/labeled_*.jsonl` (verified: 100% of rows in every one of them are CC0-1.0), and the
-evidence JSON: `artifacts/audit/{precision_*,rule_quality_*,condonly*,condv*_fit,screen_conditionals_*,
-gated_cond*,violations_*,trigger_quality*}.json` plus `artifacts/p1/*.json`.
+(`data/rules/{source_conditionals*,screened_conditionals,policy_gap_candidates,manual_triggers,reliability*}.json`),
+CC0 labels `data/processed/labeled_*.jsonl` (verified: 100% of rows in every one of them are CC0-1.0), and
+the evidence JSON: `artifacts/audit/{precision_*,rule_quality_*,condonly*,condv*_fit,screen_*,
+gated_cond*,violations_*,trigger_quality*}.json` plus `artifacts/p1/*.json` (every smoke, alignment and
+mining report, including the negative ones from evidence §15).
 
 Not tracked: raw OCR output, rollout logs (`*.jsonl` under `artifacts/p1/`), the built dataset splits
 (`data/processed/gated_condv3/{train,valid,valid_rules_heldout}.jsonl` = 2,183 / 243 / 129 rows — rebuild
 with the §6 command, they are derived from tracked labels + tracked cards), model caches, the Overleaf
 clone in `paper/` (it has its own git remote; only push it when explicitly authorized), and `data/external/`
 (48k rows with per-row licenses — regenerate with `scripts/fetch_external_pairs.py`, provenance in
-`MANIFEST.json`).
+`MANIFEST.json`). Because rollout logs are not tracked, any measurement that re-scores stored hypotheses
+(§8.1, §8.2, alignment) must be re-run after regenerating rollouts with §8; the summaries that those runs
+produced are tracked, so every number quoted in this file and in the evidence document is checkable.
 
 Not tracked: raw OCR output, rollout logs (`*.jsonl` under `artifacts/p1/`), model caches, the Overleaf
 clone in `paper/` (it has its own git remote; only push it when explicitly authorized), and `data/external/`
@@ -496,7 +574,7 @@ Deeper documents:
 
 | file | content |
 |---|---|
-| `P0_DATA_P1_EVIDENCE_2026-11-20.md` | the full session record, §1–14, including every wrong claim and its correction (§10 is explicitly annotated "superseded by §11"; §14.4 supersedes the 29.2% headline) |
+| `P0_DATA_P1_EVIDENCE_2026-11-20.md` | the full session record, §1–15, including every wrong claim and its correction (§10 is explicitly annotated "superseded by §11"; §14.4 supersedes the 29.2% headline; §15 supersedes "mine the policy's errors and the reward problem is solved") |
 | `SMOKE_P0_BASELINE_2026-11-19.md` | the original P0 baseline gate run |
 | `STATUS_REPORT.md` | earlier milestone status |
 | `PRD_VERL_GRAMMAR_AGENT.md` | product spec for the verl agent side |
@@ -574,6 +652,24 @@ Deeper documents:
     `source_conditional` cue rules the certification therefore rests on agreement + non-tautology + support
     floors only; the missing axis is **applicability sensitivity** (does the constraint abstain when the
     *source* cue is removed?), not a target-flip test. Evidence §14.6.
+17. **Every advantage-coverage number is conditional on prompt selection, and the unbiased number is 0.**
+    On 140 prompts sampled by stride over the pool (card-independent, `--breadth`), the 8 certified rules
+    produce `nonzero_spread_rate = 0.0`; on the per-rule-stratified set they produce 11.9%. Neither number
+    is "the" coverage. Evidence §15.1.
+18. **The reward gradient is not aligned with professional usage (measured, small n).** Of the within-group
+    rollout pairs where both the reward and the lexical similarity to the reference differ, 2 are concordant
+    and 8 discordant (20.0% [CI 5.7–51.0]); 89 of 120 pairs tie on reward. So the certified cue rules are
+    mostly blind and, when they fire, more often oppose than support the professional ranking. Gate **G31**
+    FAILs by design. This does not prove the rules are wrong — n = 10 decisive pairs — it proves the axis was
+    never measured and the current rule set cannot carry a training gradient. Evidence §15.7.
+19. **Surface-cue mining is exhausted; the certification regime also excludes a whole constraint family.**
+    Three mined families produced zero new certified rules (§8.3, evidence §15.3–15.5): required-form
+    candidates are saturated on this policy, ordered-pair candidates cannot exist under an *unconditional*
+    agreement floor (a multi-element constraint is satisfied by professionals less often than each element
+    alone, so `t1 .* t2` cannot reach 0.65), and exclusion candidates degenerate into reference imitation
+    (penalising `während` because professionals prefer `wärend` is a chrF term, not grammar). Fixing the
+    second requires target-side conditional applicability, which is gameable by omission and would need an
+    abstention penalty — deliberately not done here.
 
 ---
 
@@ -593,6 +689,8 @@ Deeper documents:
 | a background run's log file "does not exist" for the first minute | `/raid` NFS visibility lag (~30–60 s) for files created by a detached process. `ps` shows the process immediately — do **not** relaunch because `ls`/`grep` found no log, that is how a job runs twice. Start with `setsid … < /dev/null & disown` and poll in a separate exec |
 | a smoke metric "drops" after changing the rule set | probably prompt selection, not the rules (§12 item 12); re-score the stored rollout log with `scripts/p1_signal_by_rule.py` before believing it |
 | `nonzero_spread_rate` jumps between runs of the same config | n is small: read `nonzero_spread_rate_ci95`, and use `--prompts-per-rule` so each rule gets its own groups |
+| the gate tally differs from the README (PASS=27 FAIL=4 instead of 29/3) | the policy-dependent gates need the endpoint: run `scripts/smoke_test.py --cards … --policy-endpoint http://127.0.0.1:11434/v1 --policy-model qwen2.5-coder:7b` |
+| a mined candidate looks great at stage B | check *which* sample estimated what: stage A (obligatoriness, lift) must be pool statistics on the fit half only, otherwise the held-out certification is measuring candidates that were selected on it. Mining from the ~100-pair rollout corpus alone gives lift≈1 junk (`has → den`) |
 
 ---
 
@@ -600,19 +698,31 @@ Deeper documents:
 
 | plan | one-line status |
 |---|---|
-| **P1** card-to-verifier reward | reward side measured end-to-end. **Advantage coverage 11.9% [5.2–25.0]** on the stratified protocol; 3 of 8 certified rules have a positive policy-vs-reference gap, one strongly (`cond_if`). Binding constraints now: rules that target the policy's own errors, and policy competence (SFT) |
+| **P1** card-to-verifier reward | reward side measured end-to-end and found **not reward-ready**: advantage coverage 11.9% [5.2–25.0] stratified / **0.0%** unbiased, and gradient concordance with the professional reference 20% (G31 FAIL). The certified set is a working **label and evaluation** asset (2,555 CC0 pairs, rule-level held-out now defined), not yet a training term |
 | **P2** turn-level credit | blocked on P1 having a non-degenerate signal |
 | **P3** rules as code (morphology/POS engine) | the strongest case made by data: undecidable `equivalence`/`optionality` (~13% of constraints), the false-satisfy failure mode, the 19.2% possessive+adjective construction, and now the saturated-cue result (surface cues cannot see the differences between rollouts) |
 | **P4** curriculum / self-play | not started |
 | **P5** benchmark transfer | not started |
 
 The previously stated next step — "card coverage, not reward tuning" — is **falsified**: coverage went 2 → 8
-and advantage coverage did not follow. The next concrete steps, in order of measured payoff:
+and advantage coverage did not follow. Its successor ("mine rules from the policy's own errors") is now
+also **executed and largely falsified**: three candidate families mined with
+`scripts/mine_policy_gaps.py` produced zero new certified rules (§8.3, evidence §15). The next concrete
+steps, in order of measured payoff:
 
-1. **Mine rules from the policy's own errors**, not from corpus averages: take the stored rollout logs, find
-   target-side patterns that the policy produces (or misses) relative to professional references, then push
-   those candidates through the same three-axis certification. `cond_if` is the existence proof (+44pp gap).
-2. **Exclude negative-gap rules from the reward term** (keep them as labels/eval features) — G30 reports them.
-3. **SFT warmup** on `gated_condv3` (train 2,183 / valid 243 / rule-held-out 129) so the policy is capable
-   enough for the reward to bite at all.
-4. Statistical power: ≥6 prompts per rule and ≥3 rollouts, and read the CI, not the point.
+1. **Change the mining criterion from gap to concordance.** `gap > 0` says the policy differs from the
+   reference; it does not say the rule ranks rollouts the way the reference does. `scripts/p1_signal_by_rule.py`
+   now emits per-rule alignment offline, so thousands of candidates can be screened against stored rollouts
+   with zero model calls, and G31 is the gate that the winner must clear.
+2. **Exclude negative-gap rules from the reward term** (keep them as labels/eval features) — a correctness
+   lever, not a density lever: it lowered spread 11.9% → 7.1% on identical hypotheses while removing the
+   pull away from professional usage (§8.2, G30).
+3. **SFT warmup** on `gated_condv3` (train 2,183 / valid 243 / rule-held-out 129). Surface cues are
+   saturated for a competent 12B generalist; the regime where grammar checks bite is one whose errors are
+   grammatical rather than stylistic. This is now the highest-value unstarted experiment.
+4. **P3 (morphology/POS)** moved up: it is the only remaining route to teachable surface rules — verb
+   position, agreement, and the possessive+adjective construction are invisible to token-pattern checks, and
+   order-type constraints cannot be certified at all under the current unconditional agreement floor.
+5. Statistical power: ≥6 prompts per rule and ≥3 rollouts, and read the CI, not the point. For alignment
+   specifically, n = 10 decisive pairs means the next alignment run needs ~10× more groups (or more
+   rollouts per group) before a 20%-vs-80% difference can be called a result.

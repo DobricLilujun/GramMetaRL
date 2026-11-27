@@ -1,0 +1,221 @@
+{
+  "_comment": "candidates mined by scripts/mine_policy_gaps.py: pool obligatoriness + cue specificity on the fit half, ranked by the policy-vs-reference gap measured on stored rollouts. provenance = POLICY_GAP_MINED, not book-extracted; two-half certification (screen_source_conditionals.py --skip) is still required",
+  "candidates": [
+    {
+      "name": "pg_after_no",
+      "source_pattern": "\\bafter\\b",
+      "values": [
+        "\\bno\\b"
+      ],
+      "negate": false,
+      "why": "policy-gap mined: pool agreement 0.5593 at n=59 (base 0.0208, lift 26.882); corpus reference 0.8 vs policy 0.0 over 5 pairs (gap 0.8)"
+    },
+    {
+      "name": "pg_every_vum",
+      "source_pattern": "\\bevery\\b",
+      "values": [
+        "\\bvum\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9643 at n=56 (base 0.0357, lift 11.667); corpus reference 0.0 vs policy 0.5 over 6 pairs (gap 0.5)"
+    },
+    {
+      "name": "pg_be_iwwer",
+      "source_pattern": "\\bbe\\b",
+      "values": [
+        "\\biwwer\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9719 at n=498 (base 0.0281, lift 14.917); corpus reference 0.0 vs policy 0.2857 over 14 pairs (gap 0.2857)"
+    },
+    {
+      "name": "pg_during_während",
+      "source_pattern": "\\bduring\\b",
+      "values": [
+        "\\bwährend\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 1.0 at n=52 (base 0.0, lift 999.0); corpus reference 0.0 vs policy 0.5 over 4 pairs (gap 0.5)"
+    },
+    {
+      "name": "pg_ensure_mee",
+      "source_pattern": "\\bensure\\b",
+      "values": [
+        "\\bmee\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 1.0 at n=30 (base 0.0, lift 999.0); corpus reference 0.0 vs policy 0.5 over 4 pairs (gap 0.5)"
+    },
+    {
+      "name": "pg_ensure_garantéieren",
+      "source_pattern": "\\bensure\\b",
+      "values": [
+        "\\bgarantéieren\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 1.0 at n=30 (base 0.0, lift 999.0); corpus reference 0.0 vs policy 0.5 over 4 pairs (gap 0.5)"
+    },
+    {
+      "name": "pg_government_ausgewielte",
+      "source_pattern": "\\bgovernment\\b",
+      "values": [
+        "\\bausgewielte\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 1.0 at n=88 (base 0.0, lift 999.0); corpus reference 0.0 vs policy 0.5 over 4 pairs (gap 0.5)"
+    },
+    {
+      "name": "pg_life_iwwer",
+      "source_pattern": "\\blife\\b",
+      "values": [
+        "\\biwwer\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9863 at n=73 (base 0.0137, lift 36.5); corpus reference 0.0 vs policy 0.5 over 4 pairs (gap 0.5)"
+    },
+    {
+      "name": "pg_during_wär",
+      "source_pattern": "\\bduring\\b",
+      "values": [
+        "\\bwär\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9808 at n=52 (base 0.0192, lift 10.4); corpus reference 0.0 vs policy 0.5 over 4 pairs (gap 0.5)"
+    },
+    {
+      "name": "pg_government_gouf",
+      "source_pattern": "\\bgovernment\\b",
+      "values": [
+        "\\bgouf\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9545 at n=88 (base 0.0455, lift 8.8); corpus reference 0.0 vs policy 0.5 over 4 pairs (gap 0.5)"
+    },
+    {
+      "name": "pg_would_wär",
+      "source_pattern": "\\bwould\\b",
+      "values": [
+        "\\bwär\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.955 at n=200 (base 0.045, lift 5.556); corpus reference 0.0 vs policy 0.5 over 4 pairs (gap 0.5)"
+    },
+    {
+      "name": "pg_with_vill",
+      "source_pattern": "\\bwith\\b",
+      "values": [
+        "\\bvill\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9612 at n=464 (base 0.0388, lift 11.897); corpus reference 0.0 vs policy 0.3 over 10 pairs (gap 0.3)"
+    },
+    {
+      "name": "pg_take_gezwongen",
+      "source_pattern": "\\btake\\b",
+      "values": [
+        "\\bgezwongen\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 1.0 at n=76 (base 0.0, lift 999.0); corpus reference 0.0 vs policy 0.4 over 5 pairs (gap 0.4)"
+    },
+    {
+      "name": "pg_minister_iwwer",
+      "source_pattern": "\\bminister\\b",
+      "values": [
+        "\\biwwer\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9922 at n=129 (base 0.0078, lift 51.6); corpus reference 0.0 vs policy 0.4 over 5 pairs (gap 0.4)"
+    },
+    {
+      "name": "pg_work_iwwer",
+      "source_pattern": "\\bwork\\b",
+      "values": [
+        "\\biwwer\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9839 at n=62 (base 0.0161, lift 31.0); corpus reference 0.0 vs policy 0.4 over 5 pairs (gap 0.4)"
+    },
+    {
+      "name": "pg_so_just",
+      "source_pattern": "\\bso\\b",
+      "values": [
+        "\\bjust\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9922 at n=129 (base 0.0078, lift 30.353); corpus reference 0.0 vs policy 0.4 over 5 pairs (gap 0.4)"
+    },
+    {
+      "name": "pg_minister_goufen",
+      "source_pattern": "\\bminister\\b",
+      "values": [
+        "\\bgoufen\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9845 at n=129 (base 0.0155, lift 25.8); corpus reference 0.0 vs policy 0.4 over 5 pairs (gap 0.4)"
+    },
+    {
+      "name": "pg_so_sougenannte",
+      "source_pattern": "\\bso\\b",
+      "values": [
+        "\\bsougenannte\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9612 at n=129 (base 0.0388, lift 9.106); corpus reference 0.0 vs policy 0.4 over 5 pairs (gap 0.4)"
+    },
+    {
+      "name": "pg_been_all",
+      "source_pattern": "\\bbeen\\b",
+      "values": [
+        "\\ball\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9778 at n=180 (base 0.0222, lift 9.474); corpus reference 0.0 vs policy 0.2963 over 9 pairs (gap 0.2963)"
+    },
+    {
+      "name": "pg_would_all",
+      "source_pattern": "\\bwould\\b",
+      "values": [
+        "\\ball\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.975 at n=200 (base 0.025, lift 15.0); corpus reference 0.0 vs policy 0.4167 over 4 pairs (gap 0.4167)"
+    },
+    {
+      "name": "pg_will_dëst",
+      "source_pattern": "\\bwill\\b",
+      "values": [
+        "\\bdëst\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9592 at n=245 (base 0.0408, lift 12.25); corpus reference 0.0 vs policy 0.4167 over 4 pairs (gap 0.4167)"
+    },
+    {
+      "name": "pg_were_hir",
+      "source_pattern": "\\bwere\\b",
+      "values": [
+        "\\bhir\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 0.9684 at n=158 (base 0.0316, lift 14.968); corpus reference 0.0 vs policy 0.3667 over 5 pairs (gap 0.3667)"
+    },
+    {
+      "name": "pg_every_ausgewielte",
+      "source_pattern": "\\bevery\\b",
+      "values": [
+        "\\bausgewielte\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 1.0 at n=56 (base 0.0, lift 999.0); corpus reference 0.0 vs policy 0.3333 over 6 pairs (gap 0.3333)"
+    },
+    {
+      "name": "pg_much_ai",
+      "source_pattern": "\\bmuch\\b",
+      "values": [
+        "\\bai\\b"
+      ],
+      "negate": true,
+      "why": "policy-gap mined: pool agreement 1.0 at n=59 (base 0.0, lift 999.0); corpus reference 0.0 vs policy 0.4062 over 4 pairs (gap 0.4062)"
+    }
+  ]
+}

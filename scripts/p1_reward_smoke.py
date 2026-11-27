@@ -61,6 +61,15 @@ def main() -> None:
     ap.add_argument("--pairs", default="data/external/pairs_en_lb.jsonl")
     ap.add_argument("--source-filter", default="techgov_lu_en")
     ap.add_argument("--prompts", type=int, default=40)
+    ap.add_argument("--breadth", type=int, default=0,
+                    help="Select N card-INDEPENDENT prompts by stride across the pool. For building a "
+                         "policy corpus to mine errors from: conditioning prompt choice on any rule set "
+                         "(including 'first pair the rule set decides') makes every rate a function of "
+                         "the rule set, which is how the 29.2% headline was manufactured.")
+    ap.add_argument("--exclude-rules", default="",
+                    help="Comma-separated rule ids to drop from the reward term, e.g. rules whose "
+                         "policy-vs-reference violation gap measured by scripts/p1_signal_by_rule.py is "
+                         "negative (they penalise professional translations harder than the policy).")
     ap.add_argument("--prompts-per-rule", type=int, default=0,
                     help="stratify prompt selection: N prompts per certified rule. Use this: with "
                          "first-decided selection the prompt set changes when the rule set changes, "
@@ -85,6 +94,12 @@ def main() -> None:
     cards = [c for c in (MBGCard.model_validate_json(l)
                          for l in Path(args.cards).open("r", encoding="utf-8") if l.strip())
              if c.id in usable]
+    drop = {x.strip() for x in args.exclude_rules.split(",") if x.strip()}
+    if drop:
+        before = len(cards)
+        cards = [c for c in cards if c.id not in drop]
+        print(f"--exclude-rules: {sorted(drop)} dropped ({before} -> {len(cards)} reward rules); "
+              "excluded rules stay valid as labels/eval features, they just do not enter the reward")
     rel = ReliabilityTable.load(args.reliability)
     v = TranslationVerifier(require_applicability=True)
     print(f"certified rules: {sorted(c.id for c in cards)}")
@@ -93,7 +108,20 @@ def main() -> None:
     prompts: list[dict] = []
     rule_support: dict[str, int] = {}
     selected_per_rule: dict[str, int] = {}
-    if args.prompts_per_rule:
+    if args.breadth:
+        pool: list[dict] = []
+        with Path(args.pairs).open("r", encoding="utf-8") as f:
+            for line in f:
+                rec = json.loads(line)
+                if args.source_filter and rec.get("source") != args.source_filter:
+                    continue
+                if not rec.get("src") or not rec.get("tgt_ref"):
+                    continue
+                pool.append(rec)
+        step = max(1, len(pool) // args.breadth)
+        prompts = pool[::step][:args.breadth]
+        print(f"breadth selection: pool={len(pool)} stride={step} prompts={len(prompts)}")
+    elif args.prompts_per_rule:
         by_rule: dict[str, list[dict]] = {}
         with Path(args.pairs).open("r", encoding="utf-8") as f:
             for line in f:
@@ -201,7 +229,10 @@ def main() -> None:
         "cards_used": sorted(c.id for c in cards),
         "prompts": n,
         "prompt_selection": {
-            "mode": "stratified_per_rule" if args.prompts_per_rule else "first_decided",
+            "mode": ("breadth" if args.breadth
+                     else "stratified_per_rule" if args.prompts_per_rule else "first_decided"),
+            "breadth_requested": args.breadth,
+            "excluded_rules": sorted(x for x in args.exclude_rules.split(",") if x.strip()),
             "prompts_per_rule_requested": args.prompts_per_rule,
             "rule_support_in_pool": rule_support,
             "prompts_selected_per_rule": selected_per_rule,

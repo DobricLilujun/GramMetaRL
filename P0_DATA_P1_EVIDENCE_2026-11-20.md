@@ -894,3 +894,148 @@ protocol are therefore carrying the entire burden of proof for the 6 mined rules
 step is a discrimination probe that breaks the *source* condition instead of the target cue (i.e. test
 whether removing `if` from the English side makes the constraint abstain - an applicability-sensitivity
 axis, not a target-flip axis).
+
+---
+
+## 15. Mining rules from the policy's own errors: three candidate families, zero reward-ready rules (2026-11-27)
+
+§14.5 concluded that rule *coverage* is not the binding constraint on GRPO signal and named the next
+lever: mine constraints from the difference between stored policy rollouts and professional references.
+This section reports executing that lever. It produced one new tool (`scripts/mine_policy_gaps.py`),
+one new metric (gradient alignment), one new gate (G31), and a negative result on every candidate
+family tried. The negative result is the finding.
+
+### 15.1 Unbiased prompt sampling shows the coverage problem is worse than the stratified number
+
+To mine gaps I first needed rollouts over prompts *not* selected to make a rule fire. Added
+`--breadth N` to `scripts/p1_reward_smoke.py` (card-independent stride over the whole pool). 140 prompts
+x 1 greedy rollout of gemma3:12b -> `artifacts/p1/rollouts_gemma3_12b_breadth.jsonl`:
+
+    nonzero_spread_rate = 0.0
+
+On the per-rule-stratified set the same 8 rules gave 11.9% [5.2, 25.0]. On prompts sampled without
+respect to the rules they produce **no advantage at all**. Every previous coverage number is therefore
+conditional on prompt selection, and the unbiased number is the one to plan against.
+
+### 15.2 Mining tool design, and the bug that motivated it
+
+First version mined (cue -> form) pairs out of the rollout corpus itself. Two bugs, both caught by
+looking at the numbers rather than the exit code:
+
+- hypothesis token sets were stored as `{hyp_text: token_set}`, so `form in ht` tested dict *keys* and
+  every policy realisation rate printed 0.00. The guard now in the script
+  (`every policy realisation rate is 0.0: the hypothesis token sets are broken, not the policy`) turns
+  that class of bug into a hard stop instead of a plausible-looking table.
+- corpus-level statistics (n = 6-17 pairs per cue) cannot estimate obligatoriness. Mining was restructured
+  into two stages with different estimators: **stage A on the pool** (fit half only, index < `--fit-boundary`,
+  so the existing two-half certification still measures unseen data) requiring pool support >= 30,
+  professional agreement >= 0.5 and cue specificity `lift = p(form|cue)/p(form|cue absent) >= 2`;
+  **stage B on the rollout corpus**, used only to rank by the policy-vs-reference gap.
+
+The lift axis is not decoration: an earlier corpus-only run promoted `has -> den` with a 0.50 gap, but
+`den` is a dative article professionals write roughly half the time regardless of the cue (lift ~1).
+Same lesson as the 0.39% false-penalty Goodhart correction in section 12: a check that fires regardless
+of the condition is not a check.
+
+### 15.3 Family 1 - single-token cue, positive form: 0 certified
+
+155 stage-A candidates -> 4 with policy gap >= 0.10 -> screened on both halves
+(`artifacts/audit/screen_policygap_{fit,heldout}.json`):
+
+| candidate | fit n | fit agree | heldout n | heldout agree | verdict |
+|---|---|---|---|---|---|
+| `after -> no` | 187 | 0.52 | 128 | 0.51 | refuted (agreement) |
+| `language -> fir` | 71 | 0.52 | 11 | 0.45 | no-support / refuted |
+| `if -> wann` | 281 | 0.60 | 115 | 0.63 | refuted (agreement) |
+| `years -> joer` | 168 | **0.68** | 78 | 0.64 | fit USABLE, **refuted held out** |
+
+The gap table itself is the diagnosis: for the high-obligatoriness cues (`an, fir, et, net, och, méi,
+wéi, ouni, wann`) the policy realisation rate already equals the professional rate. Cue-level
+obligatoriness is **saturated** for this 12B, which is why 155 pool-quality candidates collapse to 4
+teachable ones and then to 0 certified.
+
+### 15.4 Family 2 - ordered pairs: structurally impossible under the agreement floor
+
+`--ordered` mines patterns `t1 .* t2` (order-type constraints, where the policy genuinely differs from
+professionals). Result: **0 candidates** at support >= 60, agreement >= 0.45, lift >= 2.5. The reason is
+arithmetic, not tuning: a multi-element constraint is satisfied by professionals strictly less often than
+each element alone, so `P(t1 and t2 in order) ~ 0.3` while the certification floor is 0.65. Raising
+agreement to 0.65 requires both elements individually near-obligatory - which is family 1 again.
+
+Two ways out, both unresolved and both honest to name:
+- *conditional applicability* ("if the cue fires **and** both tokens appear, they must be ordered"):
+  lifts agreement by construction, but applicability defined on the hypothesis is gameable - the policy
+  can dodge the check by dropping a token. Any such rule needs an abstention penalty in the reward.
+- *morphology/POS* (P3): order constraints in Luxembourgish are about finite-verb position and verb
+  clusters, which cannot be expressed as token-order regexes over surface forms at all.
+
+### 15.5 Family 3 - exclusions (professionals avoid it, policy uses it): mechanically works, semantically empty
+
+`--negative` mines `negate: true` candidates with professional violation <= 5% under the cue and policy
+violation >= 20%: 1,287 candidates, 739 with gap >= 0.10. Mechanically these are the ideal RL rules -
+they fire on the policy and not on the reference, so they cannot be saturated or anti-professional.
+Inspecting the shipped top-24 kills them as *grammar*:
+
+    during -> während   so -> just      minister -> iwwer   every -> vum
+    would -> wär        with -> vill    life -> iwwer       been -> all
+
+These are near-synonyms and frequency variants professionals happen not to prefer. Penalising them is
+reference imitation - exactly what a chrF/BLEU term already does - wearing a grammar label. Decision
+recorded: **do not ship exclusion candidates mined this way**. They stay in
+`data/rules/policy_gap_candidates.json` as evidence, not in a card set.
+
+### 15.6 Excluding anti-professional rules lowers spread: spread was never the objective
+
+Offline re-scoring of the identical 126 stratified hypotheses (`scripts/p1_signal_by_rule.py`, zero model
+calls), 8 rules vs the 5 with non-negative policy-vs-reference gap:
+
+| rule set | groups | nonzero spread |
+|---|---|---|
+| 8 certified rules | 42 | 5/42 = 11.9% [5.2, 25.0] |
+| 5 rules (negative-gap rules dropped) | 42 | 3/42 = 7.1% [2.5, 19.0] |
+
+Dropping the rules that penalise professionals harder than the policy *reduces* advantage coverage.
+Spread counts any within-group reward difference, including differences that point the wrong way. So
+"exclude anti-professional rules" is a correctness lever, not a signal-density lever.
+
+### 15.7 Gradient alignment: the missing measurement, and it reads badly
+
+New metric in `scripts/p1_signal_by_rule.py`: for every within-group rollout pair, compare the sign of
+the grammar-reward difference with the sign of the lexical-similarity-to-reference difference (token F1
+over normalised text). Concordant = the reward ranks rollouts the way a professional reference would.
+
+    42 groups x 3 rollouts, 8 certified rules
+    concordant = 2   discordant = 8   -> 20.0%  [95% CI 5.7, 51.0]
+    ties: reward-only 89, similarity-only 0, both 27
+
+Per-rule (only pairs where that rule's verdict differs): `cond_if` 1 concordant / 1 discordant;
+`comp_that` 0/2; `every_each` 0/2; `possessive` 0/2; `without` 1/1.
+
+Read it carefully. n = 10 decisive pairs, so the interval is huge and the discordance is *not*
+significant. What is significant is the shape: 89 of 120 pairs tie on reward (the rules are blind), and
+in the decisive remainder the reward more often opposes than supports the professional ranking. Combined
+with 15.3 (saturated cues) this says the P0 certified set is **not reward-ready**. It is a label and
+evaluation asset; as a training term it would mostly either do nothing or push against professional usage.
+
+New gate G31 encodes that: PASS requires concordance >= 0.5 with >= 10 decisive pairs. Current state
+**FAIL**. Gate tally with the documented command (which must include `--policy-endpoint`, otherwise two
+policy-dependent gates silently change state): **PASS=29 FAIL=3 WARN=10** (the three FAILs: G21, G24,
+G31). Tests: 35 passed.
+
+### 15.8 What this changes in the plan
+
+1. The next mining criterion is **concordance**, not gap: screen candidates by whether their verdict
+   differences rank rollouts like the reference does. It is free offline once rollouts are stored
+   (`scripts/p1_signal_by_rule.py`), and it is the axis that predicts useful RL signal.
+2. The grammar weight band (G29) stops being belt-and-braces and becomes load-bearing: with an MT term
+   present, a rule set that is blind on 89/120 pairs is harmless; a rule set that is discordant on the
+   rest is only survivable because `w_grammar < w_mt + w_tool + w_trace`.
+3. Surface cue mining is exhausted across three families. Teachable surface signal for a competent
+   generalist is nearly gone; what remains needs morphology (P3) or a weaker policy (SFT warmup makes
+   the policy's errors grammatical rather than stylistic, which is the only regime where these rules
+   could bite).
+4. Artifacts this section needs: `artifacts/p1/rollouts_gemma3_12b_breadth.jsonl` +
+   `corpus_gemma3_12b_breadth.json`, `artifacts/p1/policy_gap_mining.json`,
+   `data/rules/policy_gap_candidates.json`, `artifacts/audit/screen_policygap_{fit,heldout}.json`,
+   `artifacts/p1/signal_condv3_stratified.json` (now with `alignment` + per-rule alignment),
+   `artifacts/p1/signal_condv3_strat_pos5.json`.

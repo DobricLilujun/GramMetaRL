@@ -1,0 +1,49 @@
+{
+  "cards_used": [
+    "LB_946a24dd25d6",
+    "LB_9789dfb15623",
+    "LB_MIN01_comp_that",
+    "LB_MIN02_cond_if",
+    "LB_MIN03_every_each",
+    "LB_MIN04_negation_not",
+    "LB_MIN05_than",
+    "LB_MIN06_without"
+  ],
+  "prompts": 140,
+  "prompt_selection": {
+    "mode": "breadth",
+    "breadth_requested": 140,
+    "excluded_rules": [],
+    "prompts_per_rule_requested": 0,
+    "rule_support_in_pool": {},
+    "prompts_selected_per_rule": {}
+  },
+  "protocol": {
+    "rollout_0": "greedy (temperature 0)",
+    "other_rollouts": "temperature 0.9"
+  },
+  "nonzero_spread_rate_ci95": [
+    0.0,
+    0.027
+  ],
+  "rollouts_per_prompt": 1,
+  "policy_model": "gemma3:12b",
+  "rollout_tally": {
+    "rollout_ok": 140,
+    "group_zero_spread": 140,
+    "ref_ok": 126,
+    "ref_penalized": 14
+  },
+  "groups_nonzero_spread": 0,
+  "nonzero_spread_rate": 0.0,
+  "mean_spread": 0.0,
+  "median_spread": 0.0,
+  "reward_mean": 0.28837559162445003,
+  "reward_stdev_across_groups": 0.5579729123724348,
+  "reward_min": -1.0,
+  "reward_max": 1.0,
+  "reference_penalized_rate": 0.1,
+  "reference_mean_reward": 0.2341991512876365,
+  "policy_minus_reference": 0.05417644033681354,
+  "abstain_rollout_rate": 0.5714285714285714
+}

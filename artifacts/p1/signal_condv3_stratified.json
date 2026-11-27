@@ -31,7 +31,10 @@
    "ref_decided": 30,
    "ref_violated_rate": 0.1,
    "gap": -0.1,
-   "creates_group_spread": 0
+   "creates_group_spread": 0,
+   "align_concordant": 0,
+   "align_discordant": 0,
+   "align_tie_similarity": 0
   },
   {
    "rule_id": "LB_946a24dd25d6",
@@ -40,7 +43,10 @@
    "ref_decided": 27,
    "ref_violated_rate": 0.1111111111111111,
    "gap": -0.037037037037037035,
-   "creates_group_spread": 1
+   "creates_group_spread": 1,
+   "align_concordant": 0,
+   "align_discordant": 2,
+   "align_tie_similarity": 0
   },
   {
    "rule_id": "LB_9789dfb15623",
@@ -49,7 +55,10 @@
    "ref_decided": 21,
    "ref_violated_rate": 0.0,
    "gap": 0.0,
-   "creates_group_spread": 0
+   "creates_group_spread": 0,
+   "align_concordant": 0,
+   "align_discordant": 0,
+   "align_tie_similarity": 0
   },
   {
    "rule_id": "LB_MIN01_comp_that",
@@ -58,7 +67,10 @@
    "ref_decided": 18,
    "ref_violated_rate": 0.0,
    "gap": 0.05555555555555555,
-   "creates_group_spread": 1
+   "creates_group_spread": 1,
+   "align_concordant": 0,
+   "align_discordant": 2,
+   "align_tie_similarity": 0
   },
   {
    "rule_id": "LB_MIN02_cond_if",
@@ -67,7 +79,10 @@
    "ref_decided": 18,
    "ref_violated_rate": 0.16666666666666666,
    "gap": 0.44444444444444453,
-   "creates_group_spread": 1
+   "creates_group_spread": 1,
+   "align_concordant": 1,
+   "align_discordant": 1,
+   "align_tie_similarity": 0
   },
   {
    "rule_id": "LB_MIN03_every_each",
@@ -76,7 +91,10 @@
    "ref_decided": 18,
    "ref_violated_rate": 0.3333333333333333,
    "gap": 0.05555555555555558,
-   "creates_group_spread": 1
+   "creates_group_spread": 1,
+   "align_concordant": 0,
+   "align_discordant": 2,
+   "align_tie_similarity": 0
   },
   {
    "rule_id": "LB_MIN05_than",
@@ -85,7 +103,10 @@
    "ref_decided": 18,
    "ref_violated_rate": 0.16666666666666666,
    "gap": 0.0,
-   "creates_group_spread": 0
+   "creates_group_spread": 0,
+   "align_concordant": 0,
+   "align_discordant": 0,
+   "align_tie_similarity": 0
   },
   {
    "rule_id": "LB_MIN06_without",
@@ -94,7 +115,22 @@
    "ref_decided": 18,
    "ref_violated_rate": 0.3333333333333333,
    "gap": -0.055555555555555525,
-   "creates_group_spread": 1
+   "creates_group_spread": 1,
+   "align_concordant": 1,
+   "align_discordant": 1,
+   "align_tie_similarity": 0
   }
- ]
+ ],
+ "alignment": {
+  "concordant": 2,
+  "discordant": 8,
+  "tie_reward": 89,
+  "tie_similarity": 0,
+  "tie_both": 27,
+  "concordant_rate": 0.2,
+  "concordant_rate_ci95": [
+   0.057,
+   0.51
+  ]
+ }
 }

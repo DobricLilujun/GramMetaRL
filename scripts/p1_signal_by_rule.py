@@ -12,12 +12,22 @@ Readout that matters for rule mining:
   policy_violated_rate > reference_violated_rate  -> the rule can teach something
   both ~ 0                                        -> saturated cue, adds coverage but no advantage
   reference_violated_rate high                    -> the rule punishes professionals; not certified
+
+Non-zero spread is NOT the objective, and this script measures why. Excluding the three anti-professional
+rules from the reward lowered spread (11.9% -> 7.1% on the same 126 hypotheses): spread counts ANY
+within-group reward difference, including differences that point AWAY from the professional reference.
+The gradient-alignment block therefore compares, for every within-group rollout pair, the sign of the
+reward difference against the sign of the lexical-similarity-to-reference difference. Concordant pairs
+mean the reward ranks rollouts the way a professional reference would; discordant pairs mean the reward
+is teaching the wrong direction. Lexical F1 is a proxy, not a quality oracle - it says nothing about
+grammar - but it is the same proxy an MT reward would use, which is exactly the comparison of interest.
 """
 from __future__ import annotations
 
 import argparse
 import collections
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -44,11 +54,26 @@ def usable_ids(path: Path) -> set[str]:
     return {rid for rid, v in d.items() if isinstance(v, dict) and v.get("usable")}
 
 
+def _token_f1(a: str, b: str) -> float:
+    """Lexical overlap proxy for 'closer to the professional reference'. Case/diacritic-normalised."""
+    na = set(re.findall(r"\w+", TranslationVerifier.normalize_text(a)))
+    nb = set(re.findall(r"\w+", TranslationVerifier.normalize_text(b)))
+    if not na or not nb:
+        return 0.0
+    tp = len(na & nb)
+    if not tp:
+        return 0.0
+    p, r = tp / len(na), tp / len(nb)
+    return 2 * p * r / (p + r)
+
+
 def score_set(v: TranslationVerifier, cards: list[MBGCard], rel: ReliabilityTable,
               groups: dict[str, list[dict]]) -> tuple[dict, dict]:
     """groups: prompt_id -> [{hyp, tgt_ref, src}]  -> (per-rule stats, group-level spread)."""
     per_rule: dict[str, collections.Counter] = collections.defaultdict(collections.Counter)
     spread_flags: dict[str, collections.Counter] = collections.defaultdict(collections.Counter)
+    alignment: collections.Counter = collections.Counter()
+    rule_alignment: dict[str, collections.Counter] = collections.defaultdict(collections.Counter)
     group_rewards: dict[str, list[float]] = {}
 
     for pid, rows in groups.items():
@@ -73,6 +98,33 @@ def score_set(v: TranslationVerifier, cards: list[MBGCard], rel: ReliabilityTabl
                 per_rule[r.rule_id]["ref_decided"] += 1
                 per_rule[r.rule_id][f"ref_{r.verdict}"] += 1
         group_rewards[pid] = rewards
+        # gradient alignment: does a reward difference between two rollouts point toward the reference?
+        sims = [_token_f1(row["hyp"], row["tgt_ref"]) for row in rows]
+        seen0 = list(verdict_vectors.values())
+        for a in range(len(rows)):
+            for b in range(a + 1, len(rows)):
+                dr, ds = rewards[a] - rewards[b], sims[a] - sims[b]
+                if dr == 0 and ds == 0:
+                    alignment["tie_both"] += 1
+                elif dr == 0:
+                    alignment["tie_reward"] += 1
+                elif ds == 0:
+                    alignment["tie_similarity"] += 1
+                elif (dr > 0) == (ds > 0):
+                    alignment["concordant"] += 1
+                else:
+                    alignment["discordant"] += 1
+                # per-rule: only pairs where THIS rule changed its verdict
+                da, db = dict(seen0[a]), dict(seen0[b])
+                for rid in set(da) & set(db):
+                    if da[rid] == db[rid]:
+                        continue
+                    if ds == 0:
+                        rule_alignment[rid]["tie_similarity"] += 1
+                    elif (da[rid] == "satisfied") == (ds > 0):
+                        rule_alignment[rid]["concordant"] += 1
+                    else:
+                        rule_alignment[rid]["discordant"] += 1
         # which rule makes two rollouts in this group differ?
         seen = list(verdict_vectors.values())
         differ: set[str] = set()
@@ -86,7 +138,8 @@ def score_set(v: TranslationVerifier, cards: list[MBGCard], rel: ReliabilityTabl
                     spread_flags["_group_any"]["differs"] += 1
         for rid in differ:
             spread_flags[rid]["creates_group_spread"] += 1
-    return per_rule, {"group_rewards": group_rewards, "spread": spread_flags}
+    return per_rule, {"group_rewards": group_rewards, "spread": spread_flags,
+                      "alignment": alignment, "rule_alignment": rule_alignment}
 
 
 def _wilson(k: int, n: int, z: float = 1.96) -> list[float]:
@@ -158,16 +211,38 @@ def main() -> None:
               f"{gap*100 if gap is not None else 0:6.1f}% {sp:5d}/{n_groups}")
         rows.append({"rule_id": rid, "policy_decided": c["policy_decided"],
                      "policy_violated_rate": pv, "ref_decided": c["ref_decided"],
-                     "ref_violated_rate": rv, "gap": gap, "creates_group_spread": sp})
+                     "ref_violated_rate": rv, "gap": gap, "creates_group_spread": sp,
+                     "align_concordant": g["rule_alignment"][rid]["concordant"],
+                     "align_discordant": g["rule_alignment"][rid]["discordant"],
+                     "align_tie_similarity": g["rule_alignment"][rid]["tie_similarity"]})
 
     nz = sum(1 for pid, rw in g["group_rewards"].items() if max(rw) != min(rw))
     print(f"\ngroups with nonzero spread: {nz}/{n_groups} = {nz/n_groups:.1%}")
+    al = g["alignment"]
+    dec = al["concordant"] + al["discordant"]
+    conc = al["concordant"] / dec if dec else 0.0
+    print(f"gradient alignment (reward diff vs similarity-to-reference diff, within group): "
+          f"concordant={al['concordant']} discordant={al['discordant']} "
+          f"-> {conc:.1%} [95% CI {_wilson(al['concordant'], dec)}] "
+          f"ties: reward={al['tie_reward']} similarity={al['tie_similarity']} both={al['tie_both']}")
+    print("  per-rule alignment (only pairs where that rule's verdict differs):")
+    for rid in sorted(g["rule_alignment"], key=lambda r: -(g["rule_alignment"][r]["concordant"] + g["rule_alignment"][r]["discordant"])):
+        ra = g["rule_alignment"][rid]
+        d2 = ra["concordant"] + ra["discordant"]
+        if not d2:
+            continue
+        print(f"    {rid:26} concordant={ra['concordant']:3d} discordant={ra['discordant']:3d} "
+              f"tie_sim={ra['tie_similarity']:3d} -> {ra['concordant']/d2:.0%}")
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(json.dumps({
         "rollout_log": args.rollout_log, "rules_scored": sorted(ids), "groups": n_groups,
         "groups_nonzero_spread": nz, "nonzero_spread_rate": nz / n_groups,
         "nonzero_spread_rate_ci95": _wilson(nz, n_groups),
         "rollout_diversity": div, "per_rule": rows,
+        "alignment": {"concordant": al["concordant"], "discordant": al["discordant"],
+                      "tie_reward": al["tie_reward"], "tie_similarity": al["tie_similarity"],
+                      "tie_both": al["tie_both"], "concordant_rate": round(conc, 4),
+                      "concordant_rate_ci95": _wilson(al["concordant"], dec)},
     }, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"-> {args.out}")
 
