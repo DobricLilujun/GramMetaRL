@@ -1122,24 +1122,33 @@ is explicit instead of guessed.
 
 Results on the partial cue6 corpus (72 groups, 410 hypotheses; the full log is being regenerated):
 
-| candidate | decisive pairs | concordant/discordant | placebo conc | placebo pairs | Fisher p | verdict |
-|---|---|---|---|---|---|---|
-| `ability_can` | 19 | 18 / 1 (0.95) | 0.62 | 93 | 0.006 | **beats placebo**, but rejected on agreement (fit 0.63, held-out 0.43) |
-| `negation_not` | 12 | 11 / 1 (0.92) | 0.62 | 206 | 0.060 | borderline, not significant vs placebo |
-| `comp_that` | 17 | 9 / 8 (0.53) | 0.56 | 195 | 0.804 | indistinguishable from placebo |
-| `only` | 16 | 8 / 8 (0.50) | 0.50 | 180 | 1.000 | indistinguishable from placebo |
-| `cond_if` | 12 | 0 / 12 (0.00) | 0.30 | 93 | 0.033 | significantly **anti**-aligned (the rule whose gap was +44pp) |
-| `pg_with_vill` | 9 | 0 / 9 (0.00) | 0.49 | 177 | 0.004 | significantly anti-aligned |
+| candidate | decisive pairs | concordant/discordant | placebo conc | placebo pairs | Fisher p | agreement fit / held-out | verdict |
+|---|---|---|---|---|---|---|---|
+| `than` | 6 | 6 / 0 (1.00) | 0.22 | 146 | 0.000 | 0.70 / 0.85 | right direction, **5-6 pairs is under the 10-pair floor** |
+| `pg_government_gouf` | 5 | 5 / 0 (1.00) | 0.35 | 90 | 0.007 | 0.95 / 1.00 | right direction, too few pairs |
+| `pg_during_während` | 5 | 4 / 1 (0.80) | 0.21 | 83 | 0.012 | 1.00 / 1.00 | right direction, too few pairs |
+| `ability_can` | 19 | 18 / 1 (0.95) | 0.62 | 93 | 0.006 | 0.63 / **0.43** | plenty of pairs, but not what professionals do |
+| `comp_that` | 17 | 9 / 8 (0.53) | 0.56 | 195 | 0.804 | 0.75 / 0.75 | indistinguishable from its placebo |
+| `only` | 16 | 8 / 8 (0.50) | 0.50 | 180 | 1.000 | 0.54 / 0.55 | indistinguishable from its placebo |
+| `cond_if` | 12 | 0 / 12 (0.00) | 0.30 | 93 | 0.033 | 0.83 / 0.81 | significantly **anti**-aligned (the rule whose gap was +44pp) |
+| `pg_with_vill` | 9 | 0 / 9 (0.00) | 0.49 | 177 | 0.004 | 0.96 / 0.95 | significantly anti-aligned |
+| `both` | 5 | 5 / 0 (1.00) | 0.44 | 68 | 0.021 | **0.07** / 0.06 | beats placebo while being nonsense: why agreement stays a gate |
 
-No candidate currently clears every axis (agreement fit and held-out >= 0.65, >= 10 decisive pairs,
-concordance >= 0.5, placebo gap >= 0.1, placebo Fisher p <= 0.05). Two facts come out of that table:
+No candidate clears every axis yet (agreement fit and held-out >= 0.65, >= 10 decisive pairs,
+concordance >= 0.5, placebo gap >= 0.1, placebo Fisher p <= 0.05) - but the reasons differ, and that is
+the useful part:
 
-1. The axes disagree. `ability_can` is the best-aligned candidate in the set and simultaneously a poor
-   description of professional text (agreement 0.43 held out) - exactly the false-satisfy/lexical-shadow
-   mode, caught by keeping both axes.
-2. The candidate that looked most teachable by gap (`cond_if`, +44pp) is the one that ranks rollouts
-   **against** the reference significantly often (0/12, p=0.033 vs its placebo band). Gap and alignment
-   are not the same axis, and gap alone mis-ranks candidates.
+1. **Power-limited, not refuted**: `than`, `pg_government_gouf` and `pg_during_während` beat their placebo
+   band decisively (p = 0.000 / 0.007 / 0.012) with agreement 0.70-1.00, and fail only the 10-decisive-pair
+   floor at 5-6 pairs. They are the shortlist, and the fix is measurement budget, not a new idea:
+   `data/rules/shortlist_candidates.json` + `--cue-specs --prompts-per-cue 16 --rollouts 6`.
+2. **The axes disagree.** `ability_can` has 19 decisive pairs and concordance 0.95 (beats placebo
+   p=0.006) yet describes professional text poorly (agreement 0.63 fit, 0.43 held out) - the
+   false-satisfy/lexical-shadow mode, caught only because agreement stays a separate gate. `both`
+   (agreement 0.07) also beats its placebo.
+3. **Gap and alignment are different axes, and gap mis-ranks.** The most teachable-looking candidate by
+   gap (`cond_if`, +44pp) is the clearest anti-aligned one (0/12, p=0.033 against its own placebo band),
+   and `pg_with_vill` (agreement 0.96) is anti-aligned too (0/9, p=0.004).
 
 ### 16.4 What is solid after this section
 

@@ -23,6 +23,7 @@ data/rules/*
 !data/rules/source_conditionals*.json
 !data/rules/screened_conditionals.json
 !data/rules/policy_gap_candidates.json
+!data/rules/shortlist_candidates.json
 !data/rules/reliability*.json
 !data/external/
 data/external/*

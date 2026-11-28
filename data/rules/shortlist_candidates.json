@@ -1,0 +1,58 @@
+{
+ "note": "shortlist from the first concordance screen (artifacts/p1/concordance_screen_cue6_partial.json): three candidates beat their placebo in the right direction but have only 5-6 decisive pairs (floor 10), two are significantly anti-aligned. This file exists to buy decisive pairs via --cue-specs, NOT as a card set.",
+ "candidates": [
+  {
+   "name": "cond_if",
+   "source_pattern": "\\bif\\b",
+   "values": [
+    "\\bwa\\b",
+    "\\bwann\\b",
+    "\\bfalls\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)",
+   "mined_from": "data/rules/screened_conditionals.json"
+  },
+  {
+   "name": "than",
+   "source_pattern": "\\bthan\\b",
+   "values": [
+    "\\bwéi\\b",
+    "\\bewéi\\b"
+   ],
+   "negate": false,
+   "why": "screened candidate (v2): forms corrected from measured violations (ewéi for 'than'; 'the X-est' source to stop matching interest/request/suggest; adjective list for as...as)",
+   "mined_from": "data/rules/screened_conditionals.json"
+  },
+  {
+   "name": "pg_during_während",
+   "source_pattern": "\\bduring\\b",
+   "values": [
+    "\\bwährend\\b"
+   ],
+   "negate": true,
+   "why": "policy-gap mined: pool agreement 1.0 at n=52 (base 0.0, lift 999.0); corpus reference 0.0 vs policy 0.5 over 4 pairs (gap 0.5)",
+   "mined_from": "data/rules/policy_gap_candidates.json"
+  },
+  {
+   "name": "pg_government_gouf",
+   "source_pattern": "\\bgovernment\\b",
+   "values": [
+    "\\bgouf\\b"
+   ],
+   "negate": true,
+   "why": "policy-gap mined: pool agreement 0.9545 at n=88 (base 0.0455, lift 8.8); corpus reference 0.0 vs policy 0.5 over 4 pairs (gap 0.5)",
+   "mined_from": "data/rules/policy_gap_candidates.json"
+  },
+  {
+   "name": "pg_with_vill",
+   "source_pattern": "\\bwith\\b",
+   "values": [
+    "\\bvill\\b"
+   ],
+   "negate": true,
+   "why": "policy-gap mined: pool agreement 0.9612 at n=464 (base 0.0388, lift 11.897); corpus reference 0.0 vs policy 0.3 over 10 pairs (gap 0.3)",
+   "mined_from": "data/rules/policy_gap_candidates.json"
+  }
+ ]
+}
