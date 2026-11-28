@@ -689,17 +689,21 @@ def main() -> int:
                 and (r.get("placebo_gap") or 0.0) >= 0.1 and r.get("concordance", 0) >= 0.5]
         anti = [r["name"] for r in rows
                 if (r.get("placebo_p") or 1.0) <= 0.05 and (r.get("placebo_gap") or 0.0) <= -0.1]
+        thin = [r for r in beat if r["decisive_pairs"] < 10]
+        div0 = [r for r in rows if r["applicable_groups"] >= 5 and r["diversity_rate"] == 0.0]
         detail = (f"{len(rows)} candidates screened from {cand_screen} "
                   f"({scr.get('groups')} groups, {scr.get('hypotheses')} hypotheses, "
                   f"{scr.get('rollouts_per_group')} rollouts/group): "
                   f"clear ALL axes = {len(good)} {[r['name'] for r in good][:6]}; "
                   f"beat their placebo in the RIGHT direction = {len(beat)} "
                   f"{[(r['name'], r['decisive_pairs'], r['concordance'], r['placebo_pooled_concordance']) for r in beat][:5]}; "
-                  f"significantly ANTI-aligned = {len(anti)} {anti[:4]}. Candidates that beat placebo are "
-                  f"stopped by the 10-decisive-pair floor (they have 5-6) or by the agreement axis, i.e. "
-                  f"the shortlist is power-limited, not refuted: the next corpus needs ~3x more prompts "
-                  f"per cue for exactly these candidates. The highest-gap candidate (cond_if) is "
-                  f"anti-aligned")
+                  f"of those, {len(thin)} are below the 10-decisive-pair floor; "
+                  f"significantly ANTI-aligned = {len(anti)} {anti[:4]}; "
+                  f"{len(div0)} candidates have diversity_rate 0.00 on >=5 applicable groups, i.e. their "
+                  f"verdicts NEVER distinguish two rollouts and no corpus can alignment-test them "
+                  f"(decisive pairs scale as applicable_groups x diversity_rate x k(k-1)/2). "
+                  f"Read evidence 16.4: at 5-12 decisive pairs the sign of this axis is not stable across "
+                  f"corpora, so a single screen is a hypothesis, not a selection")
         if not good:
             warn("G32 candidate constraints screened by placebo-corrected concordance", detail)
         else:

@@ -1138,10 +1138,9 @@ No candidate clears every axis yet (agreement fit and held-out >= 0.65, >= 10 de
 concordance >= 0.5, placebo gap >= 0.1, placebo Fisher p <= 0.05) - but the reasons differ, and that is
 the useful part:
 
-1. **Power-limited, not refuted**: `than`, `pg_government_gouf` and `pg_during_während` beat their placebo
-   band decisively (p = 0.000 / 0.007 / 0.012) with agreement 0.70-1.00, and fail only the 10-decisive-pair
-   floor at 5-6 pairs. They are the shortlist, and the fix is measurement budget, not a new idea:
-   `data/rules/shortlist_candidates.json` + `--cue-specs --prompts-per-cue 16 --rollouts 6`.
+1. **Power-limited, not refuted (at 5-6 pairs)**: `than`, `pg_government_gouf` and `pg_during_während`
+   beat their placebo band (p = 0.000 / 0.007 / 0.012) with agreement 0.70-1.00, and failed only the
+   10-decisive-pair floor. **That reading was wrong, and 16.4 shows it.**
 2. **The axes disagree.** `ability_can` has 19 decisive pairs and concordance 0.95 (beats placebo
    p=0.006) yet describes professional text poorly (agreement 0.63 fit, 0.43 held out) - the
    false-satisfy/lexical-shadow mode, caught only because agreement stays a separate gate. `both`
@@ -1166,3 +1165,71 @@ Fisher), `--cue-specs/--prompts-per-cue` in `scripts/p1_reward_smoke.py`, `--bre
 `--exclude-rules`, the spread-undefined guards, exact binomial and Fisher tests, cluster CIs over
 groups. Tests: 39 passed (added: spread guard x2, binomial null, concordance direction for both
 constraint kinds, plus the earlier power/reader tests).
+
+---
+
+## 16.4. The powered re-test retracts the shortlist: three of five signals reversed (2026-11-28)
+
+The shortlist corpus (`data/rules/shortlist_candidates.json`, 5 cues x 16 prompts x 6 rollouts = 78 groups,
+446 hypotheses) multiplied the decisive pairs 2-10x. The result is a clean negative:
+
+| candidate | pairs (was) | conc (was) | placebo conc (was) | Fisher p (was) | now |
+|---|---|---|---|---|---|
+| `pg_during_während` | 5 -> **51** | 0.80 -> 0.61 | 0.21 -> 0.49 | 0.012 -> **0.139** | no longer beats its placebo |
+| `pg_government_gouf` | 5 -> **10** | 1.00 -> 0.20 | 0.35 -> 0.48 | 0.007 -> 0.108 | **reversed**: now discordant |
+| `cond_if` | 12 -> **26** | 0.00 -> 0.38 | 0.30 -> 0.60 | 0.033 -> 0.038 | the **placebo** is now the aligned one |
+| `pg_with_vill` | 9 -> **17** | 0.00 -> 0.71 | 0.49 -> 0.45 | 0.004 -> 0.048 | flipped from anti- to aligned: the only survivor, borderline |
+| `than` | 6 -> 9 | 1.00 -> 0.67 | 0.22 -> 0.40 | 0.000 -> 0.168 | still thin (needs ~160 groups) |
+
+So the partial-corpus screen produced four significant-looking effects and the powered screen kept none of
+them at the same sign and strength. Two consequences:
+
+1. **Never quote concordance from fewer than ~30 decisive pairs.** At 5-12 pairs the 95% interval is
+   [0.3, 1.0], and placebo bands sit in 0.2-0.6, so every apparent win is inside the noise of the
+   comparison it is judged against.
+2. **Decisive pairs are capped by verdict diversity, not by prompt count.** The screen now reports
+   `diversity_rate` (share of applicable groups whose verdicts differ across rollouts) and
+   `groups_needed_for_decisive_floor`: `decisive ~= applicable_groups x diversity_rate x k(k-1)/2`.
+   `pg_during_während` has divR 0.56 (18 groups suffice); `than` has 0.06 (160 groups); the exclusion
+   candidates in the cue6 corpus have divR = 0.00 and produced **zero** decisive pairs at 161 groups.
+   That is the real cost model for this axis: a rule that almost never distinguishes two rollouts cannot
+   be alignment-tested at any reasonable budget.
+
+On the full cue6 corpus (161 groups, 5.78 rollouts/group) exactly one candidate clears all axes:
+`LB_MIN04_negation_not` - which is the rule with the **most negative** policy-vs-reference gap (-10pp
+stratified, -40pp unbiased). The gap axis and the alignment axis disagree even about a certified rule,
+which is the strongest form of the 16.3 point: single-axis screening is not a selection procedure.
+
+---
+
+## 16.5. Coverage by prompt targeting (positive), and the state of the Lean line (2026-11-28)
+
+**Coverage is a curriculum variable.** The same eight rules give advantage coverage 6.2% on
+card-independent prompts, 11.9% on stratified-per-rule prompts, and **18.0% [12.8-24.7]** when prompts are
+selected so that a candidate cue is present (cue6: 161 prompts x 6 rollouts; shortlist set 17.9%
+[11.0-27.9]). Nothing about the rules changed. This is a legitimate P4 lever - choose prompts the verifier
+can judge - as long as the population number (6.2%) is reported next to the curriculum number, because the
+latter is conditioning on applicability.
+
+**The Lean line (branch `p6-lean-verified-grammar`, worktree `GramMetaRL_p6`) was re-checked against the
+current card set and cannot ingest it.** Measured: `scripts/lean_pilot.py --cards
+data/rules/mbg_cards_condv3.jsonl` dies with a pydantic `literal_error` on
+`output_constraints.0.kind = 'source_conditional'`: the branch schema predates that kind. Its own numbers
+(`artifacts/lean/summary.txt`, on the 87-card recompiled set) stand as a measurement:
+
+- 87 cards / 97 constraints / alphabet 94: `ok` 63, `out_of_fragment` 29 (27 non-regex kinds, 2 use `(?!`),
+  `dead` 4, `universal` 1;
+- 59 cards carry a formalizable obligation; **9 cards are provably unsatisfiable** (`positives /\ not(exclusions) = empty`),
+  which is an unavoidable penalty for every rollout that retrieves them;
+- 596 pairwise card conflicts among 1,711 pairs tested;
+- 12 automata claims emitted, **12/12 accepted by the Lean 4.15.0 kernel**, with minimal witnesses
+  (`'s'` at depth 0, `'en'` at depth 1) - and getting there the kernel exposed 7 encoding bugs in the
+  compiler, including one that made 24/59 look unsatisfiable when only 9 were.
+
+Why this matters for the current bottleneck: the axes that sampling measures noisily are **decidable** in
+that layer. `dead`/`universal` is exactly the vacuity that shows up as discrimination 5.3%; provable
+emptiness of the region where two verdicts differ predicts `diversity_rate = 0` - the property that made
+the exclusion candidates untestable at 161 groups - **without any GPU corpus**. Reconnecting the two lines
+is a small, well-defined job: add `source_conditional` to the branch schema and lower it into the automata
+layer (the obligation is `not(source_pattern) \/ target_form`, a regular language), then re-run
+certificates on the 93-card condv3 set and gate on `dead`/`universal`/unsatisfiable there.

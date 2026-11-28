@@ -30,7 +30,9 @@ cannot be measured are reported as undecidable and abstain instead of producing 
 | Reward noise floor (reference translation penalized) | **14.3%** stratified / **11.3%** unbiased | the two smoke artifacts above |
 | Gradient alignment: reward ranks a rollout pair the way the reference does | stratified **20.0%** (2 vs 8, p=0.11) / unbiased **66.7%** (6 vs 3, p=0.51) — **direction not established** | `artifacts/p1/signal_condv3_{stratified,breadth3}.json` |
 | New rules certified by mining the policy's own errors (3 families tried) | **0** | `artifacts/p1/policy_gap_mining.json`, `artifacts/audit/screen_policygap_{fit,heldout}.json` |
-| Candidates (of 46) that beat their own **placebo band** in the right direction | **3** (`than`, `pg_government_gouf`, `pg_during_während`) — all power-limited at 5-6 decisive pairs; 0 clear every axis; 2 significantly **anti**-aligned (`cond_if`, `pg_with_vill`) | `artifacts/p1/concordance_screen_cue6_partial.json` |
+| Candidates clearing **all** axes (agreement both halves + >=10 decisive pairs + conc >=0.5 + beats its own placebo band) | **1 of 46** on the 161-group cue6 corpus: `LB_MIN04_negation_not` — the rule with the *most negative* gap (-10pp / -40pp). On the powered shortlist corpus: 1 (`pg_with_vill`, Fisher p=0.048, borderline) | `artifacts/p1/concordance_screen_cue6.json`, `..._shortlist.json` |
+| Concordance signals that survived 2-10x more decisive pairs | **0 of 4** — `pg_during_während`, `pg_government_gouf`, `cond_if`, `than` all moved to or across their placebo band | evidence 16.4 |
+| Verdict-diversity rate (`divR`) of the exclusion candidates at 161 groups | **0.00** -> zero decisive pairs, untestable at any sane budget | `artifacts/p1/concordance_screen_cue6.json` |
 
 Headline measured result of 2026-11-27 (three parts, all negative, and one of them is a correction of my
 own number). (1) **Rule coverage is not the RL bottleneck**: 2 → 8 certified rules raised label yield by a
@@ -539,13 +541,26 @@ decisive pairs to as many as 20, since pairs scale as k(k−1)/2. Results (parti
 | `cond_if` | 12 | 0.00 | 0.30 | 0.033 | 0.83 / 0.81 | significantly **anti**-aligned — the rule whose gap measured +44pp |
 | `pg_with_vill` | 9 | 0.00 | 0.49 | 0.004 | 0.96 / 0.95 | significantly anti-aligned |
 
-So the outcome is not "nothing works": three candidates point the right way and clear the agreement axes
-but sit **below the 10-decisive-pair floor**, while one candidate with plenty of pairs fails agreement
-(the lexical-shadow mode), and the most teachable-looking candidate by gap (`cond_if`) is the clearest
-anti-aligned one. `both` (agreement 0.07) also beats its placebo, which is why agreement and
-placebo-corrected alignment are both gates rather than a score sum. The queued follow-up corpus
-(`data/rules/shortlist_candidates.json`, `--prompts-per-cue 16 --rollouts 6`) exists to buy those pairs
-for exactly the five candidates above.
+That reading was the small-n trap again. The powered re-test on the shortlist corpus (5 cues x 16 prompts
+x 6 rollouts = 78 groups, 446 hypotheses) is in `artifacts/p1/concordance_screen_shortlist.json`, and it
+**kept none of those effects at the same sign and strength**:
+
+| candidate | decisive pairs | conc | placebo conc | Fisher p | what happened |
+|---|---|---|---|---|---|
+| `pg_during_während` | 5 -> **51** | 0.80 -> 0.61 | 0.21 -> 0.49 | 0.012 -> **0.139** | no longer beats its placebo |
+| `pg_government_gouf` | 5 -> **10** | 1.00 -> 0.20 | 0.35 -> 0.48 | 0.007 -> 0.108 | **reversed** to discordant |
+| `cond_if` | 12 -> **26** | 0.00 -> 0.38 | 0.30 -> 0.60 | 0.033 -> 0.038 | now the **placebo** is the aligned one |
+| `pg_with_vill` | 9 -> **17** | 0.00 -> 0.71 | 0.49 -> 0.45 | 0.004 -> 0.048 | flipped anti -> aligned; the only survivor, borderline |
+| `than` | 6 -> 9 | 1.00 -> 0.67 | 0.22 -> 0.40 | 0.000 -> 0.168 | still thin: needs ~160 groups |
+
+Two rules for the future, both now enforced by what the screen prints: **never quote concordance below
+~30 decisive pairs** (at 5-12 pairs the 95% interval is [0.3, 1.0] while placebo bands sit at 0.2-0.6),
+and **decisive pairs are capped by verdict diversity, not prompt count** -
+`decisive ~= applicable_groups x diversity_rate x k(k-1)/2`, where `diversity_rate` (reported) is the share
+of applicable groups whose verdicts differ across rollouts. `pg_during_während` has divR 0.56 (18 groups
+enough); `than` has 0.06 (160 groups); the exclusion candidates in the 161-group cue6 corpus have divR
+**0.00** and produced zero decisive pairs. A rule that rarely distinguishes two rollouts cannot be
+alignment-tested at any sane budget - that is the cost model this axis was missing.
 
 ```bash
 $PY scripts/p1_reward_smoke.py --cue-specs data/rules/screened_conditionals_all.json \

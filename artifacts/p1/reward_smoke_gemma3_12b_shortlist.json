@@ -1,0 +1,62 @@
+{
+  "cards_used": [
+    "LB_946a24dd25d6",
+    "LB_9789dfb15623",
+    "LB_MIN01_comp_that",
+    "LB_MIN02_cond_if",
+    "LB_MIN03_every_each",
+    "LB_MIN04_negation_not",
+    "LB_MIN05_than",
+    "LB_MIN06_without"
+  ],
+  "prompts": 78,
+  "prompt_selection": {
+    "mode": "cue_targeted",
+    "breadth_requested": 0,
+    "cue_specs": "data/rules/shortlist_candidates.json",
+    "prompts_per_cue": 16,
+    "cue_source_supply": {
+      "cond_if": 16,
+      "pg_during_während": 16,
+      "pg_government_gouf": 16,
+      "pg_with_vill": 16,
+      "than": 16
+    },
+    "excluded_rules": [],
+    "prompts_per_rule_requested": 0,
+    "rule_support_in_pool": {},
+    "prompts_selected_per_rule": {}
+  },
+  "protocol": {
+    "rollout_0": "greedy (temperature 0)",
+    "other_rollouts": "temperature 0.9"
+  },
+  "rollouts_per_prompt": 6,
+  "policy_model": "gemma3:12b",
+  "rollout_tally": {
+    "rollout_ok": 468,
+    "group_zero_spread": 64,
+    "ref_ok": 64,
+    "ref_penalized": 14,
+    "group_nonzero_spread": 14
+  },
+  "groups_nonzero_spread": 14,
+  "nonzero_spread_rate": 0.1794871794871795,
+  "nonzero_spread_rate_ci95": [
+    0.11,
+    0.279
+  ],
+  "mean_spread": 0.26376405839204076,
+  "median_spread": 0.0,
+  "reward_mean": 0.3148714632729456,
+  "reward_stdev_across_groups": 0.6017945050746084,
+  "reward_min": -1.0,
+  "reward_max": 1.0,
+  "reference_penalized_rate": 0.1794871794871795,
+  "reference_mean_reward": 0.2701573394491206,
+  "policy_minus_reference": 0.04471412382382495,
+  "abstain_rollout_rate": 0.358974358974359,
+  "prompts_where_no_rule_fires": 28,
+  "prompts_where_no_rule_fires_rate": 0.359,
+  "mean_rollouts_with_a_verdict_per_prompt": 3.846
+}
