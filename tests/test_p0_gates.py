@@ -719,3 +719,16 @@ def test_concordance_scorer_direction_for_required_and_exclusion_constraints():
     groups3 = [group(["wann eise Jong ass", "wann eise Jong ass alle"], [1.0, 0.4])]
     e2 = score_candidate(forbidden, pool, groups3, fit_boundary=1)
     assert e2["concordant"] == 1 and e2["discordant"] == 0
+
+
+def test_every_script_in_scripts_parses():
+    """A careless edit once merged two statements in scripts/smoke_test.py into one line, which is a
+    SyntaxError only visible when the file is actually imported. Gate the whole directory instead."""
+    import ast
+
+    scripts = (Path(__file__).resolve().parents[1] / "scripts")
+    for path in sorted(scripts.glob("*.py")):
+        try:
+            ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        except SyntaxError as exc:  # pragma: no cover - the point is to fail loudly
+            raise AssertionError(f"{path}: {exc}") from exc

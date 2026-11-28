@@ -668,6 +668,44 @@ def main() -> int:
     else:
         warn("G29 reward weights inside the measured band", f"missing {rw_path}")
 
+    # G32: is the CANDIDATE pipeline producing anything reward-ready? Measured by
+    # scripts/screen_concordance.py: agreement (both halves) AND decisive pairs AND concordance AND a
+    # placebo-corrected margin (the alignment proxy is lexical, so its null is the candidate's own
+    # placebo band, not 0.5 - placebos measured 0.14-0.83 concordant). Measured state: 0 of 46.
+    for cand_screen in ("artifacts/p1/concordance_screen_cue6.json",
+                        "artifacts/p1/concordance_screen_cue6_partial.json"):
+        path = ROOT / cand_screen
+        if not path.exists():
+            continue
+        try:
+            scr = json.loads(path.read_text("utf-8"))
+        except Exception as exc:
+            warn("G32 candidate constraints screened by placebo-corrected concordance",
+                 f"unparsable {cand_screen}: {exc}")
+            break
+        rows = scr.get("candidates", [])
+        good = [r for r in rows if r.get("status") == "interesting"]
+        beat = [r for r in rows if (r.get("placebo_p") or 1.0) <= 0.05
+                and (r.get("placebo_gap") or 0.0) >= 0.1 and r.get("concordance", 0) >= 0.5]
+        anti = [r["name"] for r in rows
+                if (r.get("placebo_p") or 1.0) <= 0.05 and (r.get("placebo_gap") or 0.0) <= -0.1]
+        detail = (f"{len(rows)} candidates screened from {cand_screen} "
+                  f"({scr.get('groups')} groups, {scr.get('hypotheses')} hypotheses, "
+                  f"{scr.get('rollouts_per_group')} rollouts/group): "
+                  f"clear ALL axes = {len(good)} {[r['name'] for r in good][:6]}; "
+                  f"beat their placebo in the RIGHT direction = {len(beat)} "
+                  f"{[(r['name'], r['decisive_pairs'], r['concordance'], r['placebo_pooled_concordance']) for r in beat][:5]}; "
+                  f"significantly ANTI-aligned = {len(anti)} {anti[:4]}. Candidates that beat placebo are "
+                  f"stopped by the 10-decisive-pair floor (they have 5-6) or by the agreement axis, i.e. "
+                  f"the shortlist is power-limited, not refuted: the next corpus needs ~3x more prompts "
+                  f"per cue for exactly these candidates. The highest-gap candidate (cond_if) is "
+                  f"anti-aligned")
+        if not good:
+            warn("G32 candidate constraints screened by placebo-corrected concordance", detail)
+        else:
+            gate("G32 candidate constraints screened by placebo-corrected concordance", True, detail)
+        break
+
     # G30 per-rule reward usefulness, measured on policy rollouts (scripts/p1_signal_by_rule.py).
     # Two measured facts behind it: (a) three certified rules have a NEGATIVE policy-vs-reference
     # violation gap, so in RL they push the policy away from professional usage; (b) advantage coverage
@@ -686,19 +724,20 @@ def main() -> int:
             crate = float(al.get("concordant_rate") or 0.0)
             # G31: spread is not the objective; direction is. Concordance compares, for every
             # within-group rollout pair whose rewards differ, whether the higher-reward rollout is also
-            # the one lexically closer to the professional reference. Measured on 42 stratified groups
-            # x 3 rollouts with the 8 certified rules: 2 concordant vs 8 discordant (20%). A reward that
-            # fires mostly against professional usage cannot carry the training gradient alone.
+            # the one lexically closer to the professional reference. Measured on 42 stratified groups x 3
+            # rollouts (2 vs 8, 20%) and on 80 card-independent groups x 3 (6 vs 3, 66.7%): the point
+            # estimate flips sign with the prompt set and neither rejects the 0.5 null, so this gate
+            # records that the direction of the reward gradient is NOT ESTABLISHED at this budget.
             gate("G31 reward gradient is reference-aligned (concordance>=0.5, decisive pairs>=10)",
                  dec >= 10 and crate >= 0.5,
                  f"concordant={al.get('concordant')} discordant={al.get('discordant')} rate={crate:.1%} "
                  f"CI={al.get('concordant_rate_ci95')} p_vs_0.5={al.get('concordant_p_vs_0.5')}; "
                  f"ties: reward={al.get('tie_reward')} "
-                 f"similarity={al.get('tie_similarity')} both={al.get('tie_both')}. Where the grammar "
-                 f"reward ranks two rollouts differently it usually ranks them OPPOSITE to similarity "
-                 f"with the professional reference, so these cue rules cannot be the whole reward term "
-                 f"(weight band enforced by G29). Read the p-value: at small n this records "
-                 f"'direction unestablished', not 'direction proven wrong'")
+                 f"similarity={al.get('tie_similarity')} both={al.get('tie_both')}. The rules are blind on "
+                 f"most pairs (see verifier_coverage), and where they fire the direction is inside the "
+                 f"noise (the same rules score 20% stratified vs 67% unbiased), so this cue set cannot be "
+                 f"the whole reward term (weight band enforced by G29) and the alignment axis needs ~10x "
+                 f"more decisive pairs to be called anything")
             neg = [r["rule_id"] for r in sig.get("per_rule", []) if (r.get("gap") or 0.0) < -0.05]
             pos = [r["rule_id"] for r in sig.get("per_rule", []) if (r.get("gap") or 0.0) > 0.05]
             gate("G30 at least one reward rule separates the policy from professional usage (gap>0.05)",
