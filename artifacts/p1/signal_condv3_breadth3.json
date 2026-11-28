@@ -1,0 +1,131 @@
+{
+ "rollout_log": "artifacts/p1/rollouts_gemma3_12b_breadth3.jsonl",
+ "rules_scored": [
+  "LB_946a24dd25d6",
+  "LB_9789dfb15623",
+  "LB_MIN01_comp_that",
+  "LB_MIN02_cond_if",
+  "LB_MIN03_every_each",
+  "LB_MIN04_negation_not",
+  "LB_MIN05_than",
+  "LB_MIN06_without"
+ ],
+ "groups": 80,
+ "groups_nonzero_spread": 5,
+ "nonzero_spread_rate": 0.0625,
+ "nonzero_spread_rate_ci95": [
+  0.027,
+  0.138
+ ],
+ "rollout_diversity": {
+  "groups": 80,
+  "mean_distinct_hypotheses_per_group": 2.8,
+  "groups_all_rollouts_identical": 2,
+  "mean_similarity_rollout0_vs_rest": 0.842
+ },
+ "per_rule": [
+  {
+   "rule_id": "LB_946a24dd25d6",
+   "policy_decided": 54,
+   "policy_violated_rate": 0.48148148148148145,
+   "ref_decided": 54,
+   "ref_violated_rate": 0.3888888888888889,
+   "gap": 0.09259259259259256,
+   "creates_group_spread": 3,
+   "align_concordant": 4,
+   "align_discordant": 2,
+   "align_tie_similarity": 0
+  },
+  {
+   "rule_id": "LB_MIN04_negation_not",
+   "policy_decided": 15,
+   "policy_violated_rate": 0.0,
+   "ref_decided": 15,
+   "ref_violated_rate": 0.4,
+   "gap": -0.4,
+   "creates_group_spread": 0,
+   "align_concordant": 0,
+   "align_discordant": 0,
+   "align_tie_similarity": 0
+  },
+  {
+   "rule_id": "LB_MIN01_comp_that",
+   "policy_decided": 9,
+   "policy_violated_rate": 0.0,
+   "ref_decided": 9,
+   "ref_violated_rate": 0.0,
+   "gap": 0.0,
+   "creates_group_spread": 0,
+   "align_concordant": 0,
+   "align_discordant": 0,
+   "align_tie_similarity": 0
+  },
+  {
+   "rule_id": "LB_9789dfb15623",
+   "policy_decided": 6,
+   "policy_violated_rate": 0.3333333333333333,
+   "ref_decided": 6,
+   "ref_violated_rate": 0.5,
+   "gap": -0.16666666666666669,
+   "creates_group_spread": 1,
+   "align_concordant": 2,
+   "align_discordant": 0,
+   "align_tie_similarity": 0
+  },
+  {
+   "rule_id": "LB_MIN02_cond_if",
+   "policy_decided": 3,
+   "policy_violated_rate": 0.0,
+   "ref_decided": 3,
+   "ref_violated_rate": 0.0,
+   "gap": 0.0,
+   "creates_group_spread": 0,
+   "align_concordant": 0,
+   "align_discordant": 0,
+   "align_tie_similarity": 0
+  },
+  {
+   "rule_id": "LB_MIN03_every_each",
+   "policy_decided": 3,
+   "policy_violated_rate": 0.3333333333333333,
+   "ref_decided": 3,
+   "ref_violated_rate": 0.0,
+   "gap": 0.3333333333333333,
+   "creates_group_spread": 1,
+   "align_concordant": 0,
+   "align_discordant": 1,
+   "align_tie_similarity": 1
+  },
+  {
+   "rule_id": "LB_MIN05_than",
+   "policy_decided": 3,
+   "policy_violated_rate": 0.0,
+   "ref_decided": 3,
+   "ref_violated_rate": 0.0,
+   "gap": 0.0,
+   "creates_group_spread": 0,
+   "align_concordant": 0,
+   "align_discordant": 0,
+   "align_tie_similarity": 0
+  }
+ ],
+ "alignment": {
+  "concordant": 6,
+  "discordant": 3,
+  "tie_reward": 155,
+  "tie_similarity": 1,
+  "tie_both": 75,
+  "concordant_rate": 0.6667,
+  "concordant_rate_ci95": [
+   0.354,
+   0.879
+  ],
+  "concordant_p_vs_0.5": 0.5078,
+  "null": "concordant_rate 0.5 = the reward ranks a rollout pair independently of the professional reference; anything else needs the p-value to mean a thing"
+ },
+ "verifier_coverage": {
+  "rollouts": 240,
+  "rollouts_with_a_verdict": 75,
+  "coverage_rate": 0.3125
+ }
+}

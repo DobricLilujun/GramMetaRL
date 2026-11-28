@@ -52,6 +52,17 @@ def _wilson(k: int, n: int, z: float = 1.96) -> list[float]:
     return [round(max(0.0, c - h), 3), round(min(1.0, c + h), 3)]
 
 
+def _spread_undefined(rollouts: int) -> str:
+    """A group of one rollout has spread 0 BY CONSTRUCTION, so a coverage rate computed from it is not
+    a measurement. This guard exists because a corpus run (--rollouts 1, built to mine errors) was
+    briefly quoted as "advantage coverage 0.0% on unbiased prompts", which was arithmetic, not data.
+    """
+    if rollouts < 2:
+        return (f"undefined: {rollouts} rollout(s) per group, so within-group spread is 0 by "
+                "construction. Re-run with --rollouts >= 2 for a coverage number.")
+    return ""
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="GRPO reward-side smoke on policy rollouts")
     ap.add_argument("--cards", default="data/rules/mbg_cards_condonly.jsonl")
@@ -75,6 +86,13 @@ def main() -> None:
                          "first-decided selection the prompt set changes when the rule set changes, "
                          "and a measured 29.2%% -> 16.7%% 'regression' turned out to be that selection "
                          "effect, not a rule-set effect (see P0_DATA_P1_EVIDENCE section 13).")
+    ap.add_argument("--cue-specs", default="",
+                    help="Candidate spec file (scripts/mine_policy_gaps.py shape). Select prompts whose "
+                         "SOURCE matches each candidate's source_pattern, so a rollout corpus can be "
+                         "built for candidates that are not cards yet. Prompt supply, not pair count, "
+                         "is what limits alignment measurement: a log stratified for the CERTIFIED rules "
+                         "leaves most candidates with 0-5 applicable groups.")
+    ap.add_argument("--prompts-per-cue", type=int, default=4)
     ap.add_argument("--rollouts", type=int, default=4)
     ap.add_argument("--temperature", type=float, default=0.9)
     ap.add_argument("--policy-endpoint", required=True)
@@ -108,7 +126,36 @@ def main() -> None:
     prompts: list[dict] = []
     rule_support: dict[str, int] = {}
     selected_per_rule: dict[str, int] = {}
-    if args.breadth:
+    cue_support: dict[str, int] = {}
+    if args.cue_specs:
+        import re as _re
+
+        spec_raw = json.loads(Path(args.cue_specs).read_text("utf-8"))
+        specs = spec_raw["candidates"] if isinstance(spec_raw, dict) else spec_raw
+        by_cue: dict[str, list[dict]] = {s["name"]: [] for s in specs}
+        pats = {s["name"]: _re.compile(s["source_pattern"], _re.I) for s in specs}
+        with Path(args.pairs).open("r", encoding="utf-8") as f:
+            for line in f:
+                rec = json.loads(line)
+                if args.source_filter and rec.get("source") != args.source_filter:
+                    continue
+                if not rec.get("src") or not rec.get("tgt_ref"):
+                    continue
+                for name, pat in pats.items():
+                    if len(by_cue[name]) < args.prompts_per_cue and pat.search(rec["src"]):
+                        by_cue[name].append(rec)
+        for nm in sorted(by_cue):
+            cue_support[nm] = len(by_cue[nm])
+        seen_cue: set[str] = set()
+        for i in range(args.prompts_per_cue):         # round-robin: no cue may dominate the set
+            for nm in sorted(by_cue):
+                if i < len(by_cue[nm]) and by_cue[nm][i]["id"] not in seen_cue:
+                    seen_cue.add(by_cue[nm][i]["id"])
+                    prompts.append(by_cue[nm][i])
+        short = [n for n, c in sorted(cue_support.items()) if c < args.prompts_per_cue]
+        print(f"cue-targeted selection: {len(specs)} cues, {len(prompts)} prompts "
+              f"(supply < {args.prompts_per_cue} for {len(short)} cues: {short[:12]})")
+    elif args.breadth:
         pool: list[dict] = []
         with Path(args.pairs).open("r", encoding="utf-8") as f:
             for line in f:
@@ -229,9 +276,13 @@ def main() -> None:
         "cards_used": sorted(c.id for c in cards),
         "prompts": n,
         "prompt_selection": {
-            "mode": ("breadth" if args.breadth
+            "mode": ("cue_targeted" if args.cue_specs
+                     else "breadth" if args.breadth
                      else "stratified_per_rule" if args.prompts_per_rule else "first_decided"),
             "breadth_requested": args.breadth,
+            "cue_specs": args.cue_specs,
+            "prompts_per_cue": args.prompts_per_cue,
+            "cue_source_supply": cue_support,
             "excluded_rules": sorted(x for x in args.exclude_rules.split(",") if x.strip()),
             "prompts_per_rule_requested": args.prompts_per_rule,
             "rule_support_in_pool": rule_support,
@@ -239,14 +290,27 @@ def main() -> None:
         },
         "protocol": {"rollout_0": "greedy (temperature 0)",
                      "other_rollouts": f"temperature {args.temperature}"},
-        "nonzero_spread_rate_ci95": _wilson(tally["group_nonzero_spread"], n),
         "rollouts_per_prompt": args.rollouts,
         "policy_model": args.policy_model,
         "rollout_tally": dict(tally),
-        "groups_nonzero_spread": tally["group_nonzero_spread"],
-        "nonzero_spread_rate": tally["group_nonzero_spread"] / n,
-        "mean_spread": statistics.fmean(spreads),
-        "median_spread": statistics.median(spreads),
+    }
+    undef = _spread_undefined(args.rollouts)
+    if undef:
+        # The spread family of metrics is reported as null, never as 0.0.
+        res["spread_undefined"] = undef
+        res["groups_nonzero_spread"] = None
+        res["nonzero_spread_rate"] = None
+        res["nonzero_spread_rate_ci95"] = None
+        res["mean_spread"] = None
+        res["median_spread"] = None
+        print(f"\nSPREAD NOT MEASURED: {undef}")
+    else:
+        res["groups_nonzero_spread"] = tally["group_nonzero_spread"]
+        res["nonzero_spread_rate"] = tally["group_nonzero_spread"] / n
+        res["nonzero_spread_rate_ci95"] = _wilson(tally["group_nonzero_spread"], n)
+        res["mean_spread"] = statistics.fmean(spreads)
+        res["median_spread"] = statistics.median(spreads)
+    res.update({
         "reward_mean": statistics.fmean(means),
         "reward_stdev_across_groups": statistics.pstdev(means) if n > 1 else 0.0,
         "reward_min": min(means), "reward_max": max(means),
@@ -254,7 +318,16 @@ def main() -> None:
         "reference_mean_reward": statistics.fmean([g["r_ref"] for g in groups]),
         "policy_minus_reference": statistics.fmean(means) - statistics.fmean([g["r_ref"] for g in groups]),
         "abstain_rollout_rate": sum(g["abstain_rollouts"] for g in groups) / (n * args.rollouts),
-    }
+    })
+    if args.breadth or args.cue_specs:
+        # On a card-independent prompt set the honest coverage statistic is applicability: how often
+        # ANY reward rule reaches a verdict at all. That is measurable with one rollout per prompt,
+        # unlike spread. (57.1% of the 140-prompt greedy corpus had no verdict from any of the 8 rules.)
+        never = [g for g in groups if g["verdicts"].get("decided", 0) == 0]
+        res["prompts_where_no_rule_fires"] = len(never)
+        res["prompts_where_no_rule_fires_rate"] = round(len(never) / n, 4) if n else None
+        res["mean_rollouts_with_a_verdict_per_prompt"] = (round(statistics.fmean(
+            [g["verdicts"].get("decided", 0) for g in groups]), 3) if groups else None)
     print("\n" + json.dumps(res, ensure_ascii=False, indent=2))
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(json.dumps(res, ensure_ascii=False, indent=2), "utf-8")

@@ -131,6 +131,13 @@
   "concordant_rate_ci95": [
    0.057,
    0.51
-  ]
+  ],
+  "concordant_p_vs_0.5": 0.1094,
+  "null": "concordant_rate 0.5 = the reward ranks a rollout pair independently of the professional reference; anything else needs the p-value to mean a thing"
+ },
+ "verifier_coverage": {
+  "rollouts": 126,
+  "rollouts_with_a_verdict": 126,
+  "coverage_rate": 1.0
  }
 }

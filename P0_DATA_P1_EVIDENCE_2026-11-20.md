@@ -905,17 +905,39 @@ This section reports executing that lever. It produced one new tool (`scripts/mi
 one new metric (gradient alignment), one new gate (G31), and a negative result on every candidate
 family tried. The negative result is the finding.
 
-### 15.1 Unbiased prompt sampling shows the coverage problem is worse than the stratified number
+### 15.1 Unbiased prompt sampling: the first number was an artifact, the corrected one is 6.2%
 
 To mine gaps I first needed rollouts over prompts *not* selected to make a rule fire. Added
 `--breadth N` to `scripts/p1_reward_smoke.py` (card-independent stride over the whole pool). 140 prompts
-x 1 greedy rollout of gemma3:12b -> `artifacts/p1/rollouts_gemma3_12b_breadth.jsonl`:
+x **1** greedy rollout -> `artifacts/p1/rollouts_gemma3_12b_breadth.jsonl`, and it printed
 
     nonzero_spread_rate = 0.0
 
-On the per-rule-stratified set the same 8 rules gave 11.9% [5.2, 25.0]. On prompts sampled without
-respect to the rules they produce **no advantage at all**. Every previous coverage number is therefore
-conditional on prompt selection, and the unbiased number is the one to plan against.
+**That 0.0 was arithmetic, not data.** A GRPO group with one rollout has max(rewards) - min(rewards) = 0
+by definition, so a corpus run (`--rollouts 1`, built to mine errors, not to measure signal) cannot
+produce a coverage number at all. I quoted it in the commit message, README §0/§8.2 and §15.8 before
+checking. The tooling now refuses to produce it again: `p1_reward_smoke.py` writes
+`"nonzero_spread_rate": null` plus a `spread_undefined` string when `--rollouts < 2`, and
+`p1_signal_by_rule.py` hard-stops on a log with one hypothesis per group
+(`tests/test_p0_gates.py::test_spread_is_reported_as_undefined_not_zero_below_two_rollouts`,
+`::test_signal_script_refuses_a_one_rollout_log`).
+
+Re-measured properly: 80 stride-sampled prompts x 3 rollouts, same 8 certified rules
+(`artifacts/p1/reward_smoke_gemma3_12b_breadth3.json`, `artifacts/p1/signal_condv3_breadth3.json`):
+
+| | stratified (42 groups x 3) | unbiased (80 groups x 3) |
+|---|---|---|
+| groups with nonzero advantage | 5/42 = 11.9% [5.2, 25.0] | **5/80 = 6.2% [2.7, 13.8]** |
+| rollouts reaching >=1 verdict | 126/126 = 100% (by construction: prompts were chosen where rules decide) | **75/240 = 31.2%** |
+| prompts where no rule fires at all | 0 | **55/80 = 68.8%** |
+| pairs tied on reward | 89/120 | 155/240 |
+| reference penalized | 14.3% | 11.3% |
+
+Two conclusions replace the retracted one. (a) Stratification inflates coverage (11.9% vs 6.2%) but the
+intervals overlap, so prompt selection is a bias of maybe ~6pp, not the whole story. (b) **Before
+saturation there is applicability**: on card-independent prompts the rule set simply does not apply to
+two thirds of sentences, which is a different failure than "the rules are saturated", and it says the
+reward term is a *narrow* term no matter how it is weighted.
 
 ### 15.2 Mining tool design, and the bug that motivated it
 
@@ -1018,7 +1040,12 @@ with 15.3 (saturated cues) this says the P0 certified set is **not reward-ready*
 evaluation asset; as a training term it would mostly either do nothing or push against professional usage.
 
 New gate G31 encodes that: PASS requires concordance >= 0.5 with >= 10 decisive pairs. Current state
-**FAIL**. Gate tally with the documented command (which must include `--policy-endpoint`, otherwise two
+**FAIL**.
+
+**Superseded in part by 15.9:** "more often opposes than supports" was reading a 2-vs-8 split as a
+direction. On the unbiased 80-prompt set the same rules score 6-vs-3 (66.7%), the opposite sign, and
+neither rejects the 0.5 null. The defensible statement from 15.7 is the blindness (89/120 and 155/240
+ties), not the direction. Gate tally with the documented command (which must include `--policy-endpoint`, otherwise two
 policy-dependent gates silently change state): **PASS=29 FAIL=3 WARN=10** (the three FAILs: G21, G24,
 G31). Tests: 35 passed.
 
@@ -1039,3 +1066,94 @@ G31). Tests: 35 passed.
    `data/rules/policy_gap_candidates.json`, `artifacts/audit/screen_policygap_{fit,heldout}.json`,
    `artifacts/p1/signal_condv3_stratified.json` (now with `alignment` + per-rule alignment),
    `artifacts/p1/signal_condv3_strat_pos5.json`.
+
+
+---
+
+## 16. Concordance screening, and why the null is the placebo band (2026-11-27, same session)
+
+### 16.1 My alignment claim did not survive a second prompt set
+
+`p1_signal_by_rule.py` re-run on the unbiased breadth corpus (80 groups x 3 rollouts,
+`artifacts/p1/signal_condv3_breadth3.json`):
+
+    stratified (42 groups): concordant 2, discordant 8 -> 20.0% [5.7, 51.0], p vs 0.5 = 0.109
+    unbiased   (80 groups): concordant 6, discordant 3 -> 66.7% [35.4, 87.9], p vs 0.5 = 0.508
+
+Same eight rules, opposite point estimates, neither significant. So the sentence I wrote in 15.7 - "the
+reward more often opposes than supports the professional ranking" - is not supported by this data, and it
+is retracted here and in README 12.18. What survives:
+
+- the rules are **blind**: 89/120 (stratified) and 155/240 (unbiased) pairs tie on reward;
+- on unbiased prompts **68.8% of prompts get no verdict at all** from the 8 rules, and only 31.2% of
+  rollouts are judged - the reward term is narrow before it is ever saturated;
+- the negative-gap rules replicate across prompt sets (`negation_not` -10pp stratified, -40pp unbiased),
+  so excluding them from the reward is still right; `cond_if`'s +44pp did NOT replicate (0.0pp unbiased,
+  it fires on 3 rollouts there).
+
+### 16.2 `scripts/screen_concordance.py`: screening candidates by alignment, with the right null
+
+Applying the alignment axis to the 46 **candidates** (22 screened source-conditionals + 24 policy-gap
+exclusions, union in `data/rules/screened_conditionals_all.json`) exposed a second problem: the natural
+null, concordance = 0.5, is wrong for a LEXICAL proxy. Token F1 to the reference rewards sharing surface
+tokens, so a constraint that merely requires (or forbids) any frequent target token can score concordant
+without encoding grammar.
+
+The tool therefore runs a **placebo**: same source cue, same constraint kind, target forms replaced by
+unrelated target tokens drawn from the same cue-applicable slice (present in both references and rollouts,
+so the placebo actually fires). Reported per candidate: `decisive_pairs`, `concordance`, exact binomial
+p vs 0.5, Wilson and cluster-over-groups CIs, `placebo_pooled_concordance`, `placebo_gap`, and a Fisher
+exact p for candidate vs placebo.
+
+Measured placebo behaviour (12 placebos/candidate, cue-targeted corpus): pooled placebo concordance is
+nowhere near a fixed 0.5 - it ranges **0.14 to 0.83 across candidates** (`while_durative` placebos 0.83,
+`pg_during_wär` 0.14). Any concordance number quoted against 0.5 is therefore uninterpretable; the
+comparator is each candidate's own placebo band.
+
+### 16.3 Cue-targeted prompts buy the power that stratified prompts could not
+
+On the stratified log (built for the 8 certified rules), each of the 46 candidates had **0-2 decisive
+pairs**, so alignment could not rank them at all. Selecting prompts by the CANDIDATE cue
+(`--cue-specs ... --prompts-per-cue 6 --rollouts 6`, `artifacts/p1/rollouts_gemma3_12b_cue6.jsonl`)
+raises applicable groups from 0-5 to 3-11 and, with 6 rollouts (15 pairs/group), decisive pairs per
+candidate reach **up to 20**. Pairs scale as k(k-1)/2: the same prompts with 6 rollouts give 5x the
+pairs of 3 rollouts. The screen also reports `groups_needed_for_decisive_floor` so the budget question
+is explicit instead of guessed.
+
+Results on the partial cue6 corpus (72 groups, 410 hypotheses; the full log is being regenerated):
+
+| candidate | decisive pairs | concordant/discordant | placebo conc | placebo pairs | Fisher p | verdict |
+|---|---|---|---|---|---|---|
+| `ability_can` | 19 | 18 / 1 (0.95) | 0.62 | 93 | 0.006 | **beats placebo**, but rejected on agreement (fit 0.63, held-out 0.43) |
+| `negation_not` | 12 | 11 / 1 (0.92) | 0.62 | 206 | 0.060 | borderline, not significant vs placebo |
+| `comp_that` | 17 | 9 / 8 (0.53) | 0.56 | 195 | 0.804 | indistinguishable from placebo |
+| `only` | 16 | 8 / 8 (0.50) | 0.50 | 180 | 1.000 | indistinguishable from placebo |
+| `cond_if` | 12 | 0 / 12 (0.00) | 0.30 | 93 | 0.033 | significantly **anti**-aligned (the rule whose gap was +44pp) |
+| `pg_with_vill` | 9 | 0 / 9 (0.00) | 0.49 | 177 | 0.004 | significantly anti-aligned |
+
+No candidate currently clears every axis (agreement fit and held-out >= 0.65, >= 10 decisive pairs,
+concordance >= 0.5, placebo gap >= 0.1, placebo Fisher p <= 0.05). Two facts come out of that table:
+
+1. The axes disagree. `ability_can` is the best-aligned candidate in the set and simultaneously a poor
+   description of professional text (agreement 0.43 held out) - exactly the false-satisfy/lexical-shadow
+   mode, caught by keeping both axes.
+2. The candidate that looked most teachable by gap (`cond_if`, +44pp) is the one that ranks rollouts
+   **against** the reference significantly often (0/12, p=0.033 vs its placebo band). Gap and alignment
+   are not the same axis, and gap alone mis-ranks candidates.
+
+### 16.4 What is solid after this section
+
+- spread/coverage: stratified 11.9% [5.2-25.0] vs unbiased 6.2% [2.7-13.8]; both low, difference inside
+  the noise, so prompt selection biases coverage by a few points and no more;
+- applicability on unbiased prompts: 68.8% of prompts, no rule fires; 31.2% of rollouts judged;
+- blindness: 89/120 and 155/240 within-group pairs tie on reward;
+- alignment direction of the certified set: **not established** (20% vs 67% across prompt sets);
+- alignment of candidates against their own placebo band: one candidate beats placebo significantly
+  (`ability_can`) while failing agreement, and two candidates are significantly anti-aligned;
+- negative-gap rules replicate across prompt sets and are excluded from the reward term (G30).
+
+Tooling added with this section: `scripts/screen_concordance.py` (candidate alignment + placebo +
+Fisher), `--cue-specs/--prompts-per-cue` in `scripts/p1_reward_smoke.py`, `--breadth`,
+`--exclude-rules`, the spread-undefined guards, exact binomial and Fisher tests, cluster CIs over
+groups. Tests: 39 passed (added: spread guard x2, binomial null, concordance direction for both
+constraint kinds, plus the earlier power/reader tests).

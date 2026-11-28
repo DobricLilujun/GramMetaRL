@@ -692,25 +692,34 @@ def main() -> int:
             gate("G31 reward gradient is reference-aligned (concordance>=0.5, decisive pairs>=10)",
                  dec >= 10 and crate >= 0.5,
                  f"concordant={al.get('concordant')} discordant={al.get('discordant')} rate={crate:.1%} "
-                 f"CI={al.get('concordant_rate_ci95')}; ties: reward={al.get('tie_reward')} "
+                 f"CI={al.get('concordant_rate_ci95')} p_vs_0.5={al.get('concordant_p_vs_0.5')}; "
+                 f"ties: reward={al.get('tie_reward')} "
                  f"similarity={al.get('tie_similarity')} both={al.get('tie_both')}. Where the grammar "
                  f"reward ranks two rollouts differently it usually ranks them OPPOSITE to similarity "
                  f"with the professional reference, so these cue rules cannot be the whole reward term "
-                 f"(weight band enforced by G29)")
+                 f"(weight band enforced by G29). Read the p-value: at small n this records "
+                 f"'direction unestablished', not 'direction proven wrong'")
             neg = [r["rule_id"] for r in sig.get("per_rule", []) if (r.get("gap") or 0.0) < -0.05]
             pos = [r["rule_id"] for r in sig.get("per_rule", []) if (r.get("gap") or 0.0) > 0.05]
             gate("G30 at least one reward rule separates the policy from professional usage (gap>0.05)",
                  bool(pos),
                  f"positive gap (can teach): {pos}; NEGATIVE gap (penalises professionals harder than "
                  f"the policy, noise for RL): {neg}")
-            rate = float(sig.get("nonzero_spread_rate") or 0.0)
-            if rate < 0.3:
+            rate = sig.get("nonzero_spread_rate")
+            if rate is None:
+                warn("G30b advantage coverage on the stratified prompt set",
+                     f"not measurable: the signal artifact reports spread=None "
+                     f"({sig.get('spread_undefined', 'fewer than 2 rollouts per group')})")
+            elif float(rate) < 0.3:
+                rate = float(rate)
                 dv = sig.get("rollout_diversity", {})
+                cov = sig.get("verifier_coverage", {})
                 warn("G30b advantage coverage on the stratified prompt set",
                      f"{rate:.1%} of {sig.get('groups')} groups carry a nonzero advantage; rollout text "
                      f"itself varies (distinct/group={dv.get('mean_distinct_hypotheses_per_group')}, "
                      f"greedy-vs-sampled similarity={dv.get('mean_similarity_rollout0_vs_rest')}, "
-                     f"CI={sig.get('nonzero_spread_rate_ci95')}), so the gap is in what the rules look "
+                     f"CI={sig.get('nonzero_spread_rate_ci95')}; rollouts reaching at least one verdict: "
+                     f"{cov.get('coverage_rate')}), so the gap is in what the rules look "
                      f"at, not in output diversity")
     else:
         warn("G30 per-rule reward usefulness measured",

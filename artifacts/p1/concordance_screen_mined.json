@@ -1,0 +1,593 @@
+{
+  "specs": "data/rules/screened_conditionals.json",
+  "rollout_log": "artifacts/p1/rollouts_gemma3_12b_strat.jsonl",
+  "pairs": "data/external/pairs_en_lb.jsonl",
+  "pool_pairs": 8972,
+  "fit_boundary": 4000,
+  "groups": 42,
+  "hypotheses": 123,
+  "floors": {
+    "min_fit_agree": 0.65,
+    "min_heldout_agree": 0.65,
+    "min_decisive": 10,
+    "min_concordance": 0.5
+  },
+  "candidates": [
+    {
+      "name": "very",
+      "negate": false,
+      "source_pattern": "\\bvery\\b",
+      "values": [
+        "\\bganz\\b",
+        "\\bsehr\\b",
+        "\\bviru\\b",
+        "\\bhimmelsméisseg\\b"
+      ],
+      "fit_n": 63,
+      "fit_agreement": 0.5397,
+      "heldout_n": 43,
+      "heldout_agreement": 0.6279,
+      "policy_decided": 2,
+      "decisive_pairs": 2,
+      "concordant": 2,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 1.0,
+      "concordance_ci95": [
+        0.342,
+        1.0
+      ],
+      "status": "rejected",
+      "why": "fit agreement 0.5396825396825397; held-out agreement 0.627906976744186; decisive pairs 2"
+    },
+    {
+      "name": "more_than",
+      "negate": false,
+      "source_pattern": "\\bmore than\\b",
+      "values": [
+        "\\bméi\\b[^.]{0,40}\\b(wéi|ewéi)\\b",
+        "\\bnët??\\b[^.]{0,20}\\bn[ée]mme\\b",
+        "\\bnet nëmme\\b",
+        "\\bnet just\\b"
+      ],
+      "fit_n": 23,
+      "fit_agreement": 0.4783,
+      "heldout_n": 21,
+      "heldout_agreement": 0.6667,
+      "policy_decided": 5,
+      "decisive_pairs": 2,
+      "concordant": 2,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 1.0,
+      "concordance_ci95": [
+        0.342,
+        1.0
+      ],
+      "status": "rejected",
+      "why": "support fit=23 heldout=21; fit agreement 0.4782608695652174; decisive pairs 2"
+    },
+    {
+      "name": "cond_if",
+      "negate": false,
+      "source_pattern": "\\bif\\b",
+      "values": [
+        "\\bwa\\b",
+        "\\bwann\\b",
+        "\\bfalls\\b"
+      ],
+      "fit_n": 166,
+      "fit_agreement": 0.8313,
+      "heldout_n": 115,
+      "heldout_agreement": 0.8087,
+      "policy_decided": 7,
+      "decisive_pairs": 2,
+      "concordant": 1,
+      "discordant": 1,
+      "tie_similarity": 0,
+      "concordance": 0.5,
+      "concordance_ci95": [
+        0.095,
+        0.905
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 2"
+    },
+    {
+      "name": "without",
+      "negate": false,
+      "source_pattern": "\\bwithout\\b",
+      "values": [
+        "\\bouni\\b"
+      ],
+      "fit_n": 51,
+      "fit_agreement": 0.6667,
+      "heldout_n": 43,
+      "heldout_agreement": 0.7209,
+      "policy_decided": 13,
+      "decisive_pairs": 2,
+      "concordant": 1,
+      "discordant": 1,
+      "tie_similarity": 0,
+      "concordance": 0.5,
+      "concordance_ci95": [
+        0.095,
+        0.905
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 2"
+    },
+    {
+      "name": "comp_that",
+      "negate": false,
+      "source_pattern": "\\bthat\\s+(he|she|it|they|we|i|you|the|a|un|een|d)\\b",
+      "values": [
+        "\\bdatt\\b",
+        "\\bdass\\b"
+      ],
+      "fit_n": 223,
+      "fit_agreement": 0.7489,
+      "heldout_n": 103,
+      "heldout_agreement": 0.7476,
+      "policy_decided": 17,
+      "decisive_pairs": 2,
+      "concordant": 0,
+      "discordant": 2,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.658
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 2; concordance 0.00"
+    },
+    {
+      "name": "every_each",
+      "negate": false,
+      "source_pattern": "\\b(every|each)\\b",
+      "values": [
+        "\\ball(en)?\\b",
+        "\\bjidd"
+      ],
+      "fit_n": 84,
+      "fit_agreement": 0.75,
+      "heldout_n": 86,
+      "heldout_agreement": 0.7674,
+      "policy_decided": 11,
+      "decisive_pairs": 2,
+      "concordant": 0,
+      "discordant": 2,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.658
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 2; concordance 0.00"
+    },
+    {
+      "name": "negation_not",
+      "negate": false,
+      "source_pattern": "\\b(not|n't)\\b",
+      "values": [
+        "\\bnet\\b",
+        "\\bnee\\b",
+        "\\bnimmer\\b",
+        "\\bnie\\b",
+        "\\bniemools\\b",
+        "\\bniumools\\b",
+        "\\bkeen\\b",
+        "\\bkeng\\b",
+        "\\bkee\\b"
+      ],
+      "fit_n": 404,
+      "fit_agreement": 0.9307,
+      "heldout_n": 177,
+      "heldout_agreement": 0.8927,
+      "policy_decided": 28,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "superlative",
+      "negate": false,
+      "source_pattern": "\\bthe\\s+[a-zà-ÿ]{2,}est\\b|\\bthe most\\s+[a-zà-ÿ]+",
+      "values": [
+        "\\b[a-zà-ÿ]{2,}(ste|sten)\\b",
+        "\\bmeescht",
+        "\\bbescht",
+        "\\bbeste\\b"
+      ],
+      "fit_n": 42,
+      "fit_agreement": 0.4286,
+      "heldout_n": 59,
+      "heldout_agreement": 0.4237,
+      "policy_decided": 0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "fit agreement 0.42857142857142855; held-out agreement 0.423728813559322; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "ability_can",
+      "negate": false,
+      "source_pattern": "\\b(can|cannot|can't|able to)\\b",
+      "values": [
+        "\\bkann\\b",
+        "\\bkënnt\\b",
+        "\\bkënne",
+        "\\bkéint",
+        "\\bkonnt",
+        "\\bfäeg\\b",
+        "\\bméiglech\\b"
+      ],
+      "fit_n": 296,
+      "fit_agreement": 0.6318,
+      "heldout_n": 268,
+      "heldout_agreement": 0.4328,
+      "policy_decided": 6,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "fit agreement 0.6317567567567568; held-out agreement 0.43283582089552236; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "oblig_must",
+      "negate": false,
+      "source_pattern": "\\b(must|have to|has to|had to)\\b",
+      "values": [
+        "\\bmuss",
+        "\\bméisst",
+        "\\bnoutwendeg\\b"
+      ],
+      "fit_n": 170,
+      "fit_agreement": 0.6294,
+      "heldout_n": 158,
+      "heldout_agreement": 0.6329,
+      "policy_decided": 6,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "fit agreement 0.6294117647058823; held-out agreement 0.6329113924050633; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "advise_should",
+      "negate": false,
+      "source_pattern": "\\bshould\\b",
+      "values": [
+        "\\bsoll",
+        "\\bsollt"
+      ],
+      "fit_n": 97,
+      "fit_agreement": 0.4433,
+      "heldout_n": 44,
+      "heldout_agreement": 0.6591,
+      "policy_decided": 0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "fit agreement 0.44329896907216493; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "reflexive_self",
+      "negate": false,
+      "source_pattern": "\\b(himself|herself|itself|themselves|myself|yourself|ourselves)\\b",
+      "values": [
+        "\\bselwer\\b",
+        "\\bselber\\b",
+        "\\bsëch\\b"
+      ],
+      "fit_n": 93,
+      "fit_agreement": 0.3548,
+      "heldout_n": 77,
+      "heldout_agreement": 0.2727,
+      "policy_decided": 0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "fit agreement 0.3548387096774194; held-out agreement 0.2727272727272727; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "also_too",
+      "negate": false,
+      "source_pattern": "\\b(also|too)\\b",
+      "values": [
+        "\\boch\\b"
+      ],
+      "fit_n": 305,
+      "fit_agreement": 0.7967,
+      "heldout_n": 162,
+      "heldout_agreement": 0.642,
+      "policy_decided": 9,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "held-out agreement 0.6419753086419753; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "only",
+      "negate": false,
+      "source_pattern": "\\bonly\\b",
+      "values": [
+        "\\bnëmmen\\b",
+        "\\bjust\\b",
+        "\\bbloss\\b",
+        "\\binzen\\b",
+        "\\ballene\\b"
+      ],
+      "fit_n": 138,
+      "fit_agreement": 0.5362,
+      "heldout_n": 103,
+      "heldout_agreement": 0.5534,
+      "policy_decided": 6,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "fit agreement 0.5362318840579711; held-out agreement 0.5533980582524272; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "because_of",
+      "negate": false,
+      "source_pattern": "\\b(because of|due to)\\b",
+      "values": [
+        "\\bwéinst\\b",
+        "\\bwell\\b[^.]{0,40}\\bdatt\\b"
+      ],
+      "fit_n": 24,
+      "fit_agreement": 0.5,
+      "heldout_n": 53,
+      "heldout_agreement": 0.6415,
+      "policy_decided": 0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "support fit=24 heldout=53; fit agreement 0.5; held-out agreement 0.6415094339622641; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "concessive",
+      "negate": false,
+      "source_pattern": "\\b(although|though|even though)\\b",
+      "values": [
+        "\\bobwuel\\b",
+        "\\bobgläich\\b"
+      ],
+      "fit_n": 26,
+      "fit_agreement": 0.2308,
+      "heldout_n": 14,
+      "heldout_agreement": 0.4286,
+      "policy_decided": 0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "support fit=26 heldout=14; fit agreement 0.23076923076923078; held-out agreement 0.42857142857142855; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "less_fewer",
+      "negate": false,
+      "source_pattern": "\\b(less|fewer)\\b",
+      "values": [
+        "\\bmanner\\b",
+        "\\bwéineger\\b"
+      ],
+      "fit_n": 37,
+      "fit_agreement": 0.7838,
+      "heldout_n": 20,
+      "heldout_agreement": 0.85,
+      "policy_decided": 0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "support fit=37 heldout=20; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "than",
+      "negate": false,
+      "source_pattern": "\\bthan\\b",
+      "values": [
+        "\\bwéi\\b",
+        "\\bewéi\\b"
+      ],
+      "fit_n": 101,
+      "fit_agreement": 0.703,
+      "heldout_n": 71,
+      "heldout_agreement": 0.8451,
+      "policy_decided": 15,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "as_as",
+      "negate": false,
+      "source_pattern": "\\bas\\s+(much|many|well|good|far|easy|hard|difficult|important|large|big|early|late|fast|high|low|common|similar|komplex)\\s+as\\b",
+      "values": [
+        "\\b(sou|esou)\\b[^.]{0,40}\\b(wéi|ewéi)\\b"
+      ],
+      "fit_n": 40,
+      "fit_agreement": 0.175,
+      "heldout_n": 12,
+      "heldout_agreement": 0.0833,
+      "policy_decided": 0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "support fit=40 heldout=12; fit agreement 0.175; held-out agreement 0.08333333333333333; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "both",
+      "negate": false,
+      "source_pattern": "\\bboth\\b",
+      "values": [
+        "\\bbéide[n]?\\b",
+        "\\bsowuel\\b",
+        "\\bpeeceweïs\\b"
+      ],
+      "fit_n": 42,
+      "fit_agreement": 0.0714,
+      "heldout_n": 36,
+      "heldout_agreement": 0.0556,
+      "policy_decided": 0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "fit agreement 0.07142857142857142; held-out agreement 0.05555555555555555; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "enough",
+      "negate": false,
+      "source_pattern": "\\benough\\b",
+      "values": [
+        "\\bgenuch\\b",
+        "\\bgenee\\b",
+        "\\bgenug\\b"
+      ],
+      "fit_n": 31,
+      "fit_agreement": 0.5484,
+      "heldout_n": 19,
+      "heldout_agreement": 0.6316,
+      "policy_decided": 3,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "support fit=31 heldout=19; fit agreement 0.5483870967741935; held-out agreement 0.631578947368421; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "while_durative",
+      "negate": false,
+      "source_pattern": "\\bwhile\\b",
+      "values": [
+        "\\bwärend\\b",
+        "\\bnodeem\\b",
+        "\\bsoulaange\\b",
+        "\\bwärendem\\b"
+      ],
+      "fit_n": 56,
+      "fit_agreement": 0.1429,
+      "heldout_n": 32,
+      "heldout_agreement": 0.125,
+      "policy_decided": 0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "fit agreement 0.14285714285714285; held-out agreement 0.125; decisive pairs 0; concordance 0.00"
+    }
+  ],
+  "interesting": []
+}

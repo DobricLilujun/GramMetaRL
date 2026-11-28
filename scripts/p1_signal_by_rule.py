@@ -87,6 +87,11 @@ def score_set(v: TranslationVerifier, cards: list[MBGCard], rel: ReliabilityTabl
                 [x for x in rep.verdicts() if x in ("satisfied", "violated")], w))
             # keyed by rollout index, not by text: two sampled rollouts can be identical strings
             verdict_vectors[k] = [(r.rule_id, r.verdict) for r in dec]
+            # coverage of the verifier itself on this prompt distribution: a rollout with no decided
+            # verdict cannot produce advantage, whichever way the rules point.
+            alignment["rollouts"] += 1
+            if not dec:
+                alignment["rollouts_with_no_verdict"] += 1
             for r in dec:
                 per_rule[r.rule_id]["policy_decided"] += 1
                 per_rule[r.rule_id][f"policy_{r.verdict}"] += 1
@@ -142,6 +147,18 @@ def score_set(v: TranslationVerifier, cards: list[MBGCard], rel: ReliabilityTabl
                       "alignment": alignment, "rule_alignment": rule_alignment}
 
 
+def _binom_two_sided_p(k: int, n: int) -> float:
+    """Exact two-sided binomial p-value against H0: concordance = 0.5, i.e. the reward ranks a rollout
+    pair independently of the professional reference. At n = 10 decisive pairs, 2 vs 8 gives p ~ 0.11:
+    the honest reading is NOT "the reward points the wrong way", it is "we cannot yet tell"."""
+    if not n:
+        return 1.0
+    from math import comb
+
+    pmf = [comb(n, i) / 2 ** n for i in range(n + 1)]
+    return round(min(1.0, sum(p for p in pmf if p <= pmf[k] + 1e-12)), 4)
+
+
 def _wilson(k: int, n: int, z: float = 1.96) -> list[float]:
     """Wilson interval; duplicated from p1_reward_smoke.py on purpose - scripts do not import each other."""
     if not n:
@@ -175,6 +192,14 @@ def main() -> None:
             groups[r["prompt_id"]].append({"src": r["src"], "hyp": r["hyp"], "tgt_ref": r["tgt_ref"],
                                            "k": r.get("rollout", 0)})
     print(f"rollout log: {sum(len(x) for x in groups.values())} hypotheses over {len(groups)} groups")
+    max_k = max((len(rows) for rows in groups.values()), default=0)
+    if max_k < 2:
+        raise SystemExit(
+            "this log holds at most one hypothesis per prompt, so within-group spread, alignment and "
+            "diversity are all 0/undefined BY CONSTRUCTION. Use such a log only as a mining corpus "
+            "(scripts/mine_policy_gaps.py) or for applicability coverage; re-run the smoke with "
+            "--rollouts >= 2 for a signal number. (Found the hard way: a 140-prompt --rollouts 1 corpus "
+            "was briefly quoted as 'advantage coverage 0.0% on unbiased prompts'.)")
     print(f"rules scored: {len(cards)} {sorted(ids)}")
 
     # rollout diversity: if the policy emits near-identical rollouts, no rule set can produce a spread,
@@ -221,10 +246,20 @@ def main() -> None:
     al = g["alignment"]
     dec = al["concordant"] + al["discordant"]
     conc = al["concordant"] / dec if dec else 0.0
+    cov = al["rollouts"] - al["rollouts_with_no_verdict"]
+    print(f"verifier coverage on this prompt set: {cov}/{al['rollouts']} rollouts reached at least one "
+          f"verdict ({cov / max(1, al['rollouts']):.1%}); the rest cannot carry advantage at all")
+    al["rollouts_with_a_verdict"] = cov
+    al["coverage_rate"] = round(cov / max(1, al["rollouts"]), 4)
+    al_p = _binom_two_sided_p(al["concordant"], dec)
     print(f"gradient alignment (reward diff vs similarity-to-reference diff, within group): "
           f"concordant={al['concordant']} discordant={al['discordant']} "
-          f"-> {conc:.1%} [95% CI {_wilson(al['concordant'], dec)}] "
+          f"-> {conc:.1%} [95% CI {_wilson(al['concordant'], dec)}; p vs 0.5 = {al_p}] "
           f"ties: reward={al['tie_reward']} similarity={al['tie_similarity']} both={al['tie_both']}")
+    al["concordant_p_vs_0.5"] = al_p
+    if dec and al_p > 0.05:
+        print("  n too small to call the direction: this is NOT evidence that the reward points the "
+              "wrong way, it is evidence that the axis was unmeasured.")
     print("  per-rule alignment (only pairs where that rule's verdict differs):")
     for rid in sorted(g["rule_alignment"], key=lambda r: -(g["rule_alignment"][r]["concordant"] + g["rule_alignment"][r]["discordant"])):
         ra = g["rule_alignment"][rid]
@@ -242,7 +277,13 @@ def main() -> None:
         "alignment": {"concordant": al["concordant"], "discordant": al["discordant"],
                       "tie_reward": al["tie_reward"], "tie_similarity": al["tie_similarity"],
                       "tie_both": al["tie_both"], "concordant_rate": round(conc, 4),
-                      "concordant_rate_ci95": _wilson(al["concordant"], dec)},
+                      "concordant_rate_ci95": _wilson(al["concordant"], dec),
+                      "concordant_p_vs_0.5": al["concordant_p_vs_0.5"],
+                      "null": "concordant_rate 0.5 = the reward ranks a rollout pair independently of "
+                              "the professional reference; anything else needs the p-value to mean a thing"},
+        "verifier_coverage": {"rollouts": al["rollouts"],
+                              "rollouts_with_a_verdict": al["rollouts_with_a_verdict"],
+                              "coverage_rate": al["coverage_rate"]},
     }, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"-> {args.out}")
 

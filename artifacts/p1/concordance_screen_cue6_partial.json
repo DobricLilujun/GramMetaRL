@@ -1,0 +1,1862 @@
+{
+  "specs": "data/rules/screened_conditionals_all.json",
+  "rollout_log": "artifacts/p1/rollouts_gemma3_12b_cue6.jsonl",
+  "pairs": "data/external/pairs_en_lb.jsonl",
+  "pool_pairs": 8972,
+  "fit_boundary": 4000,
+  "groups": 72,
+  "hypotheses": 410,
+  "candidates": [
+    {
+      "name": "as_as",
+      "negate": false,
+      "source_pattern": "\\bas\\s+(much|many|well|good|far|easy|hard|difficult|important|large|big|early|late|fast|high|low|common|similar|komplex)\\s+as\\b",
+      "values": [
+        "\\b(sou|esou)\\b[^.]{0,40}\\b(wéi|ewéi)\\b"
+      ],
+      "fit_n": 40,
+      "fit_agreement": 0.175,
+      "heldout_n": 12,
+      "heldout_agreement": 0.0833,
+      "policy_decided": 7,
+      "applicable_groups": 3,
+      "groups_with_diversity": 3,
+      "diversity_rate": 1.0,
+      "decisive_pairs": 20,
+      "concordant": 13,
+      "discordant": 7,
+      "tie_similarity": 1,
+      "concordance": 0.65,
+      "concordance_ci95": [
+        0.433,
+        0.819
+      ],
+      "concordance_p_vs_0.5": 0.2632,
+      "concordance_ci95_cluster": [
+        0.364,
+        0.429
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 109,
+      "placebo_concordance_max": 0.8462,
+      "placebo_pooled_concordance": 0.541,
+      "placebo_gap": 0.109,
+      "placebo_p": 0.4652,
+      "status": "rejected",
+      "why": "support fit=40 heldout=12; fit agreement 0.175; held-out agreement 0.0833; placebo difference not significant (p=0.4652)",
+      "groups_needed_for_decisive_floor": 10
+    },
+    {
+      "name": "ability_can",
+      "negate": false,
+      "source_pattern": "\\b(can|cannot|can't|able to)\\b",
+      "values": [
+        "\\bkann\\b",
+        "\\bkënnt\\b",
+        "\\bkënne",
+        "\\bkéint",
+        "\\bkonnt",
+        "\\bfäeg\\b",
+        "\\bméiglech\\b"
+      ],
+      "fit_n": 296,
+      "fit_agreement": 0.6318,
+      "heldout_n": 268,
+      "heldout_agreement": 0.4328,
+      "policy_decided": 27,
+      "applicable_groups": 6,
+      "groups_with_diversity": 3,
+      "diversity_rate": 0.5,
+      "decisive_pairs": 19,
+      "concordant": 18,
+      "discordant": 1,
+      "tie_similarity": 0,
+      "concordance": 0.9474,
+      "concordance_ci95": [
+        0.754,
+        0.991
+      ],
+      "concordance_p_vs_0.5": 0.0001,
+      "concordance_ci95_cluster": [
+        0.471,
+        0.5
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 93,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.624,
+      "placebo_gap": 0.323,
+      "placebo_p": 0.0059,
+      "status": "rejected",
+      "why": "fit agreement 0.6318; held-out agreement 0.4328",
+      "groups_needed_for_decisive_floor": 20
+    },
+    {
+      "name": "comp_that",
+      "negate": false,
+      "source_pattern": "\\bthat\\s+(he|she|it|they|we|i|you|the|a|un|een|d)\\b",
+      "values": [
+        "\\bdatt\\b",
+        "\\bdass\\b"
+      ],
+      "fit_n": 223,
+      "fit_agreement": 0.7489,
+      "heldout_n": 103,
+      "heldout_agreement": 0.7476,
+      "policy_decided": 49,
+      "applicable_groups": 9,
+      "groups_with_diversity": 3,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 17,
+      "concordant": 9,
+      "discordant": 8,
+      "tie_similarity": 1,
+      "concordance": 0.5294,
+      "concordance_ci95": [
+        0.31,
+        0.738
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.167,
+        0.5
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 195,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.564,
+      "placebo_gap": -0.035,
+      "placebo_p": 0.8037,
+      "status": "rejected",
+      "why": "no better than placebo (0.53 vs 0.56); placebo difference not significant (p=0.8037)",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "only",
+      "negate": false,
+      "source_pattern": "\\bonly\\b",
+      "values": [
+        "\\bnëmmen\\b",
+        "\\bjust\\b",
+        "\\bbloss\\b",
+        "\\binzen\\b",
+        "\\ballene\\b"
+      ],
+      "fit_n": 138,
+      "fit_agreement": 0.5362,
+      "heldout_n": 103,
+      "heldout_agreement": 0.5534,
+      "policy_decided": 18,
+      "applicable_groups": 8,
+      "groups_with_diversity": 2,
+      "diversity_rate": 0.25,
+      "decisive_pairs": 16,
+      "concordant": 8,
+      "discordant": 8,
+      "tie_similarity": 0,
+      "concordance": 0.5,
+      "concordance_ci95": [
+        0.28,
+        0.72
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.5
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 180,
+      "placebo_concordance_max": 0.7222,
+      "placebo_pooled_concordance": 0.5,
+      "placebo_gap": 0.0,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "fit agreement 0.5362; held-out agreement 0.5534; no better than placebo (0.50 vs 0.50); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": 40
+    },
+    {
+      "name": "negation_not",
+      "negate": false,
+      "source_pattern": "\\b(not|n't)\\b",
+      "values": [
+        "\\bnet\\b",
+        "\\bnee\\b",
+        "\\bnimmer\\b",
+        "\\bnie\\b",
+        "\\bniemools\\b",
+        "\\bniumools\\b",
+        "\\bkeen\\b",
+        "\\bkeng\\b",
+        "\\bkee\\b"
+      ],
+      "fit_n": 404,
+      "fit_agreement": 0.9307,
+      "heldout_n": 177,
+      "heldout_agreement": 0.8927,
+      "policy_decided": 60,
+      "applicable_groups": 11,
+      "groups_with_diversity": 2,
+      "diversity_rate": 0.1818,
+      "decisive_pairs": 12,
+      "concordant": 11,
+      "discordant": 1,
+      "tie_similarity": 1,
+      "concordance": 0.9167,
+      "concordance_ci95": [
+        0.646,
+        0.985
+      ],
+      "concordance_p_vs_0.5": 0.0063,
+      "concordance_ci95_cluster": [
+        0.444,
+        0.5
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 206,
+      "placebo_concordance_max": 0.8636,
+      "placebo_pooled_concordance": 0.621,
+      "placebo_gap": 0.296,
+      "placebo_p": 0.0596,
+      "status": "rejected",
+      "why": "placebo difference not significant (p=0.0596)",
+      "groups_needed_for_decisive_floor": 56
+    },
+    {
+      "name": "cond_if",
+      "negate": false,
+      "source_pattern": "\\bif\\b",
+      "values": [
+        "\\bwa\\b",
+        "\\bwann\\b",
+        "\\bfalls\\b"
+      ],
+      "fit_n": 166,
+      "fit_agreement": 0.8313,
+      "heldout_n": 115,
+      "heldout_agreement": 0.8087,
+      "policy_decided": 5,
+      "applicable_groups": 4,
+      "groups_with_diversity": 2,
+      "diversity_rate": 0.5,
+      "decisive_pairs": 12,
+      "concordant": 0,
+      "discordant": 12,
+      "tie_similarity": 1,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.243
+      ],
+      "concordance_p_vs_0.5": 0.0005,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 93,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.301,
+      "placebo_gap": -0.301,
+      "placebo_p": 0.0333,
+      "status": "rejected",
+      "why": "concordance 0.00; no better than placebo (0.00 vs 0.30)",
+      "groups_needed_for_decisive_floor": 20
+    },
+    {
+      "name": "pg_much_ai",
+      "negate": true,
+      "source_pattern": "\\bmuch\\b",
+      "values": [
+        "\\bai\\b"
+      ],
+      "fit_n": 59,
+      "fit_agreement": 1.0,
+      "heldout_n": 43,
+      "heldout_agreement": 1.0,
+      "policy_decided": 13,
+      "applicable_groups": 6,
+      "groups_with_diversity": 2,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 11,
+      "concordant": 8,
+      "discordant": 3,
+      "tie_similarity": 2,
+      "concordance": 0.7273,
+      "concordance_ci95": [
+        0.434,
+        0.903
+      ],
+      "concordance_p_vs_0.5": 0.2266,
+      "concordance_ci95_cluster": [
+        0.375,
+        0.455
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 190,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.637,
+      "placebo_gap": 0.09,
+      "placebo_p": 0.7493,
+      "status": "rejected",
+      "why": "no better than placebo (0.73 vs 0.64); placebo difference not significant (p=0.7493)",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "pg_be_iwwer",
+      "negate": true,
+      "source_pattern": "\\bbe\\b",
+      "values": [
+        "\\biwwer\\b"
+      ],
+      "fit_n": 498,
+      "fit_agreement": 0.9719,
+      "heldout_n": 309,
+      "heldout_agreement": 0.9676,
+      "policy_decided": 9,
+      "applicable_groups": 11,
+      "groups_with_diversity": 2,
+      "diversity_rate": 0.1818,
+      "decisive_pairs": 11,
+      "concordant": 4,
+      "discordant": 7,
+      "tie_similarity": 2,
+      "concordance": 0.3636,
+      "concordance_ci95": [
+        0.152,
+        0.646
+      ],
+      "concordance_p_vs_0.5": 0.5488,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.4
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 227,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.414,
+      "placebo_gap": -0.05,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "concordance 0.36; no better than placebo (0.36 vs 0.41); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": 56
+    },
+    {
+      "name": "concessive",
+      "negate": false,
+      "source_pattern": "\\b(although|though|even though)\\b",
+      "values": [
+        "\\bobwuel\\b",
+        "\\bobgläich\\b"
+      ],
+      "fit_n": 26,
+      "fit_agreement": 0.2308,
+      "heldout_n": 14,
+      "heldout_agreement": 0.4286,
+      "policy_decided": 3,
+      "applicable_groups": 3,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 9,
+      "concordant": 5,
+      "discordant": 4,
+      "tie_similarity": 0,
+      "concordance": 0.5556,
+      "concordance_ci95": [
+        0.267,
+        0.811
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.357,
+        0.357
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 81,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.741,
+      "placebo_gap": -0.185,
+      "placebo_p": 0.2566,
+      "status": "rejected",
+      "why": "support fit=26 heldout=14; fit agreement 0.2308; held-out agreement 0.4286; decisive pairs 9; alignment not distinguishable from chance; no better than placebo (0.56 vs 0.74); placebo difference not significant (p=0.2566)",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "pg_with_vill",
+      "negate": true,
+      "source_pattern": "\\bwith\\b",
+      "values": [
+        "\\bvill\\b"
+      ],
+      "fit_n": 464,
+      "fit_agreement": 0.9612,
+      "heldout_n": 480,
+      "heldout_agreement": 0.95,
+      "policy_decided": 15,
+      "applicable_groups": 10,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.1,
+      "decisive_pairs": 9,
+      "concordant": 0,
+      "discordant": 9,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.299
+      ],
+      "concordance_p_vs_0.5": 0.0039,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 177,
+      "placebo_concordance_max": 0.7778,
+      "placebo_pooled_concordance": 0.492,
+      "placebo_gap": -0.492,
+      "placebo_p": 0.0037,
+      "status": "rejected",
+      "why": "decisive pairs 9; concordance 0.00; no better than placebo (0.00 vs 0.49)",
+      "groups_needed_for_decisive_floor": 100
+    },
+    {
+      "name": "because_of",
+      "negate": false,
+      "source_pattern": "\\b(because of|due to)\\b",
+      "values": [
+        "\\bwéinst\\b",
+        "\\bwell\\b[^.]{0,40}\\bdatt\\b"
+      ],
+      "fit_n": 24,
+      "fit_agreement": 0.5,
+      "heldout_n": 53,
+      "heldout_agreement": 0.6415,
+      "policy_decided": 2,
+      "applicable_groups": 3,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 8,
+      "concordant": 7,
+      "discordant": 1,
+      "tie_similarity": 0,
+      "concordance": 0.875,
+      "concordance_ci95": [
+        0.529,
+        0.978
+      ],
+      "concordance_p_vs_0.5": 0.0703,
+      "concordance_ci95_cluster": [
+        0.467,
+        0.467
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 111,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.685,
+      "placebo_gap": 0.19,
+      "placebo_p": 0.4325,
+      "status": "rejected",
+      "why": "support fit=24 heldout=53; fit agreement 0.5; held-out agreement 0.6415; decisive pairs 8; alignment not distinguishable from chance; placebo difference not significant (p=0.4325)",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "pg_been_all",
+      "negate": true,
+      "source_pattern": "\\bbeen\\b",
+      "values": [
+        "\\ball\\b"
+      ],
+      "fit_n": 180,
+      "fit_agreement": 0.9778,
+      "heldout_n": 111,
+      "heldout_agreement": 0.991,
+      "policy_decided": 2,
+      "applicable_groups": 6,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.1667,
+      "decisive_pairs": 8,
+      "concordant": 5,
+      "discordant": 3,
+      "tie_similarity": 0,
+      "concordance": 0.625,
+      "concordance_ci95": [
+        0.306,
+        0.863
+      ],
+      "concordance_p_vs_0.5": 0.7266,
+      "concordance_ci95_cluster": [
+        0.385,
+        0.385
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 167,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.557,
+      "placebo_gap": 0.068,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 8; alignment not distinguishable from chance; no better than placebo (0.62 vs 0.56); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": 60
+    },
+    {
+      "name": "pg_would_all",
+      "negate": true,
+      "source_pattern": "\\bwould\\b",
+      "values": [
+        "\\ball\\b"
+      ],
+      "fit_n": 200,
+      "fit_agreement": 0.975,
+      "heldout_n": 84,
+      "heldout_agreement": 0.9643,
+      "policy_decided": 2,
+      "applicable_groups": 3,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 8,
+      "concordant": 5,
+      "discordant": 3,
+      "tie_similarity": 0,
+      "concordance": 0.625,
+      "concordance_ci95": [
+        0.306,
+        0.863
+      ],
+      "concordance_p_vs_0.5": 0.7266,
+      "concordance_ci95_cluster": [
+        0.385,
+        0.385
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 105,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.533,
+      "placebo_gap": 0.092,
+      "placebo_p": 0.7239,
+      "status": "rejected",
+      "why": "decisive pairs 8; alignment not distinguishable from chance; no better than placebo (0.62 vs 0.53); placebo difference not significant (p=0.7239)",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "pg_were_hir",
+      "negate": true,
+      "source_pattern": "\\bwere\\b",
+      "values": [
+        "\\bhir\\b"
+      ],
+      "fit_n": 158,
+      "fit_agreement": 0.9684,
+      "heldout_n": 160,
+      "heldout_agreement": 0.9563,
+      "policy_decided": 4,
+      "applicable_groups": 7,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.1429,
+      "decisive_pairs": 8,
+      "concordant": 4,
+      "discordant": 4,
+      "tie_similarity": 1,
+      "concordance": 0.5,
+      "concordance_ci95": [
+        0.215,
+        0.785
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.333,
+        0.333
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 150,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.527,
+      "placebo_gap": -0.027,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 8; alignment not distinguishable from chance; no better than placebo (0.50 vs 0.53); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": 70
+    },
+    {
+      "name": "pg_ensure_garantéieren",
+      "negate": true,
+      "source_pattern": "\\bensure\\b",
+      "values": [
+        "\\bgarantéieren\\b"
+      ],
+      "fit_n": 30,
+      "fit_agreement": 1.0,
+      "heldout_n": 3,
+      "heldout_agreement": 1.0,
+      "policy_decided": 16,
+      "applicable_groups": 3,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 8,
+      "concordant": 3,
+      "discordant": 5,
+      "tie_similarity": 0,
+      "concordance": 0.375,
+      "concordance_ci95": [
+        0.137,
+        0.694
+      ],
+      "concordance_p_vs_0.5": 0.7266,
+      "concordance_ci95_cluster": [
+        0.273,
+        0.273
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 56,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.464,
+      "placebo_gap": -0.089,
+      "placebo_p": 0.719,
+      "status": "rejected",
+      "why": "support fit=30 heldout=3; decisive pairs 8; concordance 0.38; alignment not distinguishable from chance; no better than placebo (0.38 vs 0.46); placebo difference not significant (p=0.719)",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "pg_minister_goufen",
+      "negate": true,
+      "source_pattern": "\\bminister\\b",
+      "values": [
+        "\\bgoufen\\b"
+      ],
+      "fit_n": 129,
+      "fit_agreement": 0.9845,
+      "heldout_n": 78,
+      "heldout_agreement": 0.9487,
+      "policy_decided": 4,
+      "applicable_groups": 4,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.25,
+      "decisive_pairs": 8,
+      "concordant": 3,
+      "discordant": 5,
+      "tie_similarity": 0,
+      "concordance": 0.375,
+      "concordance_ci95": [
+        0.137,
+        0.694
+      ],
+      "concordance_p_vs_0.5": 0.7266,
+      "concordance_ci95_cluster": [
+        0.273,
+        0.273
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 126,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.341,
+      "placebo_gap": 0.034,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 8; concordance 0.38; alignment not distinguishable from chance; no better than placebo (0.38 vs 0.34); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": 40
+    },
+    {
+      "name": "advise_should",
+      "negate": false,
+      "source_pattern": "\\bshould\\b",
+      "values": [
+        "\\bsoll",
+        "\\bsollt"
+      ],
+      "fit_n": 97,
+      "fit_agreement": 0.4433,
+      "heldout_n": 44,
+      "heldout_agreement": 0.6591,
+      "policy_decided": 12,
+      "applicable_groups": 3,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 8,
+      "concordant": 2,
+      "discordant": 6,
+      "tie_similarity": 0,
+      "concordance": 0.25,
+      "concordance_ci95": [
+        0.071,
+        0.591
+      ],
+      "concordance_p_vs_0.5": 0.2891,
+      "concordance_ci95_cluster": [
+        0.2,
+        0.2
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 47,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.468,
+      "placebo_gap": -0.218,
+      "placebo_p": 0.4429,
+      "status": "rejected",
+      "why": "fit agreement 0.4433; decisive pairs 8; concordance 0.25; alignment not distinguishable from chance; no better than placebo (0.25 vs 0.47); placebo difference not significant (p=0.4429)",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "than",
+      "negate": false,
+      "source_pattern": "\\bthan\\b",
+      "values": [
+        "\\bwéi\\b",
+        "\\bewéi\\b"
+      ],
+      "fit_n": 101,
+      "fit_agreement": 0.703,
+      "heldout_n": 71,
+      "heldout_agreement": 0.8451,
+      "policy_decided": 23,
+      "applicable_groups": 5,
+      "groups_with_diversity": 2,
+      "diversity_rate": 0.4,
+      "decisive_pairs": 6,
+      "concordant": 6,
+      "discordant": 0,
+      "tie_similarity": 3,
+      "concordance": 1.0,
+      "concordance_ci95": [
+        0.61,
+        1.0
+      ],
+      "concordance_p_vs_0.5": 0.0312,
+      "concordance_ci95_cluster": [
+        0.5,
+        0.5
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 101,
+      "placebo_concordance_max": 0.8,
+      "placebo_pooled_concordance": 0.218,
+      "placebo_gap": 0.782,
+      "placebo_p": 0.0002,
+      "status": "rejected",
+      "why": "decisive pairs 6",
+      "groups_needed_for_decisive_floor": 25
+    },
+    {
+      "name": "pg_life_iwwer",
+      "negate": true,
+      "source_pattern": "\\blife\\b",
+      "values": [
+        "\\biwwer\\b"
+      ],
+      "fit_n": 73,
+      "fit_agreement": 0.9863,
+      "heldout_n": 28,
+      "heldout_agreement": 1.0,
+      "policy_decided": 10,
+      "applicable_groups": 3,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 6,
+      "concordant": 4,
+      "discordant": 2,
+      "tie_similarity": 2,
+      "concordance": 0.6667,
+      "concordance_ci95": [
+        0.3,
+        0.903
+      ],
+      "concordance_p_vs_0.5": 0.6875,
+      "concordance_ci95_cluster": [
+        0.4,
+        0.4
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 87,
+      "placebo_concordance_max": 0.8182,
+      "placebo_pooled_concordance": 0.437,
+      "placebo_gap": 0.23,
+      "placebo_p": 0.4041,
+      "status": "rejected",
+      "why": "support fit=73 heldout=28; decisive pairs 6; alignment not distinguishable from chance; placebo difference not significant (p=0.4041)",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "pg_work_iwwer",
+      "negate": true,
+      "source_pattern": "\\bwork\\b",
+      "values": [
+        "\\biwwer\\b"
+      ],
+      "fit_n": 62,
+      "fit_agreement": 0.9839,
+      "heldout_n": 63,
+      "heldout_agreement": 0.9841,
+      "policy_decided": 10,
+      "applicable_groups": 6,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.1667,
+      "decisive_pairs": 6,
+      "concordant": 4,
+      "discordant": 2,
+      "tie_similarity": 2,
+      "concordance": 0.6667,
+      "concordance_ci95": [
+        0.3,
+        0.903
+      ],
+      "concordance_p_vs_0.5": 0.6875,
+      "concordance_ci95_cluster": [
+        0.4,
+        0.4
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 134,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.321,
+      "placebo_gap": 0.346,
+      "placebo_p": 0.1789,
+      "status": "rejected",
+      "why": "decisive pairs 6; alignment not distinguishable from chance; placebo difference not significant (p=0.1789)",
+      "groups_needed_for_decisive_floor": 60
+    },
+    {
+      "name": "superlative",
+      "negate": false,
+      "source_pattern": "\\bthe\\s+[a-zà-ÿ]{2,}est\\b|\\bthe most\\s+[a-zà-ÿ]+",
+      "values": [
+        "\\b[a-zà-ÿ]{2,}(ste|sten)\\b",
+        "\\bmeescht",
+        "\\bbescht",
+        "\\bbeste\\b"
+      ],
+      "fit_n": 42,
+      "fit_agreement": 0.4286,
+      "heldout_n": 59,
+      "heldout_agreement": 0.4237,
+      "policy_decided": 1,
+      "applicable_groups": 2,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.5,
+      "decisive_pairs": 5,
+      "concordant": 5,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 1.0,
+      "concordance_ci95": [
+        0.566,
+        1.0
+      ],
+      "concordance_p_vs_0.5": 0.0625,
+      "concordance_ci95_cluster": [
+        0.5,
+        0.5
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 52,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.654,
+      "placebo_gap": 0.346,
+      "placebo_p": 0.1681,
+      "status": "rejected",
+      "why": "fit agreement 0.4286; held-out agreement 0.4237; decisive pairs 5; alignment not distinguishable from chance; placebo difference not significant (p=0.1681)",
+      "groups_needed_for_decisive_floor": 20
+    },
+    {
+      "name": "both",
+      "negate": false,
+      "source_pattern": "\\bboth\\b",
+      "values": [
+        "\\bbéide[n]?\\b",
+        "\\bsowuel\\b",
+        "\\bpeeceweïs\\b"
+      ],
+      "fit_n": 42,
+      "fit_agreement": 0.0714,
+      "heldout_n": 36,
+      "heldout_agreement": 0.0556,
+      "policy_decided": 5,
+      "applicable_groups": 3,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 5,
+      "concordant": 5,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 1.0,
+      "concordance_ci95": [
+        0.566,
+        1.0
+      ],
+      "concordance_p_vs_0.5": 0.0625,
+      "concordance_ci95_cluster": [
+        0.5,
+        0.5
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 77,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.442,
+      "placebo_gap": 0.558,
+      "placebo_p": 0.0211,
+      "status": "rejected",
+      "why": "fit agreement 0.0714; held-out agreement 0.0556; decisive pairs 5; alignment not distinguishable from chance",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "pg_after_no",
+      "negate": false,
+      "source_pattern": "\\bafter\\b",
+      "values": [
+        "\\bno\\b"
+      ],
+      "fit_n": 59,
+      "fit_agreement": 0.5593,
+      "heldout_n": 128,
+      "heldout_agreement": 0.5078,
+      "policy_decided": 1,
+      "applicable_groups": 4,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.25,
+      "decisive_pairs": 5,
+      "concordant": 5,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 1.0,
+      "concordance_ci95": [
+        0.566,
+        1.0
+      ],
+      "concordance_p_vs_0.5": 0.0625,
+      "concordance_ci95_cluster": [
+        0.5,
+        0.5
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 82,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.402,
+      "placebo_gap": 0.598,
+      "placebo_p": 0.0136,
+      "status": "rejected",
+      "why": "fit agreement 0.5593; held-out agreement 0.5078; decisive pairs 5; alignment not distinguishable from chance",
+      "groups_needed_for_decisive_floor": 40
+    },
+    {
+      "name": "pg_government_gouf",
+      "negate": true,
+      "source_pattern": "\\bgovernment\\b",
+      "values": [
+        "\\bgouf\\b"
+      ],
+      "fit_n": 88,
+      "fit_agreement": 0.9545,
+      "heldout_n": 55,
+      "heldout_agreement": 1.0,
+      "policy_decided": 7,
+      "applicable_groups": 4,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.25,
+      "decisive_pairs": 5,
+      "concordant": 5,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 1.0,
+      "concordance_ci95": [
+        0.566,
+        1.0
+      ],
+      "concordance_p_vs_0.5": 0.0625,
+      "concordance_ci95_cluster": [
+        0.5,
+        0.5
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 107,
+      "placebo_concordance_max": 0.7,
+      "placebo_pooled_concordance": 0.355,
+      "placebo_gap": 0.645,
+      "placebo_p": 0.0072,
+      "status": "rejected",
+      "why": "decisive pairs 5; alignment not distinguishable from chance",
+      "groups_needed_for_decisive_floor": 40
+    },
+    {
+      "name": "pg_during_während",
+      "negate": true,
+      "source_pattern": "\\bduring\\b",
+      "values": [
+        "\\bwährend\\b"
+      ],
+      "fit_n": 52,
+      "fit_agreement": 1.0,
+      "heldout_n": 62,
+      "heldout_agreement": 1.0,
+      "policy_decided": 5,
+      "applicable_groups": 3,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 5,
+      "concordant": 4,
+      "discordant": 1,
+      "tie_similarity": 0,
+      "concordance": 0.8,
+      "concordance_ci95": [
+        0.376,
+        0.964
+      ],
+      "concordance_p_vs_0.5": 0.375,
+      "concordance_ci95_cluster": [
+        0.444,
+        0.444
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 89,
+      "placebo_concordance_max": 0.625,
+      "placebo_pooled_concordance": 0.213,
+      "placebo_gap": 0.587,
+      "placebo_p": 0.0121,
+      "status": "rejected",
+      "why": "decisive pairs 5; alignment not distinguishable from chance",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "pg_so_sougenannte",
+      "negate": true,
+      "source_pattern": "\\bso\\b",
+      "values": [
+        "\\bsougenannte\\b"
+      ],
+      "fit_n": 129,
+      "fit_agreement": 0.9612,
+      "heldout_n": 103,
+      "heldout_agreement": 0.9806,
+      "policy_decided": 5,
+      "applicable_groups": 5,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.2,
+      "decisive_pairs": 5,
+      "concordant": 4,
+      "discordant": 1,
+      "tie_similarity": 0,
+      "concordance": 0.8,
+      "concordance_ci95": [
+        0.376,
+        0.964
+      ],
+      "concordance_p_vs_0.5": 0.375,
+      "concordance_ci95_cluster": [
+        0.444,
+        0.444
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 116,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.388,
+      "placebo_gap": 0.412,
+      "placebo_p": 0.1567,
+      "status": "rejected",
+      "why": "decisive pairs 5; alignment not distinguishable from chance; placebo difference not significant (p=0.1567)",
+      "groups_needed_for_decisive_floor": 50
+    },
+    {
+      "name": "very",
+      "negate": false,
+      "source_pattern": "\\bvery\\b",
+      "values": [
+        "\\bganz\\b",
+        "\\bsehr\\b",
+        "\\bviru\\b",
+        "\\bhimmelsméisseg\\b"
+      ],
+      "fit_n": 63,
+      "fit_agreement": 0.5397,
+      "heldout_n": 43,
+      "heldout_agreement": 0.6279,
+      "policy_decided": 11,
+      "applicable_groups": 2,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.5,
+      "decisive_pairs": 5,
+      "concordant": 3,
+      "discordant": 2,
+      "tie_similarity": 0,
+      "concordance": 0.6,
+      "concordance_ci95": [
+        0.231,
+        0.882
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.375,
+        0.375
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 74,
+      "placebo_concordance_max": 0.6,
+      "placebo_pooled_concordance": 0.311,
+      "placebo_gap": 0.289,
+      "placebo_p": 0.3244,
+      "status": "rejected",
+      "why": "fit agreement 0.5397; held-out agreement 0.6279; decisive pairs 5; alignment not distinguishable from chance; placebo difference not significant (p=0.3244)",
+      "groups_needed_for_decisive_floor": 20
+    },
+    {
+      "name": "pg_would_wär",
+      "negate": true,
+      "source_pattern": "\\bwould\\b",
+      "values": [
+        "\\bwär\\b"
+      ],
+      "fit_n": 200,
+      "fit_agreement": 0.955,
+      "heldout_n": 84,
+      "heldout_agreement": 0.9762,
+      "policy_decided": 1,
+      "applicable_groups": 3,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 5,
+      "concordant": 3,
+      "discordant": 2,
+      "tie_similarity": 0,
+      "concordance": 0.6,
+      "concordance_ci95": [
+        0.231,
+        0.882
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.375,
+        0.375
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 91,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.593,
+      "placebo_gap": 0.007,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 5; alignment not distinguishable from chance; no better than placebo (0.60 vs 0.59); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "less_fewer",
+      "negate": false,
+      "source_pattern": "\\b(less|fewer)\\b",
+      "values": [
+        "\\bmanner\\b",
+        "\\bwéineger\\b"
+      ],
+      "fit_n": 37,
+      "fit_agreement": 0.7838,
+      "heldout_n": 20,
+      "heldout_agreement": 0.85,
+      "policy_decided": 12,
+      "applicable_groups": 3,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 5,
+      "concordant": 1,
+      "discordant": 4,
+      "tie_similarity": 0,
+      "concordance": 0.2,
+      "concordance_ci95": [
+        0.036,
+        0.624
+      ],
+      "concordance_p_vs_0.5": 0.375,
+      "concordance_ci95_cluster": [
+        0.167,
+        0.167
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 102,
+      "placebo_concordance_max": 0.0,
+      "placebo_pooled_concordance": 0.0,
+      "placebo_gap": 0.2,
+      "placebo_p": 0.0467,
+      "status": "rejected",
+      "why": "support fit=37 heldout=20; decisive pairs 5; concordance 0.20; alignment not distinguishable from chance",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "reflexive_self",
+      "negate": false,
+      "source_pattern": "\\b(himself|herself|itself|themselves|myself|yourself|ourselves)\\b",
+      "values": [
+        "\\bselwer\\b",
+        "\\bselber\\b",
+        "\\bsëch\\b"
+      ],
+      "fit_n": 93,
+      "fit_agreement": 0.3548,
+      "heldout_n": 77,
+      "heldout_agreement": 0.2727,
+      "policy_decided": 5,
+      "applicable_groups": 2,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.5,
+      "decisive_pairs": 4,
+      "concordant": 4,
+      "discordant": 0,
+      "tie_similarity": 1,
+      "concordance": 1.0,
+      "concordance_ci95": [
+        0.51,
+        1.0
+      ],
+      "concordance_p_vs_0.5": 0.125,
+      "concordance_ci95_cluster": [
+        0.5,
+        0.5
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 95,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.558,
+      "placebo_gap": 0.442,
+      "placebo_p": 0.1347,
+      "status": "rejected",
+      "why": "fit agreement 0.3548; held-out agreement 0.2727; decisive pairs 4; alignment not distinguishable from chance; placebo difference not significant (p=0.1347)",
+      "groups_needed_for_decisive_floor": 20
+    },
+    {
+      "name": "oblig_must",
+      "negate": false,
+      "source_pattern": "\\b(must|have to|has to|had to)\\b",
+      "values": [
+        "\\bmuss",
+        "\\bméisst",
+        "\\bnoutwendeg\\b"
+      ],
+      "fit_n": 170,
+      "fit_agreement": 0.6294,
+      "heldout_n": 158,
+      "heldout_agreement": 0.6329,
+      "policy_decided": 47,
+      "applicable_groups": 9,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.1111,
+      "decisive_pairs": 4,
+      "concordant": 3,
+      "discordant": 1,
+      "tie_similarity": 1,
+      "concordance": 0.75,
+      "concordance_ci95": [
+        0.301,
+        0.954
+      ],
+      "concordance_p_vs_0.5": 0.625,
+      "concordance_ci95_cluster": [
+        0.429,
+        0.429
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 165,
+      "placebo_concordance_max": 0.8889,
+      "placebo_pooled_concordance": 0.533,
+      "placebo_gap": 0.217,
+      "placebo_p": 0.625,
+      "status": "rejected",
+      "why": "fit agreement 0.6294; held-out agreement 0.6329; decisive pairs 4; alignment not distinguishable from chance; placebo difference not significant (p=0.625)",
+      "groups_needed_for_decisive_floor": 91
+    },
+    {
+      "name": "more_than",
+      "negate": false,
+      "source_pattern": "\\bmore than\\b",
+      "values": [
+        "\\bméi\\b[^.]{0,40}\\b(wéi|ewéi)\\b",
+        "\\bnët??\\b[^.]{0,20}\\bn[ée]mme\\b",
+        "\\bnet nëmme\\b",
+        "\\bnet just\\b"
+      ],
+      "fit_n": 23,
+      "fit_agreement": 0.4783,
+      "heldout_n": 21,
+      "heldout_agreement": 0.6667,
+      "policy_decided": 15,
+      "applicable_groups": 3,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.3333,
+      "decisive_pairs": 2,
+      "concordant": 2,
+      "discordant": 0,
+      "tie_similarity": 4,
+      "concordance": 1.0,
+      "concordance_ci95": [
+        0.342,
+        1.0
+      ],
+      "concordance_p_vs_0.5": 0.5,
+      "concordance_ci95_cluster": [
+        0.5,
+        0.5
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 83,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.373,
+      "placebo_gap": 0.627,
+      "placebo_p": 0.1479,
+      "status": "rejected",
+      "why": "support fit=23 heldout=21; fit agreement 0.4783; decisive pairs 2; alignment not distinguishable from chance; placebo difference not significant (p=0.1479)",
+      "groups_needed_for_decisive_floor": 31
+    },
+    {
+      "name": "every_each",
+      "negate": false,
+      "source_pattern": "\\b(every|each)\\b",
+      "values": [
+        "\\ball(en)?\\b",
+        "\\bjidd"
+      ],
+      "fit_n": 84,
+      "fit_agreement": 0.75,
+      "heldout_n": 86,
+      "heldout_agreement": 0.7674,
+      "policy_decided": 18,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 33,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.758,
+      "placebo_gap": -0.758,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.76); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "without",
+      "negate": false,
+      "source_pattern": "\\bwithout\\b",
+      "values": [
+        "\\bouni\\b"
+      ],
+      "fit_n": 51,
+      "fit_agreement": 0.6667,
+      "heldout_n": 43,
+      "heldout_agreement": 0.7209,
+      "policy_decided": 11,
+      "applicable_groups": 4,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 74,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.378,
+      "placebo_gap": -0.378,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.38); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "also_too",
+      "negate": false,
+      "source_pattern": "\\b(also|too)\\b",
+      "values": [
+        "\\boch\\b"
+      ],
+      "fit_n": 305,
+      "fit_agreement": 0.7967,
+      "heldout_n": 162,
+      "heldout_agreement": 0.642,
+      "policy_decided": 59,
+      "applicable_groups": 10,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 194,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.567,
+      "placebo_gap": -0.567,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "held-out agreement 0.642; decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.57); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "enough",
+      "negate": false,
+      "source_pattern": "\\benough\\b",
+      "values": [
+        "\\bgenuch\\b",
+        "\\bgenee\\b",
+        "\\bgenug\\b"
+      ],
+      "fit_n": 31,
+      "fit_agreement": 0.5484,
+      "heldout_n": 19,
+      "heldout_agreement": 0.6316,
+      "policy_decided": 18,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 65,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.585,
+      "placebo_gap": -0.585,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "support fit=31 heldout=19; fit agreement 0.5484; held-out agreement 0.6316; decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.58); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "while_durative",
+      "negate": false,
+      "source_pattern": "\\bwhile\\b",
+      "values": [
+        "\\bwärend\\b",
+        "\\bnodeem\\b",
+        "\\bsoulaange\\b",
+        "\\bwärendem\\b"
+      ],
+      "fit_n": 56,
+      "fit_agreement": 0.1429,
+      "heldout_n": 32,
+      "heldout_agreement": 0.125,
+      "policy_decided": 0,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 57,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.825,
+      "placebo_gap": -0.825,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "fit agreement 0.1429; held-out agreement 0.125; decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.82); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "pg_every_vum",
+      "negate": true,
+      "source_pattern": "\\bevery\\b",
+      "values": [
+        "\\bvum\\b"
+      ],
+      "fit_n": 56,
+      "fit_agreement": 0.9643,
+      "heldout_n": 58,
+      "heldout_agreement": 0.9483,
+      "policy_decided": 6,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 28,
+      "placebo_concordance_max": 0.625,
+      "placebo_pooled_concordance": 0.357,
+      "placebo_gap": -0.357,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.36); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "pg_ensure_mee",
+      "negate": true,
+      "source_pattern": "\\bensure\\b",
+      "values": [
+        "\\bmee\\b"
+      ],
+      "fit_n": 30,
+      "fit_agreement": 1.0,
+      "heldout_n": 3,
+      "heldout_agreement": 1.0,
+      "policy_decided": 6,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 59,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.576,
+      "placebo_gap": -0.576,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "support fit=30 heldout=3; decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.58); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "pg_government_ausgewielte",
+      "negate": true,
+      "source_pattern": "\\bgovernment\\b",
+      "values": [
+        "\\bausgewielte\\b"
+      ],
+      "fit_n": 88,
+      "fit_agreement": 1.0,
+      "heldout_n": 55,
+      "heldout_agreement": 1.0,
+      "policy_decided": 12,
+      "applicable_groups": 4,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 107,
+      "placebo_concordance_max": 0.75,
+      "placebo_pooled_concordance": 0.514,
+      "placebo_gap": -0.514,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.51); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "pg_during_wär",
+      "negate": true,
+      "source_pattern": "\\bduring\\b",
+      "values": [
+        "\\bwär\\b"
+      ],
+      "fit_n": 52,
+      "fit_agreement": 0.9808,
+      "heldout_n": 62,
+      "heldout_agreement": 1.0,
+      "policy_decided": 0,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 76,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.395,
+      "placebo_gap": -0.395,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.40); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "pg_take_gezwongen",
+      "negate": true,
+      "source_pattern": "\\btake\\b",
+      "values": [
+        "\\bgezwongen\\b"
+      ],
+      "fit_n": 76,
+      "fit_agreement": 1.0,
+      "heldout_n": 61,
+      "heldout_agreement": 1.0,
+      "policy_decided": 5,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 76,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.605,
+      "placebo_gap": -0.605,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.60); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "pg_minister_iwwer",
+      "negate": true,
+      "source_pattern": "\\bminister\\b",
+      "values": [
+        "\\biwwer\\b"
+      ],
+      "fit_n": 129,
+      "fit_agreement": 0.9922,
+      "heldout_n": 78,
+      "heldout_agreement": 0.9872,
+      "policy_decided": 0,
+      "applicable_groups": 4,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 73,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.479,
+      "placebo_gap": -0.479,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.48); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "pg_so_just",
+      "negate": true,
+      "source_pattern": "\\bso\\b",
+      "values": [
+        "\\bjust\\b"
+      ],
+      "fit_n": 129,
+      "fit_agreement": 0.9922,
+      "heldout_n": 103,
+      "heldout_agreement": 0.9903,
+      "policy_decided": 6,
+      "applicable_groups": 5,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 90,
+      "placebo_concordance_max": 1.0,
+      "placebo_pooled_concordance": 0.533,
+      "placebo_gap": -0.533,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.53); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "pg_will_dëst",
+      "negate": true,
+      "source_pattern": "\\bwill\\b",
+      "values": [
+        "\\bdëst\\b"
+      ],
+      "fit_n": 245,
+      "fit_agreement": 0.9592,
+      "heldout_n": 131,
+      "heldout_agreement": 0.9847,
+      "policy_decided": 6,
+      "applicable_groups": 6,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 116,
+      "placebo_concordance_max": 0.875,
+      "placebo_pooled_concordance": 0.56,
+      "placebo_gap": -0.56,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.56); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    },
+    {
+      "name": "pg_every_ausgewielte",
+      "negate": true,
+      "source_pattern": "\\bevery\\b",
+      "values": [
+        "\\bausgewielte\\b"
+      ],
+      "fit_n": 56,
+      "fit_agreement": 1.0,
+      "heldout_n": 58,
+      "heldout_agreement": 1.0,
+      "policy_decided": 12,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_p_vs_0.5": 1.0,
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "placebo_runs": 12,
+      "placebo_decisive_pairs": 45,
+      "placebo_concordance_max": 0.75,
+      "placebo_pooled_concordance": 0.422,
+      "placebo_gap": -0.422,
+      "placebo_p": 1.0,
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00; no better than placebo (0.00 vs 0.42); placebo difference not significant (p=1.0)",
+      "groups_needed_for_decisive_floor": null
+    }
+  ],
+  "rollouts_per_group": 5.69,
+  "max_decisive_pairs_available": 990,
+  "floors": {
+    "min_fit_agree": 0.65,
+    "min_heldout_agree": 0.65,
+    "min_decisive": 10,
+    "min_concordance": 0.5
+  },
+  "null": "concordance = 0.5 means the verdict is independent of which rollout is lexically closer to the professional reference; concordance_p_vs_0.5 is the exact two-sided binomial p-value against that null. NOTE the proxy is LEXICAL (token F1), so a lexical exclusion candidate can concord without encoding grammar at all - that is why agreement-vs-professionals is reported in the same row and why a candidate still has to clear the three-axis certification.",
+  "interesting": []
+}

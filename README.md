@@ -16,32 +16,37 @@ cannot be measured are reported as undecidable and abstain instead of producing 
 | item | value | where it comes from |
 |---|---|---|
 | Gate table | **PASS=29 FAIL=3 WARN=10** | `scripts/smoke_test.py` |
-| Unit tests | **35 passed** | `tests/` |
+| Unit tests | **39 passed** | `tests/` |
 | Cards: 87 book-extracted + 6 corpus-mined | **93** | `data/rules/mbg_cards_condv3.jsonl` |
 | Rules certified usable (3 axes + support floors, CC0 pool) | **8** (2 book + 6 mined) | `artifacts/audit/rule_quality_condv3_heldout.json` |
 | Rules certified on the CC BY-NC pool (reported separately) | **2** (a *different* pair — see §5) | `artifacts/audit/rule_quality_condonly_luxalign.json` |
 | Labeled pairs (certified rules only, 100% CC0) | **2,555** | `data/processed/labeled_condv3.jsonl` |
 | SFT/RL dataset (train / valid / rule-level held-out) | **2,183 / 243 / 129** (1 of 8 rules held out) | `data/processed/gated_condv3/` |
 | Honest false-penalty rate (professional translations penalized) | **22.3%** (weighted 23.9%) | `artifacts/audit/gated_condv3_techgov.json` |
-| GRPO advantage coverage, stratified prompt set (the honest number) | **11.9%** of groups [CI 5.2–25.0] | `artifacts/p1/reward_smoke_gemma3_12b_strat.json` |
-| Rules that actually separate policy from professionals (violation gap > 0.05) | **3 of 8**, one strongly (`cond_if` +44pp) | `artifacts/p1/signal_condv3_stratified.json` |
-| Reward noise floor (reference translation penalized) | **14.3%** | `artifacts/p1/reward_smoke_gemma3_12b_strat.json` |
-| GRPO advantage coverage on an **unbiased** prompt set (140 prompts, card-independent) | **0.0%** | `artifacts/p1/corpus_gemma3_12b_breadth.json` |
-| Gradient alignment: reward ranks a rollout pair the way the reference does | **20%** of decisive pairs (2 vs 8) [CI 5.7–51.0] | `artifacts/p1/signal_condv3_stratified.json` |
+| GRPO advantage coverage, stratified prompt set | **11.9%** of groups [CI 5.2–25.0] | `artifacts/p1/reward_smoke_gemma3_12b_strat.json` |
+| GRPO advantage coverage, **card-independent** prompt set (80 prompts × 3 rollouts) | **6.2%** [CI 2.7–13.8] | `artifacts/p1/reward_smoke_gemma3_12b_breadth3.json` |
+| Rollouts on which at least one certified rule reaches a verdict (same unbiased set) | **31.2%**; **68.8%** of prompts have no rule firing at all | `artifacts/p1/signal_condv3_breadth3.json` |
+| Rules that actually separate policy from professionals (violation gap > 0.05) | **3 of 8** stratified (`cond_if` +44pp); on the unbiased set `possessive` +9.3pp, `negation_not` **−40pp** | `artifacts/p1/signal_condv3_stratified.json`, `artifacts/p1/signal_condv3_breadth3.json` |
+| Reward noise floor (reference translation penalized) | **14.3%** stratified / **11.3%** unbiased | the two smoke artifacts above |
+| Gradient alignment: reward ranks a rollout pair the way the reference does | stratified **20.0%** (2 vs 8, p=0.11) / unbiased **66.7%** (6 vs 3, p=0.51) — **direction not established** | `artifacts/p1/signal_condv3_{stratified,breadth3}.json` |
 | New rules certified by mining the policy's own errors (3 families tried) | **0** | `artifacts/p1/policy_gap_mining.json`, `artifacts/audit/screen_policygap_{fit,heldout}.json` |
+| Candidates (of 46) that beat their own **placebo band** on alignment and clear the agreement floors | **0** (`ability_can` beats placebo p=0.006 but agreement 0.43 held out; `cond_if` is significantly anti-aligned) | `artifacts/p1/concordance_screen_cue6_partial.json` |
 
-Headline measured result of 2026-11-27 (two parts, both negative). (1) **Rule coverage is not the RL
-bottleneck**: 2 → 8 certified rules raised label yield by a third and lowered the false-penalty rate, but
-moved advantage coverage by at most +4.2pp on identical hypotheses (§8.1, evidence §14). (2) **The
-certified set is not reward-ready**: on prompts sampled without respect to the rules the 8 rules produce
-zero advantage, and where they do rank two rollouts differently the ranking usually opposes the
-professional reference (20% concordance, gate G31 FAIL). They remain a label and evaluation asset.
-See §8.2 and evidence §15.
+Headline measured result of 2026-11-27 (three parts, all negative, and one of them is a correction of my
+own number). (1) **Rule coverage is not the RL bottleneck**: 2 → 8 certified rules raised label yield by a
+third and lowered the false-penalty rate, but moved advantage coverage by at most +4.2pp on identical
+hypotheses (§8.1, evidence §14). (2) **Before saturation there is applicability**: on card-independent
+prompts two thirds of prompts get no verdict from any of the 8 rules, and only 31% of rollouts are judged
+at all (§8.2). (3) **Alignment is not yet measurable**: the same reward scores 20.0% concordant on the
+stratified set and 66.7% on the unbiased set, and neither differs from chance (p = 0.11 and 0.51) — the
+certified rules are blind on 89/120 and 155/240 pairs, and gate **G31** records that the direction of the
+reward gradient has not been established. The rules remain a label and evaluation asset. See §8.2, §8.3,
+evidence §15.
 
 The three FAIL gates: G21 and G24 are about *predicate* applicability (G21: 5/100 trigger conditions are
 in executable form; G24: 26/87 cards carry an admitted predicate) and are bypassed in practice by
 `source_conditional` constraints, which derive applicability from the **source** sentence instead of a
-target-side predicate; G31 is the reward-alignment FAIL above. See §5, §8.2, §12.
+target-side predicate; G31 is the unestablished-alignment FAIL above. See §5, §8.2, §12.
 
 ### 中文快速上手
 
@@ -419,30 +424,53 @@ $PY scripts/p1_signal_by_rule.py --rollout-log artifacts/p1/rollouts_gemma3_12b.
     --rule-ids LB_946a24dd25d6,LB_9789dfb15623 --out /tmp/sig.json
 ```
 
-### 8.2 Reward readiness is alignment, not coverage (measured 2026-11-27, evidence §15)
+### 8.2 Reward readiness: applicability, then coverage, then alignment (measured 2026-11-27, evidence §15)
 
-Two measurements say the current certified set is not a usable training reward, and both are cheap to
-re-run offline.
+**First correction, against myself.** The first "unbiased prompt set" number in this repo — advantage
+coverage 0.0% — came from a corpus run with `--rollouts 1`. A group of one rollout has spread **0 by
+construction**, so 0.0% was arithmetic, not a measurement. Both tools now refuse to report it that way:
+`p1_reward_smoke.py` writes `"nonzero_spread_rate": null` plus a `spread_undefined` reason when
+`--rollouts < 2`, and `p1_signal_by_rule.py` hard-stops on a log with one hypothesis per prompt
+(`tests/test_p0_gates.py::test_spread_is_reported_as_undefined_not_zero_below_two_rollouts`,
+`::test_signal_script_refuses_a_one_rollout_log`).
 
-**An unbiased prompt set gives zero advantage.** `scripts/p1_reward_smoke.py --breadth 140` samples
-prompts by stride over the whole pool, without regard to whether any rule fires:
+**The real unbiased numbers** (80 stride-sampled pairs, card-independent, 3 rollouts each, gemma3:12b):
 
-    140 prompts x 1 greedy rollout (gemma3:12b) -> nonzero_spread_rate = 0.0
+| metric | value | note |
+|---|---|---|
+| groups with a nonzero advantage | **5/80 = 6.2%** [CI 2.7–13.8] | vs 11.9% [5.2–25.0] stratified: the intervals overlap, stratification inflates but does not manufacture |
+| rollouts with ≥1 verdict | **75/240 = 31.2%** | the first bottleneck is *applicability*, not saturation |
+| prompts where **no** rule fires | **55/80 = 68.8%** | on card-independent prompts the rule set simply is not about most sentences |
+| rollout diversity | 2.80 distinct of 3; similarity(greedy, sampled) = 0.842 | output varies; the rules do not see it |
+| reward ties within pairs | **155/240 pairs** | on the stratified set 89/120 |
 
-The 11.9% figure is conditional on per-rule prompt selection. Plan against the unbiased number.
+**Alignment direction is NOT established, and the earlier wording was too strong.** Concordance compares,
+for each within-group pair whose rewards differ, whether the higher-reward rollout is also the one lexically
+closer to the professional reference (0.5 = the reward ranks the pair independently of the reference):
 
-**Where the reward does rank two rollouts, it usually ranks them against the reference.** For every
-within-group rollout pair, `p1_signal_by_rule.py` compares the sign of the grammar-reward difference with
-the sign of the token-F1-to-reference difference:
+| prompt set | decisive pairs | concordant / discordant | rate | exact p vs 0.5 |
+|---|---|---|---|---|
+| stratified (42 groups) | 10 | 2 / 8 | 20.0% [5.7–51.0] | 0.109 |
+| unbiased (80 groups) | 9 | 6 / 3 | 66.7% [35.4–87.9] | 0.508 |
 
-    concordant 2, discordant 8 -> 20.0% [95% CI 5.7, 51.0]
-    ties: reward-only 89, similarity-only 0, both 27
+The sign flips between prompt sets and neither is significant, so the honest statement is: **the alignment
+axis is currently unmeasurable at this rollout budget.** Gate **G31** FAILs, and it should — it demands
+concordance ≥ 0.5 with ≥ 10 decisive pairs, i.e. it records "direction not established" rather than
+narrating it away. What *is* established is the blindness: 89 of 120 (stratified) and 155 of 240 (unbiased)
+pairs tie on reward.
 
-n = 10 decisive pairs, so discordance is not statistically established — what is established is the shape:
-the rules are blind on 89 of 120 pairs, and in the remainder they more often oppose than support the
-professional ranking. Gate **G31** requires concordance ≥ 0.5 with ≥ 10 decisive pairs and therefore
-**FAILs**. Consequence: `w_grammar` (gate G29) is not a safety margin, it is the reason a blind-to-opposing
-rule term is survivable at all.
+**What replicates across both prompt sets is the per-rule gap sign for the anti-professional rules:**
+
+| rule | stratified gap | unbiased gap |
+|---|---|---|
+| `LB_MIN04_negation_not` | −10.0pp | **−40.0pp** (ref violates 40%, policy 0%) |
+| `LB_9789dfb15623` comparative | 0.0pp | −16.7pp |
+| `LB_946a24dd25d6` possessive | −3.7pp | **+9.3pp** (policy violates 48.1% vs ref 38.9%) |
+| `LB_MIN02_cond_if` | +44.4pp | 0.0pp (fires on 3 rollouts only) |
+
+So `negation_not` is reliably anti-professional (measured twice), while `cond_if`'s big gap was a
+small-support artifact (3 applicable rollouts) and `possessive` — the lowest-agreement certified rule — is
+the one rule that shows a positive gap where it actually fires often (54 decided verdicts).
 
 **Dropping the anti-professional rules lowers coverage**, which proves spread was never the objective:
 
@@ -455,15 +483,75 @@ Excluding them is a **correctness** lever (the gradient stops pointing away from
 signal-density lever.
 
 ```bash
-# unbiased prompt set (rollout corpus for mining and for the honest coverage number)
-$PY scripts/p1_reward_smoke.py --model gemma3:12b --breadth 140 --rollouts 1 --temp 0 \
+# unbiased corpus + honest coverage. NOTE: --rollouts must be >= 2 or spread is refused.
+$PY scripts/p1_reward_smoke.py --breadth 80 --rollouts 3 --temperature 0.9 \
     --cards data/rules/mbg_cards_condv3.jsonl --reliability data/rules/reliability_condv3_fit.json \
-    --log-out artifacts/p1/rollouts_gemma3_12b_breadth.jsonl \
-    --out artifacts/p1/reward_smoke_gemma3_12b_breadth.json
-# alignment + per-rule alignment + spread for any rule subset, offline
+    --quality artifacts/audit/rule_quality_condv3_heldout.json \
+    --policy-endpoint http://127.0.0.1:11434/v1 --policy-model gemma3:12b \
+    --rollout-log artifacts/p1/rollouts_gemma3_12b_breadth3.jsonl \
+    --out artifacts/p1/reward_smoke_gemma3_12b_breadth3.json
+$PY scripts/p1_signal_by_rule.py --rollout-log artifacts/p1/rollouts_gemma3_12b_breadth3.jsonl \
+    --cards data/rules/mbg_cards_condv3.jsonl --reliability data/rules/reliability_condv3_fit.json \
+    --quality artifacts/audit/rule_quality_condv3_heldout.json \
+    --out artifacts/p1/signal_condv3_breadth3.json
+# corpus targeted at CANDIDATE cues (candidates that are not cards yet), to buy decisive pairs
+$PY scripts/p1_reward_smoke.py --cue-specs data/rules/screened_conditionals_all.json \
+    --prompts-per-cue 6 --rollouts 6 ... (same cards/endpoint) ...
+$PY scripts/screen_concordance.py --specs data/rules/screened_conditionals_all.json \
+    --rollout-log artifacts/p1/rollouts_gemma3_12b_cue6.jsonl \
+    --out artifacts/p1/concordance_screen_cue6.json
+# alignment + spread for any rule subset on identical hypotheses (the paired test that removed the confound)
 $PY scripts/p1_signal_by_rule.py --rollout-log artifacts/p1/rollouts_gemma3_12b_strat.jsonl \
     --rule-ids LB_MIN01_comp_that,LB_MIN02_cond_if,LB_MIN03_every_each,LB_9789dfb15623,LB_MIN05_than \
     --out artifacts/p1/signal_condv3_strat_pos5.json
+```
+
+Power note: within-group pairs scale as k(k−1)/2, so **rollouts per prompt buy quadratic power** while extra
+prompts buy linear power. At 3 rollouts (3 pairs/group) most candidates yield 0–2 decisive pairs; at 6
+rollouts (15 pairs/group) the same prompt count yields 5× the pairs. That is why the candidate corpus above
+runs `--rollouts 6`.
+
+### 8.4 Screening candidates by alignment, against the right null (measured 2026-11-27, evidence §16)
+
+`scripts/screen_concordance.py` applies the alignment axis to **candidates** (not cards): agreement with
+professionals on both halves, applicable groups, verdict-diversity rate, decisive pairs, concordance with
+Wilson + cluster-over-groups CIs, exact binomial p vs 0.5, and a **placebo control** — same source cue,
+same constraint kind, target forms replaced by unrelated tokens from the same cue-applicable slice.
+
+**The null is not 0.5.** Token-F1-to-reference is a lexical proxy, so a constraint requiring (or forbidding)
+any frequent target token can score concordant without encoding grammar. Measured pooled placebo
+concordance across candidates ranges **0.14–0.83** (`while_durative` placebos 0.83, `pg_during_wär` 0.14).
+A concordance number quoted against 0.5 is uninterpretable; the comparator is each candidate's own placebo
+band (Fisher exact, `--min-placebo-pairs 10 --min-placebo-gap 0.1 --max-placebo-p 0.05`).
+
+Power comes from cue-targeted prompts, not more of the same prompt set. On a log stratified for the
+certified rules, each of the 46 candidates had 0–2 decisive pairs; selecting prompts by the candidate cue
+with 6 rollouts (`--cue-specs … --prompts-per-cue 6 --rollouts 6`) raises applicable groups to 3–11 and
+decisive pairs to as many as 20, since pairs scale as k(k−1)/2. Results (partial cue6 corpus, 72 groups):
+
+| candidate | decisive pairs | conc | placebo conc | Fisher p | reading |
+|---|---|---|---|---|---|
+| `ability_can` | 19 | 0.95 | 0.62 | 0.006 | beats placebo, **but** agreement 0.63 / 0.43 → rejected on the agreement axis |
+| `negation_not` | 12 | 0.92 | 0.62 | 0.060 | not significant against placebo |
+| `comp_that` | 17 | 0.53 | 0.56 | 0.804 | indistinguishable from placebo |
+| `cond_if` | 12 | 0.00 | 0.30 | 0.033 | significantly **anti**-aligned — and this is the rule whose gap measured +44pp |
+| `pg_with_vill` | 9 | 0.00 | 0.49 | 0.004 | significantly anti-aligned |
+
+Nothing clears all axes at once, and that is the result: **gap and alignment are different axes**, and the
+most teachable-looking candidate by gap (`cond_if`) is the clearest anti-aligned one. Keeping both axes in
+one table is what catches it.
+
+```bash
+$PY scripts/p1_reward_smoke.py --cue-specs data/rules/screened_conditionals_all.json \
+    --prompts-per-cue 6 --rollouts 6 --temperature 0.9 \
+    --cards data/rules/mbg_cards_condv3.jsonl --reliability data/rules/reliability_condv3_fit.json \
+    --quality artifacts/audit/rule_quality_condv3_heldout.json \
+    --policy-endpoint http://127.0.0.1:11434/v1 --policy-model gemma3:12b \
+    --rollout-log artifacts/p1/rollouts_gemma3_12b_cue6.jsonl \
+    --out artifacts/p1/reward_smoke_gemma3_12b_cue6.json
+$PY scripts/screen_concordance.py --specs data/rules/screened_conditionals_all.json \
+    --rollout-log artifacts/p1/rollouts_gemma3_12b_cue6.jsonl --placebo 12 \
+    --out artifacts/p1/concordance_screen_cue6.json
 ```
 
 ### 8.3 Mining the policy's own errors: three families, zero new certified rules (evidence §15)
@@ -574,7 +662,7 @@ Deeper documents:
 
 | file | content |
 |---|---|
-| `P0_DATA_P1_EVIDENCE_2026-11-20.md` | the full session record, §1–15, including every wrong claim and its correction (§10 is explicitly annotated "superseded by §11"; §14.4 supersedes the 29.2% headline; §15 supersedes "mine the policy's errors and the reward problem is solved") |
+| `P0_DATA_P1_EVIDENCE_2026-11-20.md` | the full session record, §1–16, including every wrong claim and its correction (§10 is explicitly annotated "superseded by §11"; §14.4 supersedes the 29.2% headline; §15 supersedes "mine the policy's errors and the reward problem is solved") |
 | `SMOKE_P0_BASELINE_2026-11-19.md` | the original P0 baseline gate run |
 | `STATUS_REPORT.md` | earlier milestone status |
 | `PRD_VERL_GRAMMAR_AGENT.md` | product spec for the verl agent side |
@@ -652,16 +740,18 @@ Deeper documents:
     `source_conditional` cue rules the certification therefore rests on agreement + non-tautology + support
     floors only; the missing axis is **applicability sensitivity** (does the constraint abstain when the
     *source* cue is removed?), not a target-flip test. Evidence §14.6.
-17. **Every advantage-coverage number is conditional on prompt selection, and the unbiased number is 0.**
-    On 140 prompts sampled by stride over the pool (card-independent, `--breadth`), the 8 certified rules
-    produce `nonzero_spread_rate = 0.0`; on the per-rule-stratified set they produce 11.9%. Neither number
-    is "the" coverage. Evidence §15.1.
-18. **The reward gradient is not aligned with professional usage (measured, small n).** Of the within-group
-    rollout pairs where both the reward and the lexical similarity to the reference differ, 2 are concordant
-    and 8 discordant (20.0% [CI 5.7–51.0]); 89 of 120 pairs tie on reward. So the certified cue rules are
-    mostly blind and, when they fire, more often oppose than support the professional ranking. Gate **G31**
-    FAILs by design. This does not prove the rules are wrong — n = 10 decisive pairs — it proves the axis was
-    never measured and the current rule set cannot carry a training gradient. Evidence §15.7.
+17. **A group of one rollout cannot have spread, and a `nonzero_spread_rate = 0.0` read from such a run is
+    arithmetic, not a measurement.** The first unbiased-prompt coverage number in this repo (0.0% over 140
+    prompts) came from a corpus run with `--rollouts 1`. Re-measured at 3 rollouts per prompt: **6.2%
+    [CI 2.7–13.8]**, with **68.8%** of card-independent prompts where no rule fires at all and only **31.2%**
+    of rollouts reaching a verdict. Both scripts now null or refuse the metric below 2 rollouts. Evidence §15.1.
+18. **Alignment direction is unestablished, not "wrong".** Concordance is 20.0% [5.7–51.0] (p = 0.109) on the
+    stratified set and 66.7% [35.4–87.9] (p = 0.508) on the unbiased set: the point estimate flips sign with
+    the prompt set and neither rejects the 0.5 null. What is solid is the blindness (89/120 stratified and
+    155/240 unbiased pairs tie on reward) and the negative-gap rules that replicate across both sets
+    (`negation_not` −10pp stratified, −40pp unbiased). Gate **G31** FAILs because the direction is not
+    established; for *candidates* the axis is weaker still — screening 46 candidates on the stratified log
+    produced 0–2 decisive pairs each. Evidence §15.6–15.8.
 19. **Surface-cue mining is exhausted; the certification regime also excludes a whole constraint family.**
     Three mined families produced zero new certified rules (§8.3, evidence §15.3–15.5): required-form
     candidates are saturated on this policy, ordered-pair candidates cannot exist under an *unconditional*
@@ -670,6 +760,11 @@ Deeper documents:
     (penalising `während` because professionals prefer `wärend` is a chrF term, not grammar). Fixing the
     second requires target-side conditional applicability, which is gameable by omission and would need an
     abstention penalty — deliberately not done here.
+20. **The concordance null is the placebo band, not 0.5.** The alignment proxy is lexical (token F1 to
+    the reference), so unrelated target-token constraints score concordant too: pooled placebo concordance
+    measured 0.14–0.83 across candidates. `scripts/screen_concordance.py` therefore reports
+    `placebo_pooled_concordance`, `placebo_gap` and a Fisher exact p, and rejects a candidate that is not
+    ≥ `--min-placebo-gap` above its own placebos. Evidence §16.2.
 
 ---
 
@@ -698,7 +793,7 @@ Deeper documents:
 
 | plan | one-line status |
 |---|---|
-| **P1** card-to-verifier reward | reward side measured end-to-end and found **not reward-ready**: advantage coverage 11.9% [5.2–25.0] stratified / **0.0%** unbiased, and gradient concordance with the professional reference 20% (G31 FAIL). The certified set is a working **label and evaluation** asset (2,555 CC0 pairs, rule-level held-out now defined), not yet a training term |
+| **P1** card-to-verifier reward | reward side measured end-to-end and found **not reward-ready**: advantage coverage 11.9% [5.2–25.0] stratified / **6.2% [2.7–13.8]** on card-independent prompts, where only 31.2% of rollouts get any verdict at all; gradient concordance is **not established** (20% vs 67% across prompt sets, both p > 0.05; G31 FAIL). The certified set is a working **label and evaluation** asset (2,555 CC0 pairs, rule-level held-out now defined), not yet a training term |
 | **P2** turn-level credit | blocked on P1 having a non-degenerate signal |
 | **P3** rules as code (morphology/POS engine) | the strongest case made by data: undecidable `equivalence`/`optionality` (~13% of constraints), the false-satisfy failure mode, the 19.2% possessive+adjective construction, and now the saturated-cue result (surface cues cannot see the differences between rollouts) |
 | **P4** curriculum / self-play | not started |
@@ -723,6 +818,8 @@ steps, in order of measured payoff:
 4. **P3 (morphology/POS)** moved up: it is the only remaining route to teachable surface rules — verb
    position, agreement, and the possessive+adjective construction are invisible to token-pattern checks, and
    order-type constraints cannot be certified at all under the current unconditional agreement floor.
-5. Statistical power: ≥6 prompts per rule and ≥3 rollouts, and read the CI, not the point. For alignment
-   specifically, n = 10 decisive pairs means the next alignment run needs ~10× more groups (or more
-   rollouts per group) before a 20%-vs-80% difference can be called a result.
+5. Statistical power: ≥6 prompts per rule and ≥3 rollouts, and read the CI, not the point. Within-group
+   pairs scale as k(k−1)/2, so **rollouts per prompt buy quadratic power** — at 3 rollouts most candidates
+   give 0–2 decisive pairs, at 6 they give 5× more from the same prompts (that is why the candidate corpus
+   runs `--rollouts 6`). For alignment specifically, n = 9–10 decisive pairs means ~10× more pairs before a
+   20%-vs-80% difference can be called a result.

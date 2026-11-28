@@ -1,0 +1,788 @@
+{
+  "specs": "data/rules/policy_gap_candidates.json",
+  "rollout_log": "artifacts/p1/rollouts_gemma3_12b_strat.jsonl",
+  "pairs": "data/external/pairs_en_lb.jsonl",
+  "pool_pairs": 8972,
+  "fit_boundary": 4000,
+  "groups": 42,
+  "hypotheses": 123,
+  "candidates": [
+    {
+      "name": "pg_will_dëst",
+      "negate": true,
+      "source_pattern": "\\bwill\\b",
+      "values": [
+        "\\bdëst\\b"
+      ],
+      "fit_n": 245,
+      "fit_agreement": 0.9592,
+      "heldout_n": 131,
+      "heldout_agreement": 0.9847,
+      "policy_decided": 2,
+      "applicable_groups": 1,
+      "groups_with_diversity": 1,
+      "diversity_rate": 1.0,
+      "groups_needed_for_decisive_floor": 10,
+      "decisive_pairs": 2,
+      "concordant": 2,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 1.0,
+      "concordance_ci95": [
+        0.342,
+        1.0
+      ],
+      "concordance_ci95_cluster": [
+        0.5,
+        0.5
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 2"
+    },
+    {
+      "name": "pg_much_ai",
+      "negate": true,
+      "source_pattern": "\\bmuch\\b",
+      "values": [
+        "\\bai\\b"
+      ],
+      "fit_n": 59,
+      "fit_agreement": 1.0,
+      "heldout_n": 43,
+      "heldout_agreement": 1.0,
+      "policy_decided": 5,
+      "applicable_groups": 3,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.3333,
+      "groups_needed_for_decisive_floor": 30,
+      "decisive_pairs": 2,
+      "concordant": 2,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 1.0,
+      "concordance_ci95": [
+        0.342,
+        1.0
+      ],
+      "concordance_ci95_cluster": [
+        0.5,
+        0.5
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 2"
+    },
+    {
+      "name": "pg_been_all",
+      "negate": true,
+      "source_pattern": "\\bbeen\\b",
+      "values": [
+        "\\ball\\b"
+      ],
+      "fit_n": 180,
+      "fit_agreement": 0.9778,
+      "heldout_n": 111,
+      "heldout_agreement": 0.991,
+      "policy_decided": 2,
+      "applicable_groups": 1,
+      "groups_with_diversity": 1,
+      "diversity_rate": 1.0,
+      "groups_needed_for_decisive_floor": 10,
+      "decisive_pairs": 2,
+      "concordant": 1,
+      "discordant": 1,
+      "tie_similarity": 0,
+      "concordance": 0.5,
+      "concordance_ci95": [
+        0.095,
+        0.905
+      ],
+      "concordance_ci95_cluster": [
+        0.333,
+        0.333
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 2"
+    },
+    {
+      "name": "pg_would_all",
+      "negate": true,
+      "source_pattern": "\\bwould\\b",
+      "values": [
+        "\\ball\\b"
+      ],
+      "fit_n": 200,
+      "fit_agreement": 0.975,
+      "heldout_n": 84,
+      "heldout_agreement": 0.9643,
+      "policy_decided": 2,
+      "applicable_groups": 2,
+      "groups_with_diversity": 1,
+      "diversity_rate": 0.5,
+      "groups_needed_for_decisive_floor": 20,
+      "decisive_pairs": 2,
+      "concordant": 1,
+      "discordant": 1,
+      "tie_similarity": 0,
+      "concordance": 0.5,
+      "concordance_ci95": [
+        0.095,
+        0.905
+      ],
+      "concordance_ci95_cluster": [
+        0.333,
+        0.333
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 2"
+    },
+    {
+      "name": "pg_after_no",
+      "negate": false,
+      "source_pattern": "\\bafter\\b",
+      "values": [
+        "\\bno\\b"
+      ],
+      "fit_n": 59,
+      "fit_agreement": 0.5593,
+      "heldout_n": 128,
+      "heldout_agreement": 0.5078,
+      "policy_decided": 0,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "fit agreement 0.559322033898305; held-out agreement 0.5078125; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_every_vum",
+      "negate": true,
+      "source_pattern": "\\bevery\\b",
+      "values": [
+        "\\bvum\\b"
+      ],
+      "fit_n": 56,
+      "fit_agreement": 0.9643,
+      "heldout_n": 58,
+      "heldout_agreement": 0.9483,
+      "policy_decided": 3,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_be_iwwer",
+      "negate": true,
+      "source_pattern": "\\bbe\\b",
+      "values": [
+        "\\biwwer\\b"
+      ],
+      "fit_n": 498,
+      "fit_agreement": 0.9719,
+      "heldout_n": 309,
+      "heldout_agreement": 0.9676,
+      "policy_decided": 6,
+      "applicable_groups": 5,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_during_während",
+      "negate": true,
+      "source_pattern": "\\bduring\\b",
+      "values": [
+        "\\bwährend\\b"
+      ],
+      "fit_n": 52,
+      "fit_agreement": 1.0,
+      "heldout_n": 62,
+      "heldout_agreement": 1.0,
+      "policy_decided": 3,
+      "applicable_groups": 2,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_ensure_mee",
+      "negate": true,
+      "source_pattern": "\\bensure\\b",
+      "values": [
+        "\\bmee\\b"
+      ],
+      "fit_n": 30,
+      "fit_agreement": 1.0,
+      "heldout_n": 3,
+      "heldout_agreement": 1.0,
+      "policy_decided": 3,
+      "applicable_groups": 1,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "support fit=30 heldout=3; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_ensure_garantéieren",
+      "negate": true,
+      "source_pattern": "\\bensure\\b",
+      "values": [
+        "\\bgarantéieren\\b"
+      ],
+      "fit_n": 30,
+      "fit_agreement": 1.0,
+      "heldout_n": 3,
+      "heldout_agreement": 1.0,
+      "policy_decided": 3,
+      "applicable_groups": 1,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "support fit=30 heldout=3; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_government_ausgewielte",
+      "negate": true,
+      "source_pattern": "\\bgovernment\\b",
+      "values": [
+        "\\bausgewielte\\b"
+      ],
+      "fit_n": 88,
+      "fit_agreement": 1.0,
+      "heldout_n": 55,
+      "heldout_agreement": 1.0,
+      "policy_decided": 6,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_life_iwwer",
+      "negate": true,
+      "source_pattern": "\\blife\\b",
+      "values": [
+        "\\biwwer\\b"
+      ],
+      "fit_n": 73,
+      "fit_agreement": 0.9863,
+      "heldout_n": 28,
+      "heldout_agreement": 1.0,
+      "policy_decided": 3,
+      "applicable_groups": 2,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "support fit=73 heldout=28; decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_during_wär",
+      "negate": true,
+      "source_pattern": "\\bduring\\b",
+      "values": [
+        "\\bwär\\b"
+      ],
+      "fit_n": 52,
+      "fit_agreement": 0.9808,
+      "heldout_n": 62,
+      "heldout_agreement": 1.0,
+      "policy_decided": 0,
+      "applicable_groups": 2,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_government_gouf",
+      "negate": true,
+      "source_pattern": "\\bgovernment\\b",
+      "values": [
+        "\\bgouf\\b"
+      ],
+      "fit_n": 88,
+      "fit_agreement": 0.9545,
+      "heldout_n": 55,
+      "heldout_agreement": 1.0,
+      "policy_decided": 3,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_would_wär",
+      "negate": true,
+      "source_pattern": "\\bwould\\b",
+      "values": [
+        "\\bwär\\b"
+      ],
+      "fit_n": 200,
+      "fit_agreement": 0.955,
+      "heldout_n": 84,
+      "heldout_agreement": 0.9762,
+      "policy_decided": 0,
+      "applicable_groups": 2,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_with_vill",
+      "negate": true,
+      "source_pattern": "\\bwith\\b",
+      "values": [
+        "\\bvill\\b"
+      ],
+      "fit_n": 464,
+      "fit_agreement": 0.9612,
+      "heldout_n": 480,
+      "heldout_agreement": 0.95,
+      "policy_decided": 6,
+      "applicable_groups": 4,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_take_gezwongen",
+      "negate": true,
+      "source_pattern": "\\btake\\b",
+      "values": [
+        "\\bgezwongen\\b"
+      ],
+      "fit_n": 76,
+      "fit_agreement": 1.0,
+      "heldout_n": 61,
+      "heldout_agreement": 1.0,
+      "policy_decided": 3,
+      "applicable_groups": 2,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_minister_iwwer",
+      "negate": true,
+      "source_pattern": "\\bminister\\b",
+      "values": [
+        "\\biwwer\\b"
+      ],
+      "fit_n": 129,
+      "fit_agreement": 0.9922,
+      "heldout_n": 78,
+      "heldout_agreement": 0.9872,
+      "policy_decided": 0,
+      "applicable_groups": 0,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_work_iwwer",
+      "negate": true,
+      "source_pattern": "\\bwork\\b",
+      "values": [
+        "\\biwwer\\b"
+      ],
+      "fit_n": 62,
+      "fit_agreement": 0.9839,
+      "heldout_n": 63,
+      "heldout_agreement": 0.9841,
+      "policy_decided": 3,
+      "applicable_groups": 4,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_so_just",
+      "negate": true,
+      "source_pattern": "\\bso\\b",
+      "values": [
+        "\\bjust\\b"
+      ],
+      "fit_n": 129,
+      "fit_agreement": 0.9922,
+      "heldout_n": 103,
+      "heldout_agreement": 0.9903,
+      "policy_decided": 3,
+      "applicable_groups": 4,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_minister_goufen",
+      "negate": true,
+      "source_pattern": "\\bminister\\b",
+      "values": [
+        "\\bgoufen\\b"
+      ],
+      "fit_n": 129,
+      "fit_agreement": 0.9845,
+      "heldout_n": 78,
+      "heldout_agreement": 0.9487,
+      "policy_decided": 0,
+      "applicable_groups": 0,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_so_sougenannte",
+      "negate": true,
+      "source_pattern": "\\bso\\b",
+      "values": [
+        "\\bsougenannte\\b"
+      ],
+      "fit_n": 129,
+      "fit_agreement": 0.9612,
+      "heldout_n": 103,
+      "heldout_agreement": 0.9806,
+      "policy_decided": 3,
+      "applicable_groups": 4,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_were_hir",
+      "negate": true,
+      "source_pattern": "\\bwere\\b",
+      "values": [
+        "\\bhir\\b"
+      ],
+      "fit_n": 158,
+      "fit_agreement": 0.9684,
+      "heldout_n": 160,
+      "heldout_agreement": 0.9563,
+      "policy_decided": 3,
+      "applicable_groups": 1,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    },
+    {
+      "name": "pg_every_ausgewielte",
+      "negate": true,
+      "source_pattern": "\\bevery\\b",
+      "values": [
+        "\\bausgewielte\\b"
+      ],
+      "fit_n": 56,
+      "fit_agreement": 1.0,
+      "heldout_n": 58,
+      "heldout_agreement": 1.0,
+      "policy_decided": 6,
+      "applicable_groups": 3,
+      "groups_with_diversity": 0,
+      "diversity_rate": 0.0,
+      "groups_needed_for_decisive_floor": null,
+      "decisive_pairs": 0,
+      "concordant": 0,
+      "discordant": 0,
+      "tie_similarity": 0,
+      "concordance": 0.0,
+      "concordance_ci95": [
+        0.0,
+        0.0
+      ],
+      "concordance_ci95_cluster": [
+        0.0,
+        0.0
+      ],
+      "status": "rejected",
+      "why": "decisive pairs 0; concordance 0.00"
+    }
+  ],
+  "rollouts_per_group": 2.93,
+  "max_decisive_pairs_available": 121,
+  "floors": {
+    "min_fit_agree": 0.65,
+    "min_heldout_agree": 0.65,
+    "min_decisive": 10,
+    "min_concordance": 0.5
+  },
+  "interesting": []
+}

@@ -632,3 +632,90 @@ def test_stratified_signal_artifacts_record_the_exclusion_tradeoff():
         assert lo <= al["concordant_rate"] <= hi
         if dec:
             assert abs(al["concordant_rate"] - al["concordant"] / dec) < 1e-3
+
+
+# --------------------------------------------------------------------- spread/alignment validity
+
+def test_spread_is_reported_as_undefined_not_zero_below_two_rollouts():
+    """A group of one rollout has spread 0 BY CONSTRUCTION. A 140-prompt corpus built for error mining
+    (--rollouts 1) was briefly quoted as "advantage coverage 0.0% on unbiased prompts", which was
+    arithmetic dressed as a measurement. The smoke must null the metric instead of printing 0.0."""
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    from p1_reward_smoke import _spread_undefined
+
+    assert "by construction" in _spread_undefined(1)
+    assert _spread_undefined(2) == "" and _spread_undefined(3) == ""
+
+
+def test_signal_script_refuses_a_one_rollout_log(tmp_path):
+    """Same trap on the offline re-scoring side: p1_signal_by_rule must hard-stop rather than print
+    spread 0%, alignment 0 decisive pairs and a confident-looking table."""
+    import json
+    import subprocess
+    import sys
+
+    root = Path(__file__).resolve().parents[1]
+    log = tmp_path / "one.jsonl"
+    rows = [{"prompt_id": f"p{i}", "rollout": 0, "src": "Our son is taller.",
+             "hyp": "Eise Jong ass méi grouss.", "tgt_ref": "Eise Jong ass méi grouss wéi säi Papp.",
+             "verdicts": ["satisfied"], "rule_ids": ["LB_946a24dd25d6"], "r_grammar": 1.0}
+            for i in range(3)]
+    log.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
+    proc = subprocess.run(
+        [sys.executable, "scripts/p1_signal_by_rule.py", "--rollout-log", str(log),
+         "--rule-ids", "LB_946a24dd25d6", "--out", str(tmp_path / "sig.json")],
+        cwd=root, capture_output=True, text=True)
+    assert proc.returncode != 0
+    assert "one hypothesis per prompt" in (proc.stdout + proc.stderr)
+    assert not (tmp_path / "sig.json").exists()
+
+
+def test_binomial_null_flags_an_unmeasurable_alignment():
+    """2 concordant vs 8 discordant at n=10 is p=0.11 against the 0.5 null: NOT proof that the reward
+    points the wrong way. Every concordance number must travel with this p-value."""
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    from screen_concordance import _binom_two_sided_p
+
+    assert abs(_binom_two_sided_p(5, 10) - 1.0) < 1e-9          # exactly the null
+    assert 0.05 < _binom_two_sided_p(2, 10) < 0.20              # the measured stratified case
+    assert _binom_two_sided_p(0, 10) < 0.01                     # extreme is significant
+    assert _binom_two_sided_p(0, 0) == 1.0                      # no evidence at all
+
+
+def test_concordance_scorer_direction_for_required_and_exclusion_constraints():
+    """The direction rule (satisfied = preferred) is inverted for `negate: true` candidates, and both
+    bugs in this session were exactly here. Pin both constraint kinds with a synthetic group."""
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    from screen_concordance import score_candidate
+
+    def group(hyps, sims):
+        return {"src": "if our son is taller", "ref": "wann eise Jong méi grouss ass",
+                "hyp_norms": hyps, "sims": sims}
+
+    groups = [group(["wann eise Jong méi grouss ass", "eise Jong ass méi grouss"], [1.0, 0.6])]
+    pool = [("if our son is taller", "wann eise Jong méi grouss ass")]
+
+    required = {"name": "cond_if", "source_pattern": r"\bif\b", "negate": False,
+                "values": [r"\bwann\b"]}
+    r = score_candidate(required, pool, groups, fit_boundary=1)
+    assert r["concordant"] == 1 and r["discordant"] == 0 and r["heldout_agreement"] is None
+    assert r["fit_agreement"] == 1.0
+
+    # exclusion: the forbidden word appears in the rollout CLOSER to the reference, so preferring its
+    # absence ranks the pair AGAINST the reference -> discordant.
+    forbidden = {"name": "pg_been_all", "source_pattern": r"\bif\b", "negate": True,
+                 "values": [r"\balle\b"]}
+    groups2 = [group(["wann eise Jong ass alle", "wann eise Jong grouss ass"], [1.0, 0.6])]
+    e = score_candidate(forbidden, pool, groups2, fit_boundary=1)
+    assert e["discordant"] == 1 and e["concordant"] == 0
+    assert e["concordance_p_vs_0.5"] > 0.05      # one pair is never evidence
+    # same rule, forbidden word in the FARTHER rollout -> concordant
+    groups3 = [group(["wann eise Jong ass", "wann eise Jong ass alle"], [1.0, 0.4])]
+    e2 = score_candidate(forbidden, pool, groups3, fit_boundary=1)
+    assert e2["concordant"] == 1 and e2["discordant"] == 0
